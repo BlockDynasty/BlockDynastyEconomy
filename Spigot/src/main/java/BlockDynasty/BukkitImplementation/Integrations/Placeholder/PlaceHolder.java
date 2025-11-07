@@ -16,11 +16,14 @@
 
 package BlockDynasty.BukkitImplementation.Integrations.Placeholder;
 
+import BlockDynasty.BukkitImplementation.BlockDynastyEconomy;
 import BlockDynasty.BukkitImplementation.utils.Console;
 import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
 
 public class PlaceHolder {
     private static PlaceHolderExpansion expansion;
+    private static PlaceHolderListener listener;
 
     public static void register(lib.placeholder.PlaceHolder placeHolder){
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
@@ -29,12 +32,15 @@ public class PlaceHolder {
         }
         expansion = new PlaceHolderExpansion(placeHolder);
         expansion.register();
+        listener = new PlaceHolderListener(expansion);
+        Bukkit.getPluginManager().registerEvents(listener, BlockDynastyEconomy.getInstance());
         Console.log("PlaceholderAPI Expansion registered successfully!");
     }
 
     public static void unregister(){
         if(expansion != null){
             expansion.unregister();
+            HandlerList.unregisterAll(listener);
         }
     }
 }

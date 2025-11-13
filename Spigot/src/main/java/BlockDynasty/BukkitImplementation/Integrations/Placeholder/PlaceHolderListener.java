@@ -16,7 +16,7 @@ public class PlaceHolderListener implements Listener {
     public void onPAPIReload(ExpansionsLoadedEvent event) {
         if(!expansion.isRegistered()){
             expansion.register();
+            Console.log("PlaceholderAPI Expansion re-registered successfully after reload!");
         }
-        Console.log("PlaceholderAPI Expansion re-registered successfully after reload!");
     }
 }

@@ -1,6 +1,7 @@
 package EngineTest.mocks;
 
 import Main.Economy;
+import api.IApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,10 @@ public class MinecraftServer {
     public static void stop(){
         Economy.shutdown();
         System.out.println("Server Testing Environment Stopped.");
+    }
+
+    public static IApi getApi(){
+        return economy.getApi();
     }
 
     public static Economy getEconomy(){
@@ -57,4 +62,6 @@ public class MinecraftServer {
     public static List<Player> getOnlinePlayers(){
         return onlinePlayers;
     }
+
+
 }

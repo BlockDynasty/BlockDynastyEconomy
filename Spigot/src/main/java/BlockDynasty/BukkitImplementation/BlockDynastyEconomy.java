@@ -16,7 +16,6 @@
 
 package BlockDynasty.BukkitImplementation;
 
-import BlockDynasty.BukkitImplementation.adapters.GUI.adapters.textInput.TextInputFactory;
 import BlockDynasty.BukkitImplementation.adapters.GUI.listener.ClickListener;
 import BlockDynasty.BukkitImplementation.adapters.GUI.listener.CloseListener;
 import BlockDynasty.BukkitImplementation.Integrations.Placeholder.PlaceHolder;
@@ -30,11 +29,10 @@ import BlockDynasty.BukkitImplementation.adapters.listeners.PlayerJoinListenerOf
 import BlockDynasty.BukkitImplementation.adapters.listeners.PlayerJoinListenerOnline;
 
 import BlockDynasty.BukkitImplementation.utils.Console;
-
-
 import BlockDynasty.BukkitImplementation.utils.Updater;
 import BlockDynasty.BukkitImplementation.utils.Version;
 import Main.Economy;
+import api.IApi;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import platform.files.Configuration;
@@ -158,5 +156,9 @@ public class BlockDynastyEconomy extends JavaPlugin {
 
     public static Configuration getConfiguration() {
         return configuration;
+    }
+
+    public IApi getApi() {
+        return economy.getApi();
     }
 }

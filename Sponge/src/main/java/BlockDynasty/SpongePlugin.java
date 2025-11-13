@@ -25,6 +25,7 @@ import BlockDynasty.adapters.integrations.spongeEconomyApi.EconomyServiceAdapter
 import BlockDynasty.adapters.integrations.spongeEconomyApi.MultiCurrencyService;
 import BlockDynasty.utils.Console;
 import Main.Economy;
+import api.IApi;
 import com.google.inject.Inject;
 import platform.files.Configuration;
 import lib.commands.CommandsFactory;
@@ -143,6 +144,10 @@ public class SpongePlugin {
 
     public static Configuration getConfiguration() {
         return configuration;
+    }
+
+    public IApi getApi() {
+        return economy.getApi();
     }
 }
 

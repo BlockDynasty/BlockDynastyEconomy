@@ -53,7 +53,6 @@
                                     <artifact>com.h2database:h2</artifact>
                                     <excludes>
                                         <exclude>org/h2/tools/Upgrade*</exclude>
-                                        <exclude>org/h2/tools/**</exclude>
                                         <exclude>org/h2/sample/**</exclude>
                                         <exclude>org/h2/build/**</exclude>
                                         <exclude>org/h2/test/**</exclude>

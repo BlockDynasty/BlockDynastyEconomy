@@ -18,16 +18,23 @@ package lib.gui.templates.administrators.subMenus.currencies;
 
 import BlockDynasty.Economy.aplication.useCase.currency.EditCurrencyUseCase;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+import lib.abstractions.IPlayer;
 import lib.gui.GUIFactory;
-import lib.gui.components.IGUI;
-import lib.gui.components.IEntityGUI;
-import lib.gui.components.ITextInput;
-import lib.gui.components.Materials;
+import lib.gui.components.*;
+import lib.util.materials.Materials;
 import lib.gui.components.abstractions.AbstractPanel;
 import lib.util.colors.ChatColor;
 import lib.util.colors.Colors;
 import lib.util.colors.Message;
 
+import java.io.Console;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Base64;
 import java.util.Map;
 
 public class EditCurrencyPanel extends AbstractPanel {
@@ -49,17 +56,19 @@ public class EditCurrencyPanel extends AbstractPanel {
     private void setupGUI() {
         // Current currency info
         String color = ChatColor.stringValueOf(currency.getColor());
-        setItem(4, createItem(Materials.GOLD_INGOT,
-                        Message.process(Map.of("currency",color + currency.getSingular() + " / " + currency.getPlural()), "EditCurrencyPanel.button1.nameItem"),
-                        Message.processLines(Map.of(
-                                "symbol",color + currency.getSymbol(),
-                                "color",color + currency.getColor(),
-                                "balance",color + currency.getDefaultBalance(),
-                                "rate",color + currency.getExchangeRate(),
-                                "transferable",(currency.isTransferable() ? ChatColor.stringValueOf(Colors.GREEN)+"Yes" : ChatColor.stringValueOf(Colors.RED)+"No"),
-                                "default",(currency.isDefaultCurrency() ? ChatColor.stringValueOf(Colors.GREEN)+"Yes" : ChatColor.stringValueOf(Colors.RED)+"No"),
-                                "decimals",(currency.isDecimalSupported() ? ChatColor.stringValueOf(Colors.GREEN)+"Yes" : ChatColor.stringValueOf(Colors.RED)+"No")),"EditCurrencyPanel.button1.lore")),
-                null);
+        setItem(4,createItem(RecipeItem.builder()
+                .setMaterial(Materials.GOLD_INGOT)
+                .setName(Message.process(Map.of("currency",color + currency.getSingular() + " / " + currency.getPlural()), "EditCurrencyPanel.button1.nameItem"))
+                .setTexture(currency.getTexture())
+                .setLore(Message.processLines(Map.of(
+                        "symbol",color + currency.getSymbol(),
+                        "color",color + currency.getColor(),
+                        "balance",color + currency.getDefaultBalance(),
+                        "rate",color + currency.getExchangeRate(),
+                        "transferable",(currency.isTransferable() ? ChatColor.stringValueOf(Colors.GREEN)+"Yes" : ChatColor.stringValueOf(Colors.RED)+"No"),
+                        "default",(currency.isDefaultCurrency() ? ChatColor.stringValueOf(Colors.GREEN)+"Yes" : ChatColor.stringValueOf(Colors.RED)+"No"),
+                        "decimals",(currency.isDecimalSupported() ? ChatColor.stringValueOf(Colors.GREEN)+"Yes" : ChatColor.stringValueOf(Colors.RED)+"No")),"EditCurrencyPanel.button1.lore"))
+                .build()), null);
 
         // Edit Start Balance button
         setItem(11, createItem(Materials.EMERALD_BLOCK, Message.process(Map.of("color",ChatColor.stringValueOf(Colors.GREEN)), "EditCurrencyPanel.button2.nameItem"),
@@ -76,6 +85,32 @@ public class EditCurrencyPanel extends AbstractPanel {
         // Edit Color button
         setItem(15, createItem(Materials.LIME_DYE, Message.process(Map.of("color",ChatColor.stringValueOf(Colors.GREEN)), "EditCurrencyPanel.button4.nameItem"),
                 Message.process(Map.of("color",ChatColor.stringValueOf(Colors.WHITE)), "EditCurrencyPanel.button4.lore")), f -> {openColorSelectionGUI();});
+
+        // Edit Texture URL button
+        setItem(16,createItem(RecipeItem.builder().setMaterial(Materials.EMERALD).setName(ChatColor.stringValueOf(Colors.GREEN)+"Add texture URL or Base64").setLore("This option allows you to add custom","heads for this currency","example url: http://textures.minecraft.net/texture/...","You can find them at:"+ ChatColor.stringValueOf(Colors.GREEN)+"https://minecraft-heads.com","For developers").build()), f -> {
+            textInput.asInputChat().open(this,player,"Texture URL or Base64: "+currency.getSingular(),currency.getTexture(), s ->{
+                String stringUrl = "";
+                URL url =null;
+                try {
+                    url = new URL(s);
+                    stringUrl = s;
+                }catch (MalformedURLException e){
+                    stringUrl= getTextureURLFromBase64(s,player);
+                }
+
+                try {
+                    editCurrencyUseCase.editTexture(currency.getSingular(), stringUrl);
+                    player.sendMessage(ChatColor.stringValueOf(Colors.GREEN)+"[Bank] "+ChatColor.stringValueOf(Colors.GRAY)+"Texture updated successfully.");
+                    openEditCurrencyGUI();
+                } catch (Exception e) {
+                    player.sendMessage(ChatColor.stringValueOf(Colors.GREEN)+"[Bank] "+ChatColor.stringValueOf(Colors.RED)+"Error: " + e.getMessage());
+                    openEditCurrencyGUI();
+                }
+                return null;
+            });
+        });
+
+
 
         // Edit Symbol button
         setItem(20, createItem(Materials.NAME_TAG, Message.process(Map.of("color",ChatColor.stringValueOf(Colors.GREEN)), "EditCurrencyPanel.button5.nameItem"),
@@ -227,5 +262,29 @@ public class EditCurrencyPanel extends AbstractPanel {
             }
             return null;
         });
+    }
+
+    private static String getTextureURLFromBase64(String base64Texture, IEntityGUI player) {
+        try {
+            byte[] decodedBytes = Base64.getDecoder().decode(base64Texture);
+            String decodedString = new String(decodedBytes);
+
+            JsonElement jsonElement = JsonParser.parseString(decodedString);
+            JsonObject json = jsonElement.getAsJsonObject();
+            return json.getAsJsonObject("textures")
+                    .getAsJsonObject("SKIN")
+                    .get("url")
+                    .getAsString();
+
+        } catch (IllegalArgumentException e) {
+            player.sendMessage("invalid base64 TEXTURE input: " + e.getMessage());
+        }catch (JsonSyntaxException e){
+            player.sendMessage("invalid JSON TEXTURE input: " + e.getMessage());
+        }catch (NullPointerException e){
+           player.sendMessage("missing expected fields in TEXTURE JSON: " + e.getMessage());
+        }catch (IllegalStateException e){
+            player.sendMessage("invalid TEXTURE JSON structure."+ e.getMessage());
+        }
+        return "";
     }
 }

@@ -22,6 +22,7 @@ import lib.gui.components.IEntityGUI;
 import lib.gui.components.*;
 import lib.util.colors.ChatColor;
 import lib.util.colors.Message;
+import lib.util.materials.Materials;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -73,14 +74,16 @@ public abstract class CurrencySelectorAndAmount extends PaginatedPanel<Currency>
     @Override
     protected IItemStack createItemFor(Currency currency) {
         String color = ChatColor.stringValueOf(currency.getColor());
-        return createItem(Materials.GOLD_INGOT,
-                Message.process(Map.of("currency",color+currency.getSingular()),"CurrencySelector.button1.nameItem"),
-                Message.processLines(Map.of(
+        return createItem(RecipeItem.builder()
+                .setMaterial(Materials.GOLD_INGOT)
+                .setName(Message.process(Map.of("currency",color+currency.getSingular()),"CurrencySelector.button1.nameItem"))
+                .setTexture(currency.getTexture())
+                .setLore(Message.processLines(Map.of(
                         "singular",color + currency.getSingular(),
                         "plural",color + currency.getPlural(),
                         "transferable",(currency.isTransferable() ? "Yes" : "No"),
-                        "exchangeRate",color+ currency.getExchangeRate()),"CurrencySelector.button1.lore")
-        );
+                        "exchangeRate",color+ currency.getExchangeRate()),"CurrencySelector.button1.lore"))
+                .build());
     }
 
     @Override

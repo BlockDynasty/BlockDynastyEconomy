@@ -28,7 +28,8 @@ import lib.abstractions.PlatformAdapter;
 import lib.gui.components.IInventory;
 import lib.gui.components.IItemStack;
 import lib.gui.components.ITextInput;
-import lib.gui.components.Materials;
+import lib.gui.components.RecipeItem;
+import lib.util.materials.Materials;
 import lib.scheduler.IScheduler;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
@@ -117,8 +118,14 @@ public class SpongeAdapter implements PlatformAdapter {
 
     @Override
     public IItemStack createItemStack(Materials material) {
-        ItemStack itemStack = ItemStack.of(MaterialAdapter.toItemType(material));
+        ItemStack itemStack = ItemStack.of(MaterialAdapter.toSpongeMaterial(material));
         return  new ItemStackAdapter(itemStack);
+    }
+
+    @Override
+    public IItemStack createItemStack(RecipeItem recipeItem){
+        ItemStack itemStack = MaterialAdapter.createItemStack(recipeItem);
+        return new ItemStackAdapter(itemStack);
     }
 
     @Override

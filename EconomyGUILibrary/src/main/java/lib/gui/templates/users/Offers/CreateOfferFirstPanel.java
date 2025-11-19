@@ -22,7 +22,7 @@ import BlockDynasty.Economy.domain.entities.currency.Currency;
 import lib.gui.components.IGUI;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.ITextInput;
-import lib.gui.components.Materials;
+import lib.util.materials.Materials;
 import lib.gui.components.abstractions.CurrencySelectorAndAmount;
 import lib.util.colors.ChatColor;
 import lib.util.colors.Colors;

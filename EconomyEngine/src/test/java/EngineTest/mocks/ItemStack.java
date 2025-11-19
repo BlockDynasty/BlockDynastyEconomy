@@ -2,7 +2,7 @@ package EngineTest.mocks;
 
 import EngineTest.mocks.utils.Color;
 import lib.gui.components.IItemStack;
-import lib.gui.components.Materials;
+import lib.util.materials.Materials;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +25,12 @@ public class ItemStack implements IItemStack {
     @Override
     public IItemStack setLore(List<String> lore) {
         this.lore = lore;
+        return this;
+    }
+
+    @Override
+    public IItemStack setTexture(String texture) {
+        // Mock implementation does not handle textures
         return this;
     }
 

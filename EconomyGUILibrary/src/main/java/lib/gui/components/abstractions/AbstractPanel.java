@@ -19,6 +19,7 @@ package lib.gui.components.abstractions;
 import lib.gui.components.IEntityGUI;
 import lib.abstractions.PlatformAdapter;
 import lib.gui.components.*;
+import lib.util.materials.Materials;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -55,12 +56,19 @@ public class AbstractPanel implements IGUI {
         this.inventory.setTitle(title);
         items.forEach((key, value) -> inventory.set(key, value));
     }
-    protected IItemStack createItem(Materials material, String name, String... lore) {
+
+    @Deprecated
+    protected IItemStack createItem(Materials material,String name, String... lore) {
         IItemStack item =platformAdapter.createItemStack(material);
         item.setDisplayName(name);
         item.setLore(Arrays.asList(lore));
         return item;
     }
+
+    protected IItemStack createItem(RecipeItem recipe) {
+        return platformAdapter.createItemStack(recipe);
+    }
+
     protected void setItem(int slot, IItemStack item, Consumer<IEntityGUI> leftClickAction) {
         items.put(slot, item);
         inventory.set(slot, item);
@@ -143,8 +151,8 @@ public class AbstractPanel implements IGUI {
 
     @Override
     public void fill() {
-        IItemStack blueGlass = createItem(Materials.BLUE_STAINED_GLASS_PANE, " " ," ");
-        IItemStack filler = createItem(Materials.GLASS_PANE, " "," ");
+        IItemStack blueGlass = createItem(Materials.BLUE_STAINED_GLASS_PANE, " " , " " );
+        IItemStack filler = createItem(Materials.GLASS_PANE, " "," " );
 
         int rows = (getRows()*9) / 9;
         for (int row = 0; row < rows; row++) {

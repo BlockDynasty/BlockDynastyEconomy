@@ -107,7 +107,7 @@ public class AccountService implements IAccountService {
     }
 
     //synchronization methods
-    public void syncOnlineAccount(Account account){
+    /*public void syncOnlineAccount(Account account){
         UUID uuid = account.getUuid();
         Account cachedAccount = this.getAccountOnline(uuid);
         if (cachedAccount != null) {
@@ -120,7 +120,23 @@ public class AccountService implements IAccountService {
                 }
             }
         }
+    }*/
+
+    public void syncOnlineAccount(Account account){
+        UUID uuid = account.getUuid();
+        Account cachedAccount = this.getAccountOnline(uuid);
+        if (cachedAccount != null) {
+            // Ensure incoming account balances use system Currency instances
+            syncWalletWithSystemCurrencies(account);
+            // Replace cached balances so cachedAccount uses canonical Currency objects too
+            cachedAccount.setBalances(
+                    account.getBalances().stream()
+                            .map(m -> new Money(m.getCurrency(), m.getAmount()))
+                            .collect(Collectors.toList())
+            );
+        }
     }
+
     public void syncOnlineAccount(UUID uuid){
         Account accountCache = this.getAccountOnline(uuid);
         if (accountCache != null){
@@ -145,7 +161,7 @@ public class AccountService implements IAccountService {
             }
         }
     }
-    private void syncWalletWithSystemCurrencies(Account account) {
+    /*private void syncWalletWithSystemCurrencies(Account account) {
         List<Money> updatedMonies =  this.currencyService.getCurrencies().stream()
                 .map(systemCurrency ->
                         account.getBalances().stream()
@@ -154,6 +170,21 @@ public class AccountService implements IAccountService {
                                 .orElseGet(() -> { // Si no existe, crea un nuevo balance para esta moneda
                                     return new Money(systemCurrency);
                                 }))
+                .collect(Collectors.toList());
+        account.setBalances(updatedMonies);
+    }*/
+
+    private void syncWalletWithSystemCurrencies(Account account) {
+        List<Money> updatedMonies = this.currencyService.getCurrencies().stream()
+                .map(systemCurrency -> {
+                    Optional<Money> existing = account.getBalances().stream()
+                            .filter(balance -> balance.getCurrency().getUuid().equals(systemCurrency.getUuid()))
+                            .findFirst();
+                    // Build a new Money that uses the canonical systemCurrency instance and preserves amount
+                    return existing
+                            .map(b -> new Money(systemCurrency, b.getAmount()))
+                            .orElseGet(() -> new Money(systemCurrency));
+                })
                 .collect(Collectors.toList());
         account.setBalances(updatedMonies);
     }

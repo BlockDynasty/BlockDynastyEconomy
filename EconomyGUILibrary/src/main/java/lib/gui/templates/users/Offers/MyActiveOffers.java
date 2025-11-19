@@ -25,7 +25,7 @@ import BlockDynasty.Economy.domain.result.Result;
 import lib.gui.components.IGUI;
 import lib.gui.components.IItemStack;
 import lib.gui.components.IEntityGUI;
-import lib.gui.components.Materials;
+import lib.util.materials.Materials;
 import lib.gui.components.abstractions.PaginatedPanel;
 import lib.gui.GUIFactory;
 import lib.util.colors.ChatColor;

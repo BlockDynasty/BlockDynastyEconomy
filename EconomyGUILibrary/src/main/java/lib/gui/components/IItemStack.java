@@ -21,5 +21,6 @@ import java.util.List;
 public interface IItemStack {
     IItemStack setDisplayName(String name);
     IItemStack setLore(List<String> lore);
+    IItemStack setTexture(String texture);
     Object getHandle(); // Returns native ItemStack
 }

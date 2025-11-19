@@ -23,6 +23,7 @@ import lib.gui.components.*;
 import lib.gui.components.abstractions.AbstractPanel;
 import lib.util.colors.ChatColor;
 import lib.util.colors.Colors;
+import lib.util.materials.Materials;
 
 public class ColorSelectionPanel extends AbstractPanel {
     private final IEntityGUI player;

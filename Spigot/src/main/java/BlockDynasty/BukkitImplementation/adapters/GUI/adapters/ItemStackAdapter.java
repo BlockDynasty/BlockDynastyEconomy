@@ -22,7 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public class ItemStackAdapter implements IItemStack {
-    ItemStack itemStack;
+    private ItemStack itemStack;
 
     public ItemStackAdapter(ItemStack itemStack) {
         this.itemStack = itemStack;
@@ -30,13 +30,19 @@ public class ItemStackAdapter implements IItemStack {
 
     @Override
     public IItemStack setDisplayName(String name) {
-        MaterialAdapter.applyItemMeta(itemStack, name, null);
+        MaterialAdapter.applyItemName(itemStack, name);
         return this;
     }
 
     @Override
     public IItemStack setLore(List<String> lore) {
-        MaterialAdapter.applyItemMeta(itemStack, null, lore);
+        MaterialAdapter.applyItemLore(itemStack, lore);
+        return this;
+    }
+
+    @Override
+    public IItemStack setTexture(String texture) {
+        MaterialAdapter.applyTexture(itemStack, texture);
         return this;
     }
 

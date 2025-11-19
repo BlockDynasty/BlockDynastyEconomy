@@ -29,6 +29,7 @@ public class Currency implements ICurrency{
     private String singular;
     private String plural;
     private String symbol ;
+    private String texture;
     private String color ;
     private boolean decimalSupported ;
     private boolean transferable;
@@ -42,6 +43,7 @@ public class Currency implements ICurrency{
         this.exchangeRate = 1;
         this.color = "WHITE";
         this.symbol = "";
+        this.texture = "";
         this.decimalSupported = true;
         this.transferable = true;
         this.defaultCurrency = false;
@@ -56,17 +58,19 @@ public class Currency implements ICurrency{
         this.exchangeRate = 1;
         this.color = "WHITE";
         this.symbol = "";
+        this.texture = "";
         this.decimalSupported = true;
         this.transferable = true;
         this.defaultCurrency = false;
         this.interchangeableWith = new ArrayList<>();
     }
 
-    public Currency(UUID uuid, String singular, String plural, String symbol, String color, boolean decimalSupported, boolean transferable, boolean defaultCurrency, BigDecimal defaultBalance, double exchangeRate,List<Currency> interchangeableWith) {
+    public Currency(UUID uuid, String singular, String plural, String symbol, String texture,String color, boolean decimalSupported, boolean transferable, boolean defaultCurrency, BigDecimal defaultBalance, double exchangeRate,List<Currency> interchangeableWith) {
         this.uuid = uuid.toString();
         this.singular = singular;
         this.plural = plural;
         this.symbol = symbol;
+        this.texture = texture;
         this.color = color;
         this.decimalSupported = decimalSupported;
         this.transferable = transferable;
@@ -81,6 +85,7 @@ public class Currency implements ICurrency{
         this.singular = currency.singular;
         this.plural = currency.plural;
         this.symbol = currency.symbol;
+        this.texture = currency.texture;
         this.color = currency.color;
         this.decimalSupported = currency.decimalSupported;
         this.transferable = currency.transferable;
@@ -193,6 +198,13 @@ public class Currency implements ICurrency{
         return this.symbol;
     }
 
+    public String getTexture() {
+        return this.texture;
+    }
+
+    public void setTexture(String texture) {
+        this.texture = texture;
+    }
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }

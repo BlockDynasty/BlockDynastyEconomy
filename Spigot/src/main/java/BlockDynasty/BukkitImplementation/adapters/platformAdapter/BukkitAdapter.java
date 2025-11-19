@@ -30,7 +30,8 @@ import lib.abstractions.PlatformAdapter;
 import lib.gui.components.IInventory;
 import lib.gui.components.IItemStack;
 import lib.gui.components.ITextInput;
-import lib.gui.components.Materials;
+import lib.gui.components.RecipeItem;
+import lib.util.materials.Materials;
 import lib.scheduler.ContextualTask;
 import lib.scheduler.IScheduler;
 import org.bukkit.Bukkit;
@@ -95,7 +96,13 @@ public class BukkitAdapter implements PlatformAdapter {
 
     @Override
     public IItemStack createItemStack(Materials material) {
-        ItemStack itemStack = MaterialAdapter.toBukkitItemStack(material);
+        ItemStack itemStack = MaterialAdapter.createItemStack(material);
+        return new ItemStackAdapter(itemStack);
+    }
+
+    @Override
+    public IItemStack createItemStack(RecipeItem recipeItem) {
+        ItemStack itemStack = MaterialAdapter.createItemStack(recipeItem);
         return new ItemStackAdapter(itemStack);
     }
 

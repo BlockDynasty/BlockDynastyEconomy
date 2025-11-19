@@ -57,6 +57,11 @@ public class TextInput implements ITextInput {
 
     }
 
+    @Override
+    public ITextInput asInputChat() {
+        return this;
+    }
+
     public static class ChatInputListener {
         private final IGUI parent;
         private final IEntityGUI owner;

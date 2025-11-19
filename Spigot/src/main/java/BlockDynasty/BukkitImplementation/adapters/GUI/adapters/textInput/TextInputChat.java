@@ -34,6 +34,11 @@ public class TextInputChat implements ITextInput {
         Bukkit.getPluginManager().registerEvents(new ChatInputListener(parent, owner, title, function), getPlugin());
     }
 
+    @Override
+    public ITextInput asInputChat() {
+        return new TextInputChat();
+    }
+
     private void sendInitialMessages(IEntityGUI owner, String title, String initialText, boolean hasParent) {
         owner.sendMessage(ChatColor.stringValueOf(Colors.GREEN)+"[" + title + "] "+ChatColor.stringValueOf(Colors.GRAY) + initialText);
         owner.sendMessage(ChatColor.stringValueOf(Colors.GRAY) +"Type your response in chat.");
@@ -45,7 +50,7 @@ public class TextInputChat implements ITextInput {
         return BlockDynastyEconomy.getInstance();
     }
 
-    public class ChatInputListener implements Listener {
+    private class ChatInputListener implements Listener {
         private final IGUI parent;
         private final IEntityGUI owner;
         private final String title;

@@ -7,7 +7,7 @@ import lib.abstractions.PlatformAdapter;
 import lib.gui.components.IInventory;
 import lib.gui.components.IItemStack;
 import lib.gui.components.ITextInput;
-import lib.gui.components.Materials;
+import lib.util.materials.Materials;
 import lib.scheduler.IScheduler;
 
 import java.io.File;
@@ -35,6 +35,11 @@ public class Platform implements PlatformAdapter {
     @Override
     public IItemStack createItemStack(Materials material) {
         return new ItemStack(material);
+    }
+
+    @Override
+    public ItemStack createItemStack(lib.gui.components.RecipeItem recipeItem) {
+        return new ItemStack(recipeItem.getMaterial());
     }
 
     @Override

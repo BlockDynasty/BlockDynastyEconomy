@@ -7,6 +7,7 @@ import lib.gui.components.*;
 import lib.gui.components.abstractions.PaginatedPanel;
 import lib.util.colors.ChatColor;
 import lib.util.colors.Message;
+import lib.util.materials.Materials;
 
 import java.util.Map;
 
@@ -27,9 +28,11 @@ public class CurrencyListExchange extends PaginatedPanel<Currency> {
     @Override
     protected IItemStack createItemFor(Currency currency) {
         String color = ChatColor.stringValueOf(currency.getColor());
-        return createItem(Materials.GOLD_INGOT,
-                Message.process(Map.of("currency",color+currency.getSingular()),"CurrencySelector.button1.nameItem"),
-               "Click to remove");
+        return createItem(RecipeItem.builder().setMaterial(Materials.GOLD_INGOT)
+                .setName(Message.process(Map.of("currency",color+currency.getSingular()),"CurrencySelector.button1.nameItem"))
+                .setLore("Click to remove")
+                .setTexture(currency.getTexture())
+                .build());
     }
 
     @Override

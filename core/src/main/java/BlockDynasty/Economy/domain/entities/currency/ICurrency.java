@@ -41,6 +41,7 @@ public interface ICurrency {
      String getColor();
      void setColor(String color);
      String getSymbol();
+     String getTexture();
      void setSymbol(String symbol);
      double getExchangeRate();
      void setExchangeRate(double exchangeRate);

@@ -32,7 +32,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-public class TextInputAnvil implements ITextInput {
+public class TextInputAnvil extends TextInputChat {
 
     @Override
     public void open(IEntityGUI owner, String title, String initialText, Function<String, String> function) {

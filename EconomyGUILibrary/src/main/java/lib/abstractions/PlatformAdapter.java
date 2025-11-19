@@ -19,7 +19,8 @@ package lib.abstractions;
 import lib.gui.components.IInventory;
 import lib.gui.components.IItemStack;
 import lib.gui.components.ITextInput;
-import lib.gui.components.Materials;
+import lib.gui.components.RecipeItem;
+import lib.util.materials.Materials;
 import lib.scheduler.IScheduler;
 
 import java.io.File;
@@ -31,7 +32,10 @@ public interface PlatformAdapter {
     IPlayer getPlayerByUUID(UUID uuid);
     List<IPlayer> getOnlinePlayers();
 
+    @Deprecated
     IItemStack createItemStack(Materials material);
+
+    IItemStack createItemStack(RecipeItem recipeItem);
     IInventory createInventory(String title, int rows);
     void dispatchCommand(String command) throws Exception;
 

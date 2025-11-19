@@ -22,7 +22,7 @@ import BlockDynasty.Economy.domain.result.Result;
 import lib.gui.GUIFactory;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.ITextInput;
-import lib.gui.components.Materials;
+import lib.util.materials.Materials;
 import lib.gui.components.abstractions.AbstractPanel;
 import lib.gui.templates.users.Offers.ListPlayerOnlineToOffer;
 import lib.gui.templates.users.Offers.ListPlayersOfflineToOffer;

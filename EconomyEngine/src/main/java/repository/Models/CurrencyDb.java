@@ -40,6 +40,9 @@ public class CurrencyDb {
     @Column(name = "symbol")
     private String symbol;
 
+    @Column(name= "texture")
+    private String texture;
+
     @Column(name = "color")
     private String color;
 
@@ -103,6 +106,14 @@ public class CurrencyDb {
 
     public void setSymbol(String symbol) {
         this.symbol = symbol;
+    }
+
+    public String getTexture() {
+        return texture;
+    }
+
+    public void setTexture(String texture) {
+        this.texture = texture;
     }
 
     public String getColor() {
@@ -178,6 +189,7 @@ public class CurrencyDb {
         setDefaultBalance(currency.getDefaultBalance());
         setExchangeRate(currency.getExchangeRate());
         setSymbol(currency.getSymbol());
+        setTexture(currency.getTexture());
         setInterchangeableWith(currency.getInterchangeableWith());
     }
 }

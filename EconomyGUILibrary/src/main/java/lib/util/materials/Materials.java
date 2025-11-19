@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package lib.gui.components;
+package lib.util.materials;
 
 /**
  * Enum representing common materials used across GUIs
@@ -29,6 +29,8 @@ public enum Materials {
     GOLD_NUGGET,
     LIME_DYE,
     NETHER_STAR,
+    STONE,
+    AIR,
 
     // Item indicators
     PAPER,

@@ -34,13 +34,14 @@ public class CurrencyMapper {
         entity.setUuid(domain.getUuid().toString());
         entity.setSingular(domain.getSingular());
         entity.setPlural(domain.getPlural());
-        entity.setColor(domain.getColor()); // Si tu dominio tiene color
+        entity.setColor(domain.getColor());
         entity.setDecimalSupported(domain.isDecimalSupported());
         entity.setTransferable(domain.isTransferable());
         entity.setDefaultCurrency(domain.isDefaultCurrency());
         entity.setDefaultBalance(domain.getDefaultBalance());
         entity.setExchangeRate(domain.getExchangeRate());
-        entity.setSymbol(domain.getSymbol()); // Si tu dominio tiene símbolo
+        entity.setSymbol(domain.getSymbol());
+        entity.setTexture(domain.getTexture());
         entity.setInterchangeableWith(domain.getInterchangeableWith());
         return entity;
     }
@@ -56,6 +57,7 @@ public class CurrencyMapper {
                 entity.getSingular(),
                 entity.getPlural(),
                 entity.getSymbol(),
+                entity.getTexture(),
                 entity.getColor(),
                 entity.isDecimalSupported(),
                 entity.isTransferable(),

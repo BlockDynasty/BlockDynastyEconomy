@@ -19,7 +19,7 @@ package lib.gui.components.abstractions;
 import lib.gui.components.IGUI;
 import lib.gui.components.IItemStack;
 import lib.gui.components.IEntityGUI;
-import lib.gui.components.Materials;
+import lib.util.materials.Materials;
 import lib.util.colors.ChatColor;
 import lib.util.colors.Colors;
 import lib.util.colors.Message;

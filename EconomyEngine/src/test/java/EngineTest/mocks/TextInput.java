@@ -5,7 +5,6 @@ import lib.gui.components.IEntityGUI;
 import lib.gui.components.IGUI;
 import lib.gui.components.ITextInput;
 
-import java.util.Scanner;
 import java.util.function.Function;
 
 public class TextInput implements ITextInput {
@@ -38,5 +37,10 @@ public class TextInput implements ITextInput {
 
     public static void setInput(String userInput) {
         input = userInput;
+    }
+
+    @Override
+    public ITextInput asInputChat() {
+        return this;
     }
 }

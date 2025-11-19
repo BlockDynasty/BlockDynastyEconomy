@@ -122,11 +122,26 @@ public class EditCurrencyUseCase {
     }
 
     public void editSymbol(String nameCurrency,String symbol){
-            Currency currency = currencyService.getCurrency(nameCurrency);
+        Currency currency = currencyService.getCurrency(nameCurrency);
         if (currency == null){
             throw new CurrencyNotFoundException("Currency not found");
         }
         currency.setSymbol(symbol);
+        try {
+            dataStore.saveCurrency(currency);
+            //actualizar cache no hace falta por que ya traje la referencia de la moneda de currencymanager
+            updateForwarder.sendUpdateMessage("currency", currency.getUuid().toString());
+        }catch (TransactionException e){
+            throw new TransactionException("Error creating currency");
+        }
+    }
+
+    public void editTexture(String nameCurrency,String texture){
+        Currency currency = currencyService.getCurrency(nameCurrency);
+        if (currency == null){
+            throw new CurrencyNotFoundException("Currency not found");
+        }
+        currency.setTexture(texture);
         try {
             dataStore.saveCurrency(currency);
             //actualizar cache no hace falta por que ya traje la referencia de la moneda de currencymanager

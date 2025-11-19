@@ -22,6 +22,7 @@ import lib.gui.components.*;
 import lib.util.colors.ChatColor;
 import lib.util.colors.Colors;
 import lib.util.colors.Message;
+import lib.util.materials.Materials;
 
 import java.util.List;
 import java.util.Map;

@@ -23,7 +23,8 @@ import BlockDynasty.Economy.domain.result.Result;
 import lib.gui.components.IGUI;
 import lib.gui.components.IItemStack;
 import lib.gui.components.IEntityGUI;
-import lib.gui.components.Materials;
+import lib.gui.components.RecipeItem;
+import lib.util.materials.Materials;
 import lib.gui.components.abstractions.PaginatedPanel;
 import lib.util.colors.ChatColor;
 import lib.util.colors.Colors;
@@ -72,10 +73,13 @@ public class AccountBalance extends PaginatedPanel<Money> {
     @Override
     protected IItemStack createItemFor(Money money) {
         Currency currency = money.getCurrency();
-        return createItem(Materials.GOLD_INGOT,
-                Message.process(Map.of("currency",ChatColor.stringValueOf(currency.getColor()) + currency.getSingular()),"AccountBalance.button1.nameItem"),
-                Message.process(Map.of("color",ChatColor.stringValueOf(Colors.WHITE),
-                                "currency",ChatColor.stringValueOf(currency.getColor()) + money.format()),"AccountBalance.button1.lore"));
+        return createItem(RecipeItem.builder()
+                .setMaterial(Materials.GOLD_INGOT)
+                .setName(Message.process(Map.of("currency",ChatColor.stringValueOf(currency.getColor()) + currency.getSingular()),"AccountBalance.button1.nameItem"))
+                .setLore( Message.process(Map.of("color",ChatColor.stringValueOf(Colors.WHITE),
+                        "currency",ChatColor.stringValueOf(currency.getColor()) + money.format()),"AccountBalance.button1.lore"))
+                .setTexture(currency.getTexture())
+                .build());
     }
 
     @Override

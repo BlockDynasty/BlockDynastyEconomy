@@ -18,7 +18,7 @@ package lib.gui.templates.administrators.mainMenus;
 
 import lib.gui.GUIFactory;
 import lib.gui.components.IEntityGUI;
-import lib.gui.components.Materials;
+import lib.util.materials.Materials;
 import lib.gui.components.abstractions.AbstractPanel;
 import lib.util.colors.ChatColor;
 import lib.util.colors.Colors;

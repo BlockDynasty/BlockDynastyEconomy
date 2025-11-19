@@ -16,7 +16,8 @@
 
 package BlockDynasty.adapters.GUI.adapters;
 
-import lib.gui.components.Materials;
+import lib.gui.components.RecipeItem;
+import lib.util.materials.Materials;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.spongepowered.api.Sponge;
@@ -27,10 +28,7 @@ import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MaterialAdapter {
@@ -38,46 +36,54 @@ public class MaterialAdapter {
     private static final ItemType FALLBACK = ItemTypes.STONE.get();
 
     static {
-        // Initialize automatically
         for (Materials material : Materials.values()) {
             try {
                 Field field = ItemTypes.class.getField(material.name());
                 Object supplier = field.get(null);
-                // Call the get() method on the supplier
                 ItemType itemType = (ItemType) supplier.getClass().getMethod("get").invoke(supplier);
                 MATERIAL_MAP.put(material, itemType);
             } catch (Exception e) {
-                //System.out.println("No mapping found for " + material.name() + ": " + e.getMessage());
                 MATERIAL_MAP.put(material, FALLBACK);
             }
         }
     }
 
-    public static void applyItemMeta(ItemStack item, String displayName, List<String> lore){
+    public static ItemType toSpongeMaterial(Materials material) {
+        return MATERIAL_MAP.getOrDefault(material, FALLBACK);
+    }
 
+    public static void applyItemName(ItemStack item, String displayName){
         if(displayName != null){
             if(item.type().equals( ItemTypes.PLAYER_HEAD.get())){
                 Optional<ServerPlayer> optional= Sponge.server().player(displayName);
                 optional.ifPresent(serverPlayer -> item.offer(Keys.GAME_PROFILE, serverPlayer.profile()));
             }
-            //item.offer(Keys.CUSTOM_NAME,  Component.text().append(LegacyComponentSerializer.legacyAmpersand().deserialize(displayName)).build());
             item.offer(Keys.CUSTOM_NAME,  MiniMessage.miniMessage().deserialize(displayName));
-
         }
-        if(lore != null){
-            //List<Component> loreComponents = lore.stream()
-            //        .map(m -> Component.text().append(LegacyComponentSerializer.legacyAmpersand().deserialize(m)).build())
-            //        .collect(Collectors.toList());
+    }
 
+    public static void applyItemLore(ItemStack item, List<String> lore){
+        if(lore != null){
             List<Component> loreComponents = lore.stream()
                     .map(m ->  MiniMessage.miniMessage().deserialize(m))
                     .collect(Collectors.toList());
             item.offer(Keys.LORE, loreComponents);
         }
-
     }
 
-    public static ItemType toItemType(Materials material) {
-        return MATERIAL_MAP.getOrDefault(material, FALLBACK);
+    public static void applyTexture(ItemStack item, String texture){
+        //nothing to do here
+    }
+
+    public static ItemStack createItemStack(RecipeItem recipeItem){
+        ItemStack itemStack = null;
+        if(recipeItem.getMaterial() != null){
+            ItemType itemType = toSpongeMaterial(recipeItem.getMaterial());
+            itemStack = ItemStack.of(itemType);
+            applyItemName(itemStack, recipeItem.getName());
+            applyItemLore(itemStack, List.of(recipeItem.getLore()));
+            applyTexture(itemStack, recipeItem.getTexture());
+        }
+        return itemStack;
     }
 }

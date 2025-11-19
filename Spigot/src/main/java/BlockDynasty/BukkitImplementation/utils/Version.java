@@ -27,6 +27,7 @@ public class Version {
     private static final boolean hasAdventure = JavaUtil.classExists("net.kyori.adventure.text.Component")&&JavaUtil.classExists("net.kyori.adventure.text.minimessage.MiniMessage");
     public static final boolean isFolia = JavaUtil.classExists("io.papermc.paper.threadedregions.RegionizedServer");
     public static final boolean isCanvas = JavaUtil.classExists("io.canvasmc.canvas.server.ThreadedServer");
+    public static final boolean supportCustomTexture = isHigherThan("1.20");
 
     //this dependency is critical, because the library AnvilGUI works directly with NMS code.
     private static final boolean hasSupportAnvilGUI = !isMohist() && !isHigherThan("1.21.10");
@@ -55,6 +56,10 @@ public class Version {
      */
     public static boolean hasSupportAdventureText() {
         return hasAdventure;
+    }
+
+    public static boolean hasSupportCustomTexture() {
+        return supportCustomTexture;
     }
 
     /**

@@ -18,6 +18,7 @@ package useCaseTest.transaction;
 
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.useCase.currency.EditCurrencyUseCase;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import mockClass.CourierTest;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.SearchAccountUseCase;
@@ -48,17 +49,17 @@ public class ExchangeUseCaseTest {
     SearchCurrencyUseCase searchCurrencyUseCase;
     EditCurrencyUseCase editCurrencyUseCase;
     ExchangeUseCase exchangeUseCase;
-    Currency coin;
-    Currency dinero;
+    ICurrency coin;
+    ICurrency dinero;
 
     @BeforeEach
     void setUp() {
         // Keep the same currency setup
-        coin = new Currency(UUID.randomUUID(), "Coin", "Coins");
+        coin =Currency.builder().setSingular("Coin").setPlural("Coins").build();
         coin.setExchangeRate(1.0);
         coin.setDecimalSupported(false); // Coins don't support decimals
 
-        dinero = new Currency(UUID.randomUUID(), "dinero", "dinero");
+        dinero = Currency.builder().setSingular("dinero").setPlural("dinero").build();
         dinero.setExchangeRate(30000.0);
 
         // Increase the initial dinero balance to have enough for the test

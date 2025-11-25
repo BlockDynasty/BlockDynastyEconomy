@@ -33,7 +33,7 @@ public class MockConnectionHibernateH2 implements Connection {
 
         // Configure H2 in-memory database
         configuration.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1");
+        configuration.setProperty("hibernate.connection.url", "jdbc:h2:mem:testdb");
         configuration.setProperty("hibernate.connection.username", "");
         configuration.setProperty("hibernate.connection.password", "");
 

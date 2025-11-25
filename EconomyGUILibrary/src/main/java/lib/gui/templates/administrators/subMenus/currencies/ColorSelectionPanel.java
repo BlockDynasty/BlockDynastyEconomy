@@ -18,6 +18,7 @@ package lib.gui.templates.administrators.subMenus.currencies;
 
 import BlockDynasty.Economy.aplication.useCase.currency.EditCurrencyUseCase;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import lib.gui.GUIFactory;
 import lib.gui.components.*;
 import lib.gui.components.abstractions.AbstractPanel;
@@ -27,11 +28,11 @@ import lib.util.materials.Materials;
 
 public class ColorSelectionPanel extends AbstractPanel {
     private final IEntityGUI player;
-    private final Currency currency;
+    private final ICurrency currency;
     private final EditCurrencyUseCase editCurrencyUseCase;
     private final ITextInput textInput;
 
-    public ColorSelectionPanel(IEntityGUI player, Currency currency, EditCurrencyUseCase editCurrencyUseCase, IGUI parent, ITextInput textInput) {
+    public ColorSelectionPanel(IEntityGUI player, ICurrency currency, EditCurrencyUseCase editCurrencyUseCase, IGUI parent, ITextInput textInput) {
         super("Select color", 5,player,parent);
         this.player = player;
         this.currency = currency;

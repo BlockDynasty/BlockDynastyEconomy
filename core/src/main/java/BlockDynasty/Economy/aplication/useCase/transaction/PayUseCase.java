@@ -18,6 +18,7 @@ package BlockDynasty.Economy.aplication.useCase.transaction;
 
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.IPayUseCase;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.events.transactionsEvents.PayEvent;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
@@ -42,15 +43,15 @@ public class PayUseCase extends TransferFundsUseCase implements IPayUseCase {
     }
 
     @Override
-    protected void logSuccess(Account accountFrom, Account accountTo, Currency currency, BigDecimal amount) {
+    protected void logSuccess(Account accountFrom, Account accountTo, ICurrency currency, BigDecimal amount) {
         this.economyLogger.log("[PAY] Account: " + accountFrom.getNickname() + " paid " + currency.format(amount) + " to " + accountTo.getNickname());
     }
     @Override
-    protected void logFailure(Account accountFrom, Account accountTo, Currency currency, BigDecimal amount, Result<TransferResult> result) {
+    protected void logFailure(Account accountFrom, Account accountTo, ICurrency currency, BigDecimal amount, Result<TransferResult> result) {
         this.economyLogger.log("[PAY Failed] Account: " + accountFrom.getNickname() + " paid " + currency.format(amount) + " to " + accountTo.getNickname() + " Error: " + result.getErrorMessage() + " Code: " + result.getErrorCode());
     }
     @Override
-    protected void emitEvent(Account accountFrom, Account accountTo, Currency currency, BigDecimal amount) {
+    protected void emitEvent(Account accountFrom, Account accountTo, ICurrency currency, BigDecimal amount) {
         this.eventManager.emit(new PayEvent(accountFrom.getPlayer(), accountTo.getPlayer(), currency, amount));
     }
 }

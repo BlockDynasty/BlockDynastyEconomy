@@ -16,5 +16,24 @@
 
 package BlockDynasty.BukkitImplementation.Integrations.treasuryEconomy;
 
+import BlockDynasty.BukkitImplementation.BlockDynastyEconomy;
+import BlockDynasty.BukkitImplementation.utils.Console;
+import me.lokka30.treasury.api.common.service.ServicePriority;
+import me.lokka30.treasury.api.common.service.ServiceRegistry;
+import me.lokka30.treasury.api.economy.EconomyProvider;
+import org.bukkit.Bukkit;
+
 public class TreasuryHook {
+    public static void register(){
+        if(Bukkit.getPluginManager().isPluginEnabled("Treasury")) {
+            EconomyProvider econProvider = new economyHook(BlockDynastyEconomy.getApi());
+            ServiceRegistry.INSTANCE.registerService(
+                    EconomyProvider.class,
+                    econProvider,
+                    "BlockDynastyEconomy",
+                    ServicePriority.NORMAL
+            );
+            Console.log("Treasury economy plugin detected, registering BlockDynastyEconomy as economy provider...");
+        }
+    }
 }

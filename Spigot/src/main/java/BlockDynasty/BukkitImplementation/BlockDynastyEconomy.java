@@ -16,6 +16,7 @@
 
 package BlockDynasty.BukkitImplementation;
 
+import BlockDynasty.BukkitImplementation.Integrations.treasuryEconomy.TreasuryHook;
 import BlockDynasty.BukkitImplementation.adapters.GUI.listener.ClickListener;
 import BlockDynasty.BukkitImplementation.adapters.GUI.listener.CloseListener;
 import BlockDynasty.BukkitImplementation.Integrations.Placeholder.PlaceHolder;
@@ -34,6 +35,7 @@ import BlockDynasty.BukkitImplementation.utils.Version;
 import Main.Economy;
 import api.IApi;
 import org.bukkit.Bukkit;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.event.HandlerList;
 import platform.files.Configuration;
 import org.bstats.bukkit.Metrics;
@@ -42,7 +44,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class BlockDynastyEconomy extends JavaPlugin {
     private static BlockDynastyEconomy instance;
-    private Economy economy;
+    private static Economy economy;
     private static Configuration configuration;
     private Metrics metrics;
 
@@ -147,6 +149,7 @@ public class BlockDynastyEconomy extends JavaPlugin {
     private void setupIntegrations() {
         Vault.init(economy.getApiWithLog(economy.getVaultLogger()));
         PlaceHolder.register(economy.getPlaceHolder());
+        TreasuryHook.register();
         ChannelRegister.init(this);
     }
 
@@ -158,7 +161,7 @@ public class BlockDynastyEconomy extends JavaPlugin {
         return configuration;
     }
 
-    public IApi getApi() {
+    public static IApi getApi() {
         return economy.getApi();
     }
 }

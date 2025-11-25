@@ -20,6 +20,7 @@ import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.aplication.useCase.transaction.DepositUseCase;
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.IDepositUseCase;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.events.Context;
 import BlockDynasty.Economy.domain.result.Result;
 import lib.gui.components.IGUI;
@@ -45,7 +46,7 @@ public class DepositPanel extends CurrencySelectorAndAmount {
     }
 
     @Override
-    public String execute(IEntityGUI sender, Currency currency, BigDecimal amount){
+    public String execute(IEntityGUI sender, ICurrency currency, BigDecimal amount){
         Result<Void> result = depositUseCase.execute(targetPlayer.getUuid(),currency.getSingular(), amount, Context.COMMAND);
         if (result.isSuccess()) {
             sender.sendMessage(ChatColor.stringValueOf(Colors.GREEN)+"[Bank] "+ChatColor.stringValueOf(Colors.GRAY)+"Deposited "+ ChatColor.stringValueOf(currency.getColor()) + currency.format(amount) +ChatColor.stringValueOf(Colors.GRAY)+ " to " + targetPlayer.getNickname() + "'s account.");

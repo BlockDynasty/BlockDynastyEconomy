@@ -19,6 +19,7 @@ package repository;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.Exceptions.CurrencyAlreadyExist;
 import BlockDynasty.Economy.domain.entities.currency.Exceptions.CurrencyNotFoundException;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.persistence.Exceptions.RepositoryException;
 import BlockDynasty.Economy.domain.persistence.entities.ICurrencyRepository;
 import jakarta.persistence.NoResultException;
@@ -39,11 +40,11 @@ public class CurrencyRepository implements ICurrencyRepository {
     }
 
     @Override
-    public List<Currency> findAll() {
+    public List<ICurrency> findAll() {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
-                List<Currency> currencies = session.createQuery("SELECT c FROM CurrencyDb c", CurrencyDb.class)
+                List<ICurrency> currencies = session.createQuery("SELECT c FROM CurrencyDb c", CurrencyDb.class)
                         .getResultList()
                         .stream()
                         .map(CurrencyMapper::toDomain)
@@ -58,7 +59,7 @@ public class CurrencyRepository implements ICurrencyRepository {
     }
 
     @Override
-    public Currency findByUuid(String uuid) {
+    public ICurrency findByUuid(String uuid) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
@@ -79,7 +80,7 @@ public class CurrencyRepository implements ICurrencyRepository {
     }
 
     @Override
-    public Currency findDefaultCurrency() {
+    public ICurrency findDefaultCurrency() {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
@@ -100,7 +101,7 @@ public class CurrencyRepository implements ICurrencyRepository {
     }
 
     @Override
-    public Currency findByName(String name) {
+    public ICurrency findByName(String name) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
@@ -121,7 +122,7 @@ public class CurrencyRepository implements ICurrencyRepository {
     }
 
     @Override
-    public void save(Currency currency) {
+    public void save(ICurrency currency) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
@@ -132,7 +133,7 @@ public class CurrencyRepository implements ICurrencyRepository {
                         .setParameter("singular", currency.getSingular())
                         .getSingleResult();
 
-                currencyDb.update(currency);
+                CurrencyMapper.update(currency,currencyDb);
                 session.merge(currencyDb);
                 tx.commit();
             } catch (NoResultException e) {
@@ -145,7 +146,7 @@ public class CurrencyRepository implements ICurrencyRepository {
     }
 
     @Override
-    public void delete(Currency currency) {
+    public void delete(ICurrency currency) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
@@ -169,7 +170,7 @@ public class CurrencyRepository implements ICurrencyRepository {
     }
 
     @Override
-    public void update(Currency currency) {
+    public void update(ICurrency currency) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
@@ -180,7 +181,7 @@ public class CurrencyRepository implements ICurrencyRepository {
                         .setParameter("singular", currency.getSingular())
                         .getSingleResult();
 
-                currencyDb.update(currency);
+                CurrencyMapper.update(currency,currencyDb);
                 session.merge(currencyDb);
                 tx.commit();
             } catch (NoResultException e) {
@@ -193,7 +194,7 @@ public class CurrencyRepository implements ICurrencyRepository {
     }
 
     @Override
-    public void create(Currency currency) {
+    public void create(ICurrency currency) {
         if (currency == null) {
             throw new IllegalArgumentException("Currency no puede ser nulo");
         }

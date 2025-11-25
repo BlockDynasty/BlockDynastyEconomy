@@ -20,6 +20,7 @@ import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.events.EventRegistry;
 import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.entities.offers.Offer;
 import BlockDynasty.Economy.domain.events.offersEvents.*;
 import BlockDynasty.Economy.domain.services.IOfferService;
@@ -53,7 +54,7 @@ public class OfferService implements IOfferService {
         this.eventManager = eventManager;
     }
 
-    public Offer createOffer(Player playerSender, Player playerReceiver, BigDecimal amountCurrencyValue, BigDecimal amountCurrencyOffer, Currency currencyValue, Currency currencyOffer) {
+    public Offer createOffer(Player playerSender, Player playerReceiver, BigDecimal amountCurrencyValue, BigDecimal amountCurrencyOffer, ICurrency currencyValue, ICurrency currencyOffer) {
         Offer offer = new Offer(playerSender, playerReceiver, amountCurrencyValue, amountCurrencyOffer, currencyValue, currencyOffer);
         addOffer(offer);
         return offer;

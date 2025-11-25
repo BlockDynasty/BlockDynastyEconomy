@@ -19,6 +19,7 @@ package useCaseTest.transaction;
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.useCase.account.CreateAccountUseCase;
 import BlockDynasty.Economy.aplication.useCase.currency.CreateCurrencyUseCase;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import mockClass.CourierTest;
 import BlockDynasty.Economy.aplication.services.CurrencyService;
 import BlockDynasty.Economy.domain.result.Result;
@@ -42,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class DepositUseCaseTest {
     Account nullplague;
-    Currency dinero;
+    ICurrency dinero;
     IRepository repository;
     CurrencyService currencyService;
     AccountService accountService;
@@ -55,7 +56,7 @@ public class DepositUseCaseTest {
     @BeforeEach
     void setUp() {
         nullplague = new Account(UUID.randomUUID(), "nullplague");
-        dinero= new Currency(UUID.randomUUID(),"dinero","dinero");
+        dinero= Currency.builder().setSingular("dinero").setPlural("dinero").build();
 
         repository = FactoryRepo.getDb();
         currencyService = new CurrencyService(repository);

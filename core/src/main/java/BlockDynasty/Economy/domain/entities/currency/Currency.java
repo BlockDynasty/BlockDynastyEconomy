@@ -36,64 +36,9 @@ public class Currency implements ICurrency{
     private boolean defaultCurrency ;
     private BigDecimal defaultBalance ;
     private double exchangeRate ;
-    private List<Currency> interchangeableWith;
+    private List<ICurrency> interchangeableWith;
 
-    public Currency(UUID uuid, String singular, String plural) {
-        this.defaultBalance = BigDecimal.ZERO;
-        this.exchangeRate = 1;
-        this.color = "WHITE";
-        this.symbol = "";
-        this.texture = "";
-        this.decimalSupported = true;
-        this.transferable = true;
-        this.defaultCurrency = false;
-        this.uuid = uuid.toString();
-        this.singular = singular;
-        this.plural = plural;
-        this.interchangeableWith = new ArrayList<>();
-    }
-
-    public Currency() {
-        this.defaultBalance = BigDecimal.ZERO;
-        this.exchangeRate = 1;
-        this.color = "WHITE";
-        this.symbol = "";
-        this.texture = "";
-        this.decimalSupported = true;
-        this.transferable = true;
-        this.defaultCurrency = false;
-        this.interchangeableWith = new ArrayList<>();
-    }
-
-    public Currency(UUID uuid, String singular, String plural, String symbol, String texture,String color, boolean decimalSupported, boolean transferable, boolean defaultCurrency, BigDecimal defaultBalance, double exchangeRate,List<Currency> interchangeableWith) {
-        this.uuid = uuid.toString();
-        this.singular = singular;
-        this.plural = plural;
-        this.symbol = symbol;
-        this.texture = texture;
-        this.color = color;
-        this.decimalSupported = decimalSupported;
-        this.transferable = transferable;
-        this.defaultCurrency = defaultCurrency;
-        this.defaultBalance = defaultBalance;
-        this.exchangeRate = exchangeRate;
-        this.interchangeableWith = interchangeableWith;
-    }
-
-    public Currency(Currency currency) {
-        this.uuid = currency.uuid;
-        this.singular = currency.singular;
-        this.plural = currency.plural;
-        this.symbol = currency.symbol;
-        this.texture = currency.texture;
-        this.color = currency.color;
-        this.decimalSupported = currency.decimalSupported;
-        this.transferable = currency.transferable;
-        this.defaultCurrency = currency.defaultCurrency;
-        this.defaultBalance = currency.defaultBalance;
-        this.exchangeRate = currency.exchangeRate;
-        this.interchangeableWith = currency.getInterchangeableWith();
-    }
+    private Currency() {}
 
     public void setUuid(UUID uuid) {
         this.uuid = uuid.toString();
@@ -158,10 +103,6 @@ public class Currency implements ICurrency{
         return this.defaultCurrency;
     }
 
-    public void setStartBalance(BigDecimal startBalance){
-        this.defaultBalance =startBalance;
-    }
-
     public void setDefaultBalance(BigDecimal defaultBalance) {
         this.defaultBalance = defaultBalance;
     }
@@ -217,25 +158,25 @@ public class Currency implements ICurrency{
         this.exchangeRate = exchangeRate;
     }
 
-    public void addInterchangeableCurrency(Currency currency) {
+    public void addInterchangeableCurrency(ICurrency currency) {
         if (!this.interchangeableWith.contains(currency)) {
             this.interchangeableWith.add(currency);
         }
     }
 
-    public void removeInterchangeableCurrency(Currency currency) {
+    public void removeInterchangeableCurrency(ICurrency currency) {
         this.interchangeableWith.remove(currency);
     }
 
-    public void setInterchangeableWith(List<Currency> interchangeableWith) {
+    public void setInterchangeableCurrencies(List<ICurrency> interchangeableWith) {
         this.interchangeableWith = interchangeableWith;
     }
 
-    public List<Currency> getInterchangeableWith() {
+    public List<ICurrency> getInterchangeableCurrencies() {
         return interchangeableWith;
     }
 
-    public boolean isInterchangeableWith(Currency currency) {
+    public boolean isInterchangeableWith(ICurrency currency) {
         return interchangeableWith.stream().anyMatch(c -> c.equals(currency));
     }
 
@@ -265,6 +206,114 @@ public class Currency implements ICurrency{
     @Override
     public int hashCode() {
         return Objects.hash(uuid);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private String uuid = UUID.randomUUID().toString();
+        private String singular = "";
+        private String plural = "";
+        private String symbol= "";
+        private String texture = "";
+        private String color= "WHITE";
+        private boolean decimalSupported= true;
+        private boolean transferable= true;
+        private boolean defaultCurrency= false;
+        private BigDecimal defaultBalance= BigDecimal.ZERO;
+        private double exchangeRate = 1;
+        private List<ICurrency> interchangeableWith= new ArrayList<>();
+
+        public Builder setUuid(UUID uuid) {
+            this.uuid = uuid.toString();
+            return this;
+        }
+
+        public Builder setSingular(String singular) {
+            this.singular = singular;
+            return this;
+        }
+
+        public Builder setPlural(String plural) {
+            this.plural = plural;
+            return this;
+        }
+
+        public Builder setSymbol(String symbol) {
+            this.symbol = symbol;
+            return this;
+        }
+
+        public Builder setTexture(String texture) {
+            this.texture = texture;
+            return this;
+        }
+
+        public Builder setColor(String color) {
+            this.color = color;
+            return this;
+        }
+
+        public Builder setDecimalSupported(boolean decimalSupported) {
+            this.decimalSupported = decimalSupported;
+            return this;
+        }
+
+        public Builder setTransferable(boolean transferable) {
+            this.transferable = transferable;
+            return this;
+        }
+
+        public Builder setDefaultCurrency(boolean defaultCurrency) {
+            this.defaultCurrency = defaultCurrency;
+            return this;
+        }
+        public Builder setDefaultBalance(BigDecimal defaultBalance) {
+            this.defaultBalance = defaultBalance;
+            return this;
+        }
+        public Builder setExchangeRate(double exchangeRate) {
+            this.exchangeRate = exchangeRate;
+            return this;
+        }
+        public Builder setInterchangeableWith(List<ICurrency> interchangeableWith) {
+            this.interchangeableWith = interchangeableWith;
+            return this;
+        }
+
+        public Builder copy(ICurrency currency) {
+            this.uuid = currency.getUuid().toString();
+            this.singular = currency.getSingular();
+            this.plural = currency.getPlural();
+            this.symbol = currency.getSymbol();
+            this.texture = currency.getTexture();
+            this.color = currency.getColor();
+            this.decimalSupported = currency.isDecimalSupported();
+            this.transferable = currency.isTransferable();
+            this.defaultCurrency = currency.isDefaultCurrency();
+            this.defaultBalance = currency.getDefaultBalance();
+            this.exchangeRate = currency.getExchangeRate();
+            this.interchangeableWith = new ArrayList<>(currency.getInterchangeableCurrencies());
+            return this;
+        }
+        public ICurrency build() {
+            Currency currency = new Currency();
+            currency.uuid = this.uuid;
+            currency.singular = this.singular;
+            currency.plural = this.plural;
+            currency.symbol = this.symbol;
+            currency.texture = this.texture;
+            currency.color = this.color;
+            currency.decimalSupported = this.decimalSupported;
+            currency.transferable = this.transferable;
+            currency.defaultCurrency = this.defaultCurrency;
+            currency.defaultBalance = this.defaultBalance;
+            currency.exchangeRate = this.exchangeRate;
+            currency.interchangeableWith = this.interchangeableWith;
+            return currency;
+        }
     }
 }
 

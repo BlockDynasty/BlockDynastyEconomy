@@ -18,6 +18,7 @@ package BlockDynasty.Economy.aplication.useCase.offer;
 
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByUUIDUseCase;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.entities.offers.Offer;
 import BlockDynasty.Economy.domain.events.offersEvents.OfferCreated;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
@@ -73,11 +74,11 @@ public class CreateOfferUseCase {
             return Result.failure("Receiver account is blocked", ErrorCode.ACCOUNT_BLOCKED);
         }
 
-        Result<Currency> currencyValueResult = this.searchCurrencyUseCase.getCurrency(currencyNameValue);
+        Result<ICurrency> currencyValueResult = this.searchCurrencyUseCase.getCurrency(currencyNameValue);
         if (!currencyValueResult.isSuccess()) {
             return Result.failure(currencyValueResult.getErrorMessage(), currencyValueResult.getErrorCode());
         }
-        Result<Currency> currencyOfferResult = this.searchCurrencyUseCase.getCurrency(currencyNameOffer);
+        Result<ICurrency> currencyOfferResult = this.searchCurrencyUseCase.getCurrency(currencyNameOffer);
         if (!currencyOfferResult.isSuccess()) {
             return Result.failure(currencyOfferResult.getErrorMessage(), currencyOfferResult.getErrorCode());
         }

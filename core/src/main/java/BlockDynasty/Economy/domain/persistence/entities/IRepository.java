@@ -16,6 +16,7 @@
 
 package BlockDynasty.Economy.domain.persistence.entities;
 
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.persistence.transaction.ITransactions;
 import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
@@ -26,12 +27,12 @@ import java.util.List;
 //todo: evaluar hacer solo operaciones CRUD
 public interface IRepository extends ITransactions {
 
-    List<Currency> loadCurrencies();
-    Result<Currency> loadCurrencyByName(String name);
-    Result<Currency> loadCurrencyByUuid(String uuid);
-    Result<Currency> loadDefaultCurrency(); //carga la moneda por defecto, si no hay devuelve una lista vacia
-    void saveCurrency(Currency currency); //hace de update tambien
-    void deleteCurrency(Currency currency);
+    List<ICurrency> loadCurrencies();
+    Result<ICurrency> loadCurrencyByName(String name);
+    Result<ICurrency> loadCurrencyByUuid(String uuid);
+    Result<ICurrency> loadDefaultCurrency(); //carga la moneda por defecto, si no hay devuelve una lista vacia
+    void saveCurrency(ICurrency currency); //hace de update tambien
+    void deleteCurrency(ICurrency currency);
 
     List<Account> loadAccounts(); //una cuenta de un criterio
     Result<Account> loadAccountByUuid(String uuid);

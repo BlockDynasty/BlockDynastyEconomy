@@ -18,6 +18,7 @@ package BlockDynasty.Economy.domain.events.transactionsEvents;
 
 import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.events.SerializableEvent;
 
 import java.math.BigDecimal;
@@ -26,16 +27,16 @@ import java.math.BigDecimal;
 public class TradeEvent extends SerializableEvent {
     private final Player fromPlayer;
     private final Player toPlayer;
-    private final Currency currencyFrom;
-    private final Currency currencyTo;
+    private final ICurrency currencyFrom;
+    private final ICurrency currencyTo;
     private final BigDecimal amountFrom;
     private final BigDecimal amountTo;
 
-    public TradeEvent(Player fromPlayer, Player toPlayer, Currency currencyFrom, Currency currencyTo, BigDecimal amountFrom, BigDecimal amountTo) {
+    public TradeEvent(Player fromPlayer, Player toPlayer, ICurrency currencyFrom, ICurrency currencyTo, BigDecimal amountFrom, BigDecimal amountTo) {
         this.fromPlayer = new Player(fromPlayer);
         this.toPlayer = new Player(toPlayer);
-        this.currencyFrom = new Currency( currencyFrom );
-        this.currencyTo = new Currency( currencyTo );
+        this.currencyFrom = Currency.builder().copy(currencyFrom).build();;
+        this.currencyTo = Currency.builder().copy(currencyTo).build();;
         this.amountFrom = amountFrom;
         this.amountTo = amountTo;
     }
@@ -46,10 +47,10 @@ public class TradeEvent extends SerializableEvent {
     public Player getToPlayer() {
         return toPlayer;
     }
-    public Currency getCurrencyFrom() {
+    public ICurrency getCurrencyFrom() {
         return currencyFrom;
     }
-    public Currency getCurrencyTo() {
+    public ICurrency getCurrencyTo() {
         return currencyTo;
     }
     public BigDecimal getAmountFrom() {

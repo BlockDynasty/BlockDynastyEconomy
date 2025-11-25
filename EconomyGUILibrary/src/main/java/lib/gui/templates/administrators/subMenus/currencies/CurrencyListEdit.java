@@ -18,6 +18,7 @@ package lib.gui.templates.administrators.subMenus.currencies;
 
 import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import lib.gui.GUIFactory;
 import lib.gui.components.IGUI;
 import lib.gui.components.IEntityGUI;
@@ -32,7 +33,7 @@ public class CurrencyListEdit extends CurrencySelectorAndAmount {
     }
 
     @Override
-    public void functionLeftItemClick(Currency currency) {
+    public void functionLeftItemClick(ICurrency currency) {
         GUIFactory.editCurrencyPanel(player, currency, this).open();
     }
 

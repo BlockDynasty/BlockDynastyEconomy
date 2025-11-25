@@ -2,6 +2,7 @@ package BlockDynasty.Economy.aplication.useCase.transaction.genericOperations;
 
 import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.services.IAccountService;
@@ -30,7 +31,7 @@ public abstract class MultiAccountSingleCurrencyOp extends Operation {
         if (!accountToResult.isSuccess()) {
             return Result.failure(accountToResult.getErrorMessage(), accountToResult.getErrorCode());
         }
-        Result<Currency> currencyResult = this.searchCurrencyUseCase.getCurrency(currency);
+        Result<ICurrency> currencyResult = this.searchCurrencyUseCase.getCurrency(currency);
         if (!currencyResult.isSuccess()) {
             return Result.failure(currencyResult.getErrorMessage(), currencyResult.getErrorCode());
         }
@@ -38,5 +39,5 @@ public abstract class MultiAccountSingleCurrencyOp extends Operation {
         return execute(accountFromResult.getValue(), accountToResult.getValue(), currencyResult.getValue(), amount);
     }
 
-    public abstract Result<Void> execute(Account accountFrom, Account accountTo, Currency currency, BigDecimal amount);
+    public abstract Result<Void> execute(Account accountFrom, Account accountTo, ICurrency currency, BigDecimal amount);
 }

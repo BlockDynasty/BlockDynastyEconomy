@@ -20,6 +20,7 @@ import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.entities.balance.Money;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.Exceptions.CurrencyNotFoundException;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.persistence.transaction.ITransactions;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
@@ -45,7 +46,7 @@ public class TransactionRepository  implements ITransactions {
         this.sessionFactory = sessionFactory;
     }
     @Override
-    public Result<TransferResult> transfer(String fromUuid, String toUuid, Currency currency, BigDecimal amount) {
+    public Result<TransferResult> transfer(String fromUuid, String toUuid, ICurrency currency, BigDecimal amount) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
@@ -140,7 +141,7 @@ public class TransactionRepository  implements ITransactions {
     }
 
     @Override
-    public Result<Account> withdraw(String accountUuid, Currency currency, BigDecimal amount) {
+    public Result<Account> withdraw(String accountUuid, ICurrency currency, BigDecimal amount) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
@@ -184,7 +185,7 @@ public class TransactionRepository  implements ITransactions {
     }
 
     @Override
-    public Result<Account> deposit(String accountUuid, Currency currency, BigDecimal amount) {
+    public Result<Account> deposit(String accountUuid, ICurrency currency, BigDecimal amount) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
@@ -228,7 +229,7 @@ public class TransactionRepository  implements ITransactions {
         }
     }
     @Override
-    public Result<Account> exchange(String playerUUID, Currency fromCurrency, BigDecimal amountFrom, Currency toCurrency, BigDecimal amountTo) {
+    public Result<Account> exchange(String playerUUID, ICurrency fromCurrency, BigDecimal amountFrom, ICurrency toCurrency, BigDecimal amountTo) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
@@ -278,7 +279,7 @@ public class TransactionRepository  implements ITransactions {
     }
 
     @Override
-    public Result<TransferResult> trade(String fromUuid, String toUuid, Currency fromCurrency, Currency toCurrency, BigDecimal amountFrom, BigDecimal amountTo) {
+    public Result<TransferResult> trade(String fromUuid, String toUuid, ICurrency fromCurrency, ICurrency toCurrency, BigDecimal amountFrom, BigDecimal amountTo) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
@@ -353,7 +354,7 @@ public class TransactionRepository  implements ITransactions {
     }
 
     @Override
-    public Result<Account> setBalance(String accountUuid, Currency currency, BigDecimal amount) {
+    public Result<Account> setBalance(String accountUuid, ICurrency currency, BigDecimal amount) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {

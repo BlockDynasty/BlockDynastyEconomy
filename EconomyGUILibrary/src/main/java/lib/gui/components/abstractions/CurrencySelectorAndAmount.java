@@ -18,6 +18,7 @@ package lib.gui.components.abstractions;
 
 import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.*;
 import lib.util.colors.ChatColor;
@@ -29,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public abstract class CurrencySelectorAndAmount extends PaginatedPanel<Currency> {
+public abstract class CurrencySelectorAndAmount extends PaginatedPanel<ICurrency> {
     private final SearchCurrencyUseCase searchCurrencyUseCase;
     private final IEntityGUI player;
     private final ITextInput textInput;
@@ -42,13 +43,13 @@ public abstract class CurrencySelectorAndAmount extends PaginatedPanel<Currency>
         showCurrencies();
     }
 
-    public CurrencySelectorAndAmount(IEntityGUI player, SearchCurrencyUseCase searchCurrencyUseCase, IGUI parentGUI, Currency exceptCurrency, ITextInput textInput) {
+    public CurrencySelectorAndAmount(IEntityGUI player, SearchCurrencyUseCase searchCurrencyUseCase, IGUI parentGUI, ICurrency exceptCurrency, ITextInput textInput) {
         this(player, searchCurrencyUseCase, parentGUI, textInput);
         showCurrenciesExcluding(exceptCurrency);
     }
 
-    private void showCurrenciesExcluding(Currency exceptCurrency) {
-        List<Currency> currencies = searchCurrencyUseCase.getCurrencies().stream()
+    private void showCurrenciesExcluding(ICurrency exceptCurrency) {
+        List<ICurrency> currencies = searchCurrencyUseCase.getCurrencies().stream()
                 .filter(c -> !c.equals(exceptCurrency))
                 .collect(Collectors.toList());
 
@@ -61,7 +62,7 @@ public abstract class CurrencySelectorAndAmount extends PaginatedPanel<Currency>
     }
 
     private void showCurrencies() {
-        List<Currency> currencies = searchCurrencyUseCase.getCurrencies();
+        List<ICurrency> currencies = searchCurrencyUseCase.getCurrencies();
 
         //testing purposes
         //for (int i = 0; i < 45; i++) {
@@ -72,7 +73,7 @@ public abstract class CurrencySelectorAndAmount extends PaginatedPanel<Currency>
     }
 
     @Override
-    protected IItemStack createItemFor(Currency currency) {
+    protected IItemStack createItemFor(ICurrency currency) {
         String color = ChatColor.stringValueOf(currency.getColor());
         return createItem(RecipeItem.builder()
                 .setMaterial(Materials.GOLD_INGOT)
@@ -87,7 +88,7 @@ public abstract class CurrencySelectorAndAmount extends PaginatedPanel<Currency>
     }
 
     @Override
-    protected void functionLeftItemClick(Currency currency) {
+    protected void functionLeftItemClick(ICurrency currency) {
         textInput.open(this,player,Message.process(Map.of("currency",currency.getSingular()),"CurrencySelector.button2.nameItem"),Message.process("CurrencySelector.button2.lore"), s->{
             try {
                 BigDecimal amount = new BigDecimal(s);
@@ -98,5 +99,5 @@ public abstract class CurrencySelectorAndAmount extends PaginatedPanel<Currency>
         });
     }
 
-    protected String execute(IEntityGUI sender, Currency currency, BigDecimal amount){return "execute not implement";};
+    protected String execute(IEntityGUI sender, ICurrency currency, BigDecimal amount){return "execute not implement";};
 }

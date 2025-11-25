@@ -18,22 +18,23 @@ package BlockDynasty.Economy.domain.events.transactionsEvents;
 
 import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.events.Event;
 
 import java.math.BigDecimal;
 
 public class ExchangeEvent extends Event {
     private final Player player;
-    private final Currency fromCurrency;
-    private final Currency toCurrency;
+    private final ICurrency fromCurrency;
+    private final ICurrency toCurrency;
     private final BigDecimal amount;
     private final double exchangeRate;
     private final BigDecimal exchangedAmount;
 
-    public ExchangeEvent(Player player, Currency fromCurrency, Currency toCurrency, BigDecimal amount, double exchangeRate, BigDecimal exchangedAmount) {
+    public ExchangeEvent(Player player, ICurrency fromCurrency, ICurrency toCurrency, BigDecimal amount, double exchangeRate, BigDecimal exchangedAmount) {
         this.player = new Player(player);
-        this.fromCurrency = new Currency(fromCurrency);
-        this.toCurrency = new Currency(toCurrency);
+        this.fromCurrency = Currency.builder().copy(fromCurrency).build();;
+        this.toCurrency = Currency.builder().copy(toCurrency).build();;
         this.amount = amount;
         this.exchangeRate = exchangeRate;
         this.exchangedAmount = exchangedAmount;
@@ -42,10 +43,10 @@ public class ExchangeEvent extends Event {
     public Player getPlayer() {
         return player;
     }
-    public Currency getFromCurrency() {
+    public ICurrency getFromCurrency() {
         return fromCurrency;
     }
-    public Currency getToCurrency() {
+    public ICurrency getToCurrency() {
         return toCurrency;
     }
     public BigDecimal getAmount() {

@@ -19,6 +19,7 @@ package lib.gui.templates.users.Exchange;
 import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.IExchangeUseCase;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import lib.gui.components.IGUI;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.ITextInput;
@@ -45,7 +46,7 @@ public class ExchangeFirstPanel extends CurrencySelectorAndAmount {
     }
 
     @Override
-    protected void functionLeftItemClick(Currency currency) {
+    protected void functionLeftItemClick(ICurrency currency) {
         new ExchangeSecondPanel(player, searchCurrencyUseCase, exchangeUseCase, currency, this,textInput).open();
     }
 

@@ -17,6 +17,7 @@
 package BlockDynasty.Economy.domain.entities.balance;
 
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.Result;
 
 import java.math.BigDecimal;
@@ -26,8 +27,8 @@ public interface IMoney {
     Result<Void> add(BigDecimal amount);
     Result<Void> setAmount(BigDecimal amount);
 
-    void setCurrency(Currency currency);
+    void setCurrency(ICurrency currency);
     BigDecimal getAmount();
-    Currency getCurrency();
+    ICurrency getCurrency();
     boolean hasEnough(BigDecimal amount);
 }

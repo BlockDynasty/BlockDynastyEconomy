@@ -19,6 +19,7 @@ package BlockDynasty.Economy.aplication.useCase.transaction;
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.useCase.transaction.genericOperations.SingleAccountMultiCurrencyOp;
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.IExchangeUseCase;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.events.transactionsEvents.ExchangeEvent;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
@@ -51,7 +52,7 @@ public class ExchangeUseCase extends SingleAccountMultiCurrencyOp implements IEx
     }
 
     //si solo si los valores de intercambio son mayor a 0 se realiza el intercambio
-    public Result<BigDecimal> execute(Account account, Currency currencyFrom, Currency currencyTo, BigDecimal amountFrom, BigDecimal amountTo){
+    public Result<BigDecimal> execute(Account account, ICurrency currencyFrom, ICurrency currencyTo, BigDecimal amountFrom, BigDecimal amountTo){
         //si el amountTo or amountFrom no son nullos y son negativos, error no se puede hacer el exchange entre estas dos monedas
         if (currencyFrom.getExchangeRate() <=0) {
             return Result.failure("The "+currencyFrom.getSingular() +" are not interchangeable.", ErrorCode.CURRENCY_HAS_NO_EXCHANGE_RATE);

@@ -18,6 +18,7 @@ package useCaseTest.account;
 
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.services.CurrencyService;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.aplication.useCase.account.CreateAccountUseCase;
@@ -89,7 +90,7 @@ public class SearchAccountUseCaseTest {
 
 */
 
-        Currency defaultCurrency = new Currency(UUID.randomUUID(), "default", "default");
+        ICurrency defaultCurrency = Currency.builder().setSingular("default").setPlural("default").build();
         Account robert = new Account(UUID.randomUUID(), "robert");
         Account nullplague = new Account(UUID.randomUUID(), "nullplague");
         Account Cris = new Account(UUID.randomUUID(),"Cris");

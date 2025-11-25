@@ -20,6 +20,7 @@ import BlockDynasty.Economy.Core;
 import BlockDynasty.Economy.aplication.useCase.UseCaseFactory;
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.IWithdrawUseCase;
 import BlockDynasty.Economy.domain.entities.balance.Money;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
 import mockClass.CourierTest;
 import BlockDynasty.Economy.domain.result.ErrorCode;
@@ -43,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class WithdrawUseCaseTest {
     Account nullplague;
-    Currency dinero;
+    ICurrency dinero;
     IRepository repository;
     ICurrencyService currencyService;
     AccountService accountService;
@@ -55,7 +56,7 @@ public class WithdrawUseCaseTest {
     @BeforeEach
     void setUp() {
         nullplague = new Account(UUID.randomUUID(), "nullplague");
-        dinero= new Currency(UUID.randomUUID(),"dinero","dinero");
+        dinero= Currency.builder().setSingular("dinero").setPlural("dinero").build();
 
         repository = FactoryRepo.getDb();
 
@@ -106,7 +107,7 @@ public class WithdrawUseCaseTest {
 
     @Test
     void withdrawUseCaseTestWithNullBalance(){
-        currencyService.add(new Currency(UUID.randomUUID(),"oro","oro"));
+        currencyService.add(Currency.builder().setSingular("oro").setPlural("oro").build());
         Result<Void> result = withdrawUseCase.execute(nullplague.getUuid(), "oro", BigDecimal.valueOf(10000));
         assertEquals(ErrorCode.ACCOUNT_NOT_HAVE_BALANCE, result.getErrorCode(), result.getErrorMessage() );
     }

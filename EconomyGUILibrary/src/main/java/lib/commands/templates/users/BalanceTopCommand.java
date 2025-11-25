@@ -20,6 +20,7 @@ import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetTopA
 import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.entities.balance.Money;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.Result;
 import lib.commands.abstractions.IEntityCommands;
 import lib.commands.abstractions.AbstractCommand;
@@ -68,7 +69,7 @@ public class BalanceTopCommand extends AbstractCommand {
             for (int i = 0; i < accounts.size(); i++) {
                 Account account = accounts.get(i);
                 Money money = account.getMoney(nameCurrency);
-                Currency currency = money.getCurrency();
+                ICurrency currency = money.getCurrency();
                 BigDecimal balanceValue = money.getAmount();
                 String message = MessageService.getMessage("balance_top.balance",
                         Map.of(

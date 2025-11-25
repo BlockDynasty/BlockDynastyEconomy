@@ -19,6 +19,7 @@ package BlockDynasty.Economy.aplication.useCase.transaction;
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.useCase.transaction.genericOperations.MultiAccountMultiCurrencyOp;
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.ITradeUseCase;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.events.transactionsEvents.TradeEvent;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
@@ -50,7 +51,7 @@ public class TradeCurrenciesUseCase extends MultiAccountMultiCurrencyOp implemen
         this.eventManager = eventManager;
     }
 
-    public Result<Void> execute(Account accountFrom, Account accountTo, Currency currencyFrom, Currency currencyTo, BigDecimal amountFrom, BigDecimal amountTo){
+    public Result<Void> execute(Account accountFrom, Account accountTo, ICurrency currencyFrom, ICurrency currencyTo, BigDecimal amountFrom, BigDecimal amountTo){
         if(!currencyFrom.isTransferable() || !currencyTo.isTransferable()){
             return Result.failure("Currency not transferable", ErrorCode.CURRENCY_NOT_PAYABLE);
         }

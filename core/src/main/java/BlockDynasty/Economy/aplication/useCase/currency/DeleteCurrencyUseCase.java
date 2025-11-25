@@ -16,6 +16,7 @@
 
 package BlockDynasty.Economy.aplication.useCase.currency;
 
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.courier.Courier;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
@@ -23,6 +24,8 @@ import BlockDynasty.Economy.domain.entities.currency.Exceptions.CurrencyNotFound
 import BlockDynasty.Economy.domain.persistence.Exceptions.TransactionException;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
+
+import java.util.List;
 
 //todo: borrar currency y registro de esta moneda de todos los usuarios que la tengan. tanto en la cache como en la base de datos?
 public class DeleteCurrencyUseCase {
@@ -38,8 +41,9 @@ public class DeleteCurrencyUseCase {
         this.dataStore = dataStore;
         this.updateForwarder = updateForwarder;
     }
+
     public void deleteCurrency(String currencyName){
-        Currency currency = currencyService.getCurrency(currencyName);
+        ICurrency currency = currencyService.getCurrency(currencyName);
         if (currency == null){
             throw new CurrencyNotFoundException("Currency not found");
         }
@@ -47,6 +51,14 @@ public class DeleteCurrencyUseCase {
             throw new CurrencyNotFoundException(currency.getSingular()+" is default");
         }
         try {
+            List<ICurrency> allCurrencies = currencyService.getCurrencies();
+            for (ICurrency curr : allCurrencies){
+                if (curr.isInterchangeableWith(currency)){
+                    curr.removeInterchangeableCurrency(currency);
+                    dataStore.saveCurrency(curr);
+                }
+            }
+
             dataStore.deleteCurrency(currency);
             currencyService.remove(currency);
             accountService.syncDbWithOnlineAccounts();

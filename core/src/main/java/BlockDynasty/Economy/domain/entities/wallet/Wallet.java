@@ -18,6 +18,7 @@ package BlockDynasty.Economy.domain.entities.wallet;
 
 import BlockDynasty.Economy.domain.entities.balance.Money;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class Wallet implements IWallet {
                 b.getCurrency().getSingular().equals(currencyName) || b.getCurrency().getPlural().equals(currencyName));
     }
 
-    public Money getMoney(Currency currency) {
+    public Money getMoney(ICurrency currency) {
         return balances.stream()
                 .filter(b -> b.getCurrency().equals(currency))
                 .findFirst()
@@ -71,7 +72,7 @@ public class Wallet implements IWallet {
         this.balances = monies;
     }
 
-    public void createBalance(Currency currency, BigDecimal amount) {
+    public void createBalance(ICurrency currency, BigDecimal amount) {
         Money money = new Money(currency, amount);
         balances.add(money);
     }

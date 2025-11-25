@@ -26,7 +26,7 @@ public class CourierTest implements Courier {
 
     @Override
     public void sendUpdateMessage(String type, String data, String target) {
-
+        System.out.println("[BUNGEE CHANNEL SEND] " + type + " " + data+ " target: " + target);
     }
 
 

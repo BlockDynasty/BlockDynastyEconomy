@@ -16,6 +16,7 @@
 
 package BlockDynasty.Economy.aplication.useCase.currency;
 
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.services.courier.Courier;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.Exceptions.CurrencyNotFoundException;
@@ -38,14 +39,14 @@ public class EditCurrencyUseCase {
     }
 
     public void editStartBal(String name, double startBal){
-        Currency currency = currencyService.getCurrency(name);
+        ICurrency currency = currencyService.getCurrency(name);
         if (currency == null){
             throw new CurrencyNotFoundException("Currency not found");
         }
         if (!currency.isDecimalSupported() && startBal % 1 != 0) {
             throw new DecimalNotSupportedException("Currency does not support decimals");
         }
-        currency.setStartBalance(BigDecimal.valueOf(startBal));
+        currency.setDefaultBalance(BigDecimal.valueOf(startBal));
         try {
             dataStore.saveCurrency(currency);
             //actualizar cache no hace falta por que ya traje la referencia de la moneda de currencymanager
@@ -59,7 +60,7 @@ public class EditCurrencyUseCase {
         if (rate <= -1) {
             throw new IllegalArgumentException("Exchange rate must be greater than -1");
         }
-        Currency currency = currencyService.getCurrency(currencyName);
+        ICurrency currency = currencyService.getCurrency(currencyName);
         if (currency == null){
             throw new CurrencyNotFoundException("Currency not found");
         }
@@ -76,8 +77,8 @@ public class EditCurrencyUseCase {
         if (currencyName.equalsIgnoreCase(currencyToAddName)){
             throw new IllegalArgumentException("Cannot add the same currency as interchangeable");
         }
-        Currency currency = currencyService.getCurrency(currencyName);
-        Currency currencyToAdd = currencyService.getCurrency(currencyToAddName);
+        ICurrency currency = currencyService.getCurrency(currencyName);
+        ICurrency currencyToAdd = currencyService.getCurrency(currencyToAddName);
         if (currency == null || currencyToAdd == null){
             throw new CurrencyNotFoundException("Currency not found");
         }
@@ -91,8 +92,8 @@ public class EditCurrencyUseCase {
     }
 
     public void removeInterchangeableCurrency(String currencyName, String currencyToRemoveName){
-        Currency currency = currencyService.getCurrency(currencyName);
-        Currency currencyToRemove = currencyService.getCurrency(currencyToRemoveName);
+        ICurrency currency = currencyService.getCurrency(currencyName);
+        ICurrency currencyToRemove = currencyService.getCurrency(currencyToRemoveName);
         if (currency == null || currencyToRemove == null){
             throw new CurrencyNotFoundException("Currency not found");
         }
@@ -106,7 +107,7 @@ public class EditCurrencyUseCase {
     }
 
     public void editColor(String nameCurrency, String colorString){
-        Currency currency = currencyService.getCurrency(nameCurrency);
+        ICurrency currency = currencyService.getCurrency(nameCurrency);
         if (currency == null){
             throw new CurrencyNotFoundException("Currency not found");
         }
@@ -122,7 +123,7 @@ public class EditCurrencyUseCase {
     }
 
     public void editSymbol(String nameCurrency,String symbol){
-        Currency currency = currencyService.getCurrency(nameCurrency);
+        ICurrency currency = currencyService.getCurrency(nameCurrency);
         if (currency == null){
             throw new CurrencyNotFoundException("Currency not found");
         }
@@ -137,7 +138,7 @@ public class EditCurrencyUseCase {
     }
 
     public void editTexture(String nameCurrency,String texture){
-        Currency currency = currencyService.getCurrency(nameCurrency);
+        ICurrency currency = currencyService.getCurrency(nameCurrency);
         if (currency == null){
             throw new CurrencyNotFoundException("Currency not found");
         }
@@ -152,7 +153,7 @@ public class EditCurrencyUseCase {
     }
 
     public void setDefaultCurrency(String currencyName){
-        Currency currency = currencyService.getCurrency(currencyName);
+        ICurrency currency = currencyService.getCurrency(currencyName);
         if (currency.isDefaultCurrency()){
             return;
         }
@@ -179,7 +180,7 @@ public class EditCurrencyUseCase {
 
     public void setSingularName(String actualName, String newName){
         //todo: cambiar nombre de la moneda, verificar si existe el actualname tanto plural como singualr, y actualizar el mismo campo plural o singular
-        Currency currency = currencyService.getCurrency(actualName);
+        ICurrency currency = currencyService.getCurrency(actualName);
         if (currency == null){
             throw new CurrencyNotFoundException("Currency not found");
         }
@@ -193,7 +194,7 @@ public class EditCurrencyUseCase {
     }
 
     public void setPluralName(String actualName, String newName){
-        Currency currency = currencyService.getCurrency(actualName);
+        ICurrency currency = currencyService.getCurrency(actualName);
         if (currency == null){
             throw new CurrencyNotFoundException("Currency not found");
         }
@@ -207,7 +208,7 @@ public class EditCurrencyUseCase {
     }
 
     public void togglePayable(String currencyName){
-        Currency currency = currencyService.getCurrency(currencyName);
+        ICurrency currency = currencyService.getCurrency(currencyName);
         if (currency == null){
             throw new CurrencyNotFoundException("Currency not found");
         }
@@ -221,7 +222,7 @@ public class EditCurrencyUseCase {
     }
 
     public void toggleDecimals(String currencyName){
-        Currency currency = currencyService.getCurrency(currencyName);
+        ICurrency currency = currencyService.getCurrency(currencyName);
         if (currency == null){
             throw new CurrencyNotFoundException("Currency not found");
         }

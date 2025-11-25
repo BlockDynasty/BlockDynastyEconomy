@@ -17,6 +17,7 @@
 package useCaseTest.transaction;
 
 import BlockDynasty.Economy.aplication.events.EventManager;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import mockClass.CourierTest;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
@@ -55,13 +56,13 @@ public class TradeCurrenciesUseCaseTest {
     SearchAccountUseCase searchAccountUseCase;
     SearchCurrencyUseCase searchCurrencyUseCase;
     TradeCurrenciesUseCase tradeCurrenciesUseCase;
-    Currency coin;
-    Currency dinero;
+    ICurrency coin;
+    ICurrency dinero;
 
     @BeforeEach
     void setUp() {
-        coin = new Currency(UUID.randomUUID(),"Coin","Coins");
-        dinero = new Currency(UUID.randomUUID(),"dinero","dinero");
+        coin = Currency.builder().setSingular("Coin").setPlural("Coins").build();
+        dinero =Currency.builder().setSingular("dinero").setPlural("dinero").build();
 
         nullplague = new Account(UUID.randomUUID(), "nullplague");
         cris = new Account(UUID.randomUUID(), "cris");

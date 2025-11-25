@@ -18,6 +18,8 @@ package BlockDynasty.Economy.domain.entities.offers;
 
 import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
@@ -26,11 +28,11 @@ public class Offer implements IOffer {
     private Player vendedor;
     private Player comprador;
     private BigDecimal cantidad;  //puede ser de tipo balance, compuesto por currency y cantidad.
-    private Currency tipoCantidad;
+    private ICurrency tipoCantidad;
     private BigDecimal monto;
-    private Currency tipoMonto;
+    private ICurrency tipoMonto;
 
-    public Offer(Player vendedor, Player comprador, BigDecimal cantidad, BigDecimal monto,Currency tipoCantidad,Currency tipoMonto) {
+    public Offer(Player vendedor, Player comprador, BigDecimal cantidad, BigDecimal monto, ICurrency tipoCantidad, ICurrency tipoMonto) {
         this.vendedor = vendedor;
         this.comprador = comprador;
         this.cantidad = cantidad;
@@ -53,7 +55,7 @@ public class Offer implements IOffer {
     }
 
     //tipo de moneda ofertada
-    public Currency getTipoCantidad() {
+    public ICurrency getTipoCantidad() {
         return this.tipoCantidad;
     }
 
@@ -62,7 +64,7 @@ public class Offer implements IOffer {
         return this.monto;
     }
     //tipo de moneda monto a pagar
-    public Currency getTipoMonto() {
+    public ICurrency getTipoMonto() {
         return this.tipoMonto;
     }
 

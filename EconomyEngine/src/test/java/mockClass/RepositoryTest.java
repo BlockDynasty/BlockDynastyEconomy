@@ -18,6 +18,7 @@ package mockClass;
 
 import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
@@ -29,37 +30,37 @@ import java.util.stream.Collectors;
 
 public class RepositoryTest implements IRepository {
     private final List<Account> accounts = new ArrayList<>();
-    private final List<Currency> currencies = new ArrayList<>();
+    private final List<ICurrency> currencies = new ArrayList<>();
 
 
     @Override
-    public List<Currency> loadCurrencies() {
+    public List<ICurrency> loadCurrencies() {
             return new ArrayList<>(currencies);
 
     }
 
     @Override
-    public Result<Currency> loadCurrencyByName(String name) {
+    public Result<ICurrency> loadCurrencyByName(String name) {
         return null;
     }
 
     @Override
-    public Result<Currency> loadCurrencyByUuid(String uuid) {
+    public Result<ICurrency> loadCurrencyByUuid(String uuid) {
         return null;
     }
 
     @Override
-    public Result<Currency> loadDefaultCurrency() {
+    public Result<ICurrency> loadDefaultCurrency() {
         return null;
     }
 
     @Override
-    public void saveCurrency(Currency currency) {
+    public void saveCurrency(ICurrency currency) {
         currencies.add(currency);
     }
 
     @Override
-    public void deleteCurrency(Currency currency) {//todo create
+    public void deleteCurrency(ICurrency currency) {//todo create
         accounts.forEach(account -> account.getBalances().remove(currency.getSingular()));
 
         currencies.remove(currency);
@@ -115,7 +116,7 @@ public class RepositoryTest implements IRepository {
     }
 
     @Override
-    public Result<TransferResult> transfer(String userFrom, String userTo, Currency currency, BigDecimal amount) {
+    public Result<TransferResult> transfer(String userFrom, String userTo, ICurrency currency, BigDecimal amount) {
         // Simular una transferencia exitosa
         Account fromAccount = accounts.stream().filter(a -> a.getUuid().toString().equals(userFrom)).findFirst().orElse(null);
         Account toAccount = accounts.stream().filter(a -> a.getUuid().toString().equals(userTo)).findFirst().orElse(null);
@@ -134,7 +135,7 @@ public class RepositoryTest implements IRepository {
     }
 
     @Override
-    public Result<Account> withdraw(String accountUuid, Currency currency, BigDecimal amount) {
+    public Result<Account> withdraw(String accountUuid, ICurrency currency, BigDecimal amount) {
         Account account = accounts.stream()
                 .filter(a -> a.getUuid().toString().equals(accountUuid))
                 .findFirst()
@@ -152,7 +153,7 @@ public class RepositoryTest implements IRepository {
     }
 
     @Override
-    public Result<Account> deposit(String accountUuid, Currency currency, BigDecimal amount) {
+    public Result<Account> deposit(String accountUuid, ICurrency currency, BigDecimal amount) {
         Account account = accounts.stream()
                 .filter(a -> a.getUuid().toString().equals(accountUuid))
                 .findFirst()
@@ -169,7 +170,7 @@ public class RepositoryTest implements IRepository {
     }
 
     @Override
-    public Result<Account> exchange(String fromUuid, Currency fromCurrency, BigDecimal amountFrom, Currency toCurrency, BigDecimal amountTo) {
+    public Result<Account> exchange(String fromUuid, ICurrency fromCurrency, BigDecimal amountFrom, ICurrency toCurrency, BigDecimal amountTo) {
         Account account = accounts.stream()
                 .filter(a -> a.getUuid().toString().equals(fromUuid))
                 .findFirst()
@@ -194,7 +195,7 @@ public class RepositoryTest implements IRepository {
     }
 
     @Override
-    public Result<TransferResult> trade(String fromUuid, String toUuid, Currency fromCurrency, Currency toCurrency, BigDecimal amountFrom, BigDecimal amountTo) {
+    public Result<TransferResult> trade(String fromUuid, String toUuid, ICurrency fromCurrency, ICurrency toCurrency, BigDecimal amountFrom, BigDecimal amountTo) {
         Account fromAccount = accounts.stream()
                 .filter(a -> a.getUuid().toString().equals(fromUuid))
                 .findFirst()
@@ -236,7 +237,7 @@ public class RepositoryTest implements IRepository {
     }
 
     @Override
-    public Result<Account> setBalance(String accountUuid, Currency currency, BigDecimal amount) {
+    public Result<Account> setBalance(String accountUuid, ICurrency currency, BigDecimal amount) {
         Account account = accounts.stream()
                 .filter(a -> a.getUuid().toString().equals(accountUuid))
                 .findFirst()

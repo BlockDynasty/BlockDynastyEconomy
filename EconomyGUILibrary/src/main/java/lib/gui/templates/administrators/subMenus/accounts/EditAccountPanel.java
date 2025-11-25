@@ -75,6 +75,12 @@ public class EditAccountPanel extends AbstractPanel {
                     });
                 });
 
+        setItem(22,createItem(Materials.PAPER,ChatColor.stringValueOf(Colors.AQUA)+"Sell Command","Sell a command to a player","Example: give <playername> <itemname> [amount]",
+                        ChatColor.stringValueOf(Colors.RED)+"IMPORTANT: Enter the full command",ChatColor.stringValueOf(Colors.RED)+"including any necessary parameters, such as player name."),
+                f -> {
+                    GUIFactory.sellCommandPanel(sender , target, this).open();
+                });
+
         setItem(40,createItem(Materials.BARRIER, ChatColor.stringValueOf(Colors.RED)+"Back","Click to go back"),f->{
             GUIFactory.accountSelectorToEdit(sender,this.getParent().getParent()).open();});
 
@@ -122,5 +128,7 @@ public class EditAccountPanel extends AbstractPanel {
                         }
                     });
         }
+
+
     }
 }

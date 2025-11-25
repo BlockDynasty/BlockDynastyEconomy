@@ -17,16 +17,17 @@
 package BlockDynasty.Economy.domain.persistence.entities;
 
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 
 import java.util.List;
 
 public interface ICurrencyRepository {
-    List<Currency> findAll();
-    Currency findByName(String name);
-    Currency findByUuid(String uid);
-    Currency findDefaultCurrency();
-    void save(Currency currency);
-    void delete(Currency currency);
-    void update(Currency currency);
-    void create(Currency currency);
+    List<ICurrency> findAll();
+    ICurrency findByName(String name);
+    ICurrency findByUuid(String uid);
+    ICurrency findDefaultCurrency();
+    void save(ICurrency currency);
+    void delete(ICurrency currency);
+    void update(ICurrency currency);
+    void create(ICurrency currency);
 }

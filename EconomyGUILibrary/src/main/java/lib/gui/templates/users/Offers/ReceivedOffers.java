@@ -21,6 +21,7 @@ import BlockDynasty.Economy.aplication.useCase.offer.CancelOfferUseCase;
 import BlockDynasty.Economy.aplication.useCase.offer.SearchOfferUseCase;
 import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.entities.offers.Offer;
 import BlockDynasty.Economy.domain.result.Result;
 import lib.gui.GUIFactory;
@@ -65,8 +66,8 @@ public class ReceivedOffers extends PaginatedPanel<Offer> {
     protected IItemStack createItemFor(Offer offer) {
         Player vendedor = offer.getVendedor();
 
-        Currency tipoCantidad = offer.getTipoCantidad();
-        Currency tipoMonto = offer.getTipoMonto();
+        ICurrency tipoCantidad = offer.getTipoCantidad();
+        ICurrency tipoMonto = offer.getTipoMonto();
 
         return createItem(
                 Materials.PLAYER_HEAD,

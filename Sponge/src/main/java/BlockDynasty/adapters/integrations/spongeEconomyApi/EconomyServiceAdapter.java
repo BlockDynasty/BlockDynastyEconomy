@@ -106,7 +106,7 @@ public class EconomyServiceAdapter implements MultiCurrencyService {
 
     @Override
     public Optional<Currency> getCurrency(String currencyName) {
-        BlockDynasty.Economy.domain.entities.currency.Currency response = api.getCurrency(currencyName);
+        BlockDynasty.Economy.domain.entities.currency.ICurrency response = api.getCurrency(currencyName);
         if (response != null) {
             return Optional.of(new CurrencyAdapter(response));
         }

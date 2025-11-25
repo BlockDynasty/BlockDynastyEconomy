@@ -18,6 +18,7 @@ package repositoryTest;
 
 import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.Exceptions.CurrencyNotFoundException;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.persistence.entities.ICurrencyRepository;
 
 import repository.CurrencyRepository;
@@ -37,38 +38,38 @@ public class CrudCurrencyTest {
 
         @Test
         public void testCreate() {
-            Currency currency = new Currency(UUID.randomUUID(),"dinero","dinero");
+            ICurrency currency = Currency.builder().setSingular("dinero").setPlural("dinero").build();
             this.currencyRepository.create(currency);
         }
 
         @Test
         public void testFindAll() {
             // Create the currency within a transaction
-            Currency currency = new Currency(UUID.randomUUID(), "dinero", "dineros");
-            Currency currency2 = new Currency(UUID.randomUUID(), "coin", "coins");
+            ICurrency currency = Currency.builder().setSingular("dinero").setPlural("dinero").build();
+            ICurrency currency2 = Currency.builder().setSingular("coin").setPlural("coins").build();
 
             currencyRepository.create(currency);
             currencyRepository.create(currency2);
-            List<Currency> currencies = currencyRepository.findAll();
+            List<ICurrency> currencies = currencyRepository.findAll();
             assertEquals(2, currencies.size(), "Should find two currencies");
         }
         @Test
         public void testFindByName() {
             // Create the currency within a transaction
-            Currency currency = new Currency(UUID.randomUUID(), "dinero", "dineros");
+            ICurrency currency = Currency.builder().setSingular("dinero").setPlural("dinero").build();
 
             currencyRepository.create(currency);
-            Currency currencyDb = currencyRepository.findByName(currency.getSingular());
+            ICurrency currencyDb = currencyRepository.findByName(currency.getSingular());
             assertEquals("dinero", currencyDb.getSingular());
 
         }
         @Test
         public void testFindByUuid() {
             // Create the currency within a transaction
-            Currency currency = new Currency(UUID.randomUUID(), "dinero", "dinero");
+            ICurrency currency = Currency.builder().setSingular("dinero").setPlural("dinero").build();
 
             currencyRepository.create(currency);
-            Currency currencyDb = currencyRepository.findByUuid(currency.getUuid().toString());
+            ICurrency currencyDb = currencyRepository.findByUuid(currency.getUuid().toString());
 
             assertEquals("dinero", currencyDb.getSingular());
 
@@ -76,20 +77,20 @@ public class CrudCurrencyTest {
         @Test
         public void testSave() {
             // Create the currency within a transaction
-            Currency currency = new Currency(UUID.randomUUID(), "dinero", "dinero"); //dos monedas iguales cargadas en memoria = error
+            ICurrency currency = Currency.builder().setSingular("dinero").setPlural("dinero").build(); //dos monedas iguales cargadas en memoria = error
 
             currencyRepository.create(currency);
             currency.setSingular("dinerito");
             currencyRepository.save(currency);
 
-            Currency currencyDb = currencyRepository.findByUuid(currency.getUuid().toString());
+            ICurrency currencyDb = currencyRepository.findByUuid(currency.getUuid().toString());
 
             assertEquals("dinerito", currencyDb.getSingular());
         }
         @Test
         public void testDelete() {
             // Create the currency within a transaction
-            Currency currency = new Currency(UUID.randomUUID(), "dinero", "dinero");
+            ICurrency currency = Currency.builder().setSingular("dinero").setPlural("dinero").build();
 
            currencyRepository.create(currency);
             currencyRepository.delete(currency);
@@ -99,12 +100,12 @@ public class CrudCurrencyTest {
         @Test
         public void testUpdate() {
             // Create the currency within a transaction
-            Currency currency = new Currency(UUID.randomUUID(), "dinero", "dinero");
+            ICurrency currency = Currency.builder().setSingular("dinero").setPlural("dinero").build();
             currencyRepository.create(currency);
             currency.setSingular("dinerito");
             currencyRepository.update(currency);
 
-            Currency currencyFind =currencyRepository.findByName(currency.getSingular());
+            ICurrency currencyFind =currencyRepository.findByName(currency.getSingular());
 
             assertEquals(currencyFind.getSingular(), currency.getSingular());
         }

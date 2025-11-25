@@ -18,6 +18,7 @@ package platform.listeners;
 
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.entities.offers.Offer;
 import BlockDynasty.Economy.domain.events.Context;
 import BlockDynasty.Economy.domain.events.offersEvents.OfferAccepted;
@@ -43,7 +44,7 @@ public class EventListener {
             IEntityCommands player = platformAdapter.getPlayer(event.getPayer().getNickname());
             IEntityCommands target = platformAdapter.getPlayer(event.getReceived().getNickname());
 
-            Currency currency = event.getCurrency();
+            ICurrency currency = event.getCurrency();
             String format = currency.format(event.getAmount());
             String receiverName = event.getReceived().getNickname();
             String senderName = event.getPayer().getNickname();
@@ -62,7 +63,7 @@ public class EventListener {
             IEntityCommands player = platformAdapter.getPlayer(event.getFromPlayer().getNickname());
             IEntityCommands target = platformAdapter.getPlayer(event.getToPlayer().getNickname());
 
-            Currency currency = event.getCurrency();
+            ICurrency currency = event.getCurrency();
             String format = currency.format(event.getAmount());
             String receiverName = event.getToPlayer().getNickname();
             String senderName = event.getFromPlayer().getNickname();
@@ -92,10 +93,10 @@ public class EventListener {
         eventManager.subscribe(ExchangeEvent.class, event -> {
             IEntityCommands player = platformAdapter.getPlayer(event.getPlayer().getNickname());
 
-            Currency fromCurrency = event.getFromCurrency();
+            ICurrency fromCurrency = event.getFromCurrency();
             String fromFormat = fromCurrency.format(event.getAmount());
 
-            Currency toCurrency = event.getToCurrency();
+            ICurrency toCurrency = event.getToCurrency();
             String toFormat = toCurrency.format(event.getExchangedAmount());
 
             if (player != null) {
@@ -108,10 +109,10 @@ public class EventListener {
             IEntityCommands sender = platformAdapter.getPlayer(event.getFromPlayer().getNickname());
             IEntityCommands receiver = platformAdapter.getPlayer(event.getToPlayer().getNickname());
 
-            Currency fromCurrency = event.getCurrencyFrom();
+            ICurrency fromCurrency = event.getCurrencyFrom();
             String fromFormat = fromCurrency.format(event.getAmountFrom());
 
-            Currency toCurrency = event.getCurrencyTo();
+            ICurrency toCurrency = event.getCurrencyTo();
             String toFormat = toCurrency.format(event.getAmountTo());
 
             if (sender != null ) {
@@ -186,9 +187,9 @@ public class EventListener {
             IEntityCommands receiver = platformAdapter.getPlayerByUUID(offer.getComprador().getUuid());
             IEntityCommands sender = platformAdapter.getPlayerByUUID(offer.getVendedor().getUuid());
 
-            Currency currencyOffered = offer.getTipoCantidad();
+            ICurrency currencyOffered = offer.getTipoCantidad();
             BigDecimal amountOffered = offer.getCantidad();
-            Currency currencyValue = offer.getTipoMonto();
+            ICurrency currencyValue = offer.getTipoMonto();
             BigDecimal amountValue = offer.getMonto();
 
             String fromFormat = currencyOffered.format(amountOffered);

@@ -17,54 +17,103 @@
 package repository.Mappers;
 
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import repository.Models.CurrencyDb;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class CurrencyMapper {
 
     // De Modelo de Dominio → Entidad JPA
-    public static CurrencyDb toEntity(Currency domain) {
-        if (domain == null) {
-            return null; // Manejo de caso nulo
-        }
-        CurrencyDb entity = new CurrencyDb();
-        entity.setUuid(domain.getUuid().toString());
-        entity.setSingular(domain.getSingular());
-        entity.setPlural(domain.getPlural());
-        entity.setColor(domain.getColor());
-        entity.setDecimalSupported(domain.isDecimalSupported());
-        entity.setTransferable(domain.isTransferable());
-        entity.setDefaultCurrency(domain.isDefaultCurrency());
-        entity.setDefaultBalance(domain.getDefaultBalance());
-        entity.setExchangeRate(domain.getExchangeRate());
-        entity.setSymbol(domain.getSymbol());
-        entity.setTexture(domain.getTexture());
-        entity.setInterchangeableWith(domain.getInterchangeableWith());
-        return entity;
+    public static CurrencyDb toEntity(ICurrency domain) {
+        if (domain == null) return null;
+
+        CurrencyDb entityDb = new CurrencyDb();
+        entityDb.setUuid(domain.getUuid().toString());
+        entityDb.setSingular(domain.getSingular());
+        entityDb.setPlural(domain.getPlural());
+        entityDb.setColor(domain.getColor());
+        entityDb.setDecimalSupported(domain.isDecimalSupported());
+        entityDb.setTransferable(domain.isTransferable());
+        entityDb.setDefaultCurrency(domain.isDefaultCurrency());
+        entityDb.setDefaultBalance(domain.getDefaultBalance());
+        entityDb.setExchangeRate(domain.getExchangeRate());
+        entityDb.setSymbol(domain.getSymbol());
+        entityDb.setTexture(domain.getTexture());
+        entityDb.setInterchangeableWith(convertListToEntity(domain.getInterchangeableCurrencies()));
+        return entityDb;
     }
 
     // De Entidad JPA → Modelo de Dominio
-    public static Currency toDomain(CurrencyDb entity) {
-        if (entity == null) {
-            return null; // Manejo de caso nulo
-        }
-
-        return new Currency(
-                UUID.fromString(entity.getUuid()),
-                entity.getSingular(),
-                entity.getPlural(),
-                entity.getSymbol(),
-                entity.getTexture(),
-                entity.getColor(),
-                entity.isDecimalSupported(),
-                entity.isTransferable(),
-                entity.isDefaultCurrency(),
-                entity.getDefaultBalance(),
-                entity.getExchangeRate(),
-                entity.getInterchangeableWith()
-        );
+    public static ICurrency toDomain(CurrencyDb entity) {
+        if (entity == null) return null;
+        return Currency.builder()
+                .setUuid(UUID.fromString(entity.getUuid()))
+                .setSingular(entity.getSingular())
+                .setPlural(entity.getPlural())
+                .setSymbol(entity.getSymbol())
+                .setTexture(entity.getTexture())
+                .setColor(entity.getColor())
+                .setDecimalSupported(entity.isDecimalSupported())
+                .setTransferable(entity.isTransferable())
+                .setDefaultCurrency(entity.isDefaultCurrency())
+                .setDefaultBalance(entity.getDefaultBalance())
+                .setExchangeRate(entity.getExchangeRate())
+                .setInterchangeableWith(convertListToDomain(entity.getInterchangeableWith()))
+                .build();
     }
+
+    // Actualizar campos (excepto ID/UUID)
+    public static void update(ICurrency currency,CurrencyDb currencyDb) {
+        currencyDb.setSingular(currency.getSingular());
+        currencyDb.setPlural(currency.getPlural());
+        currencyDb.setColor(currency.getColor());
+        currencyDb.setDecimalSupported(currency.isDecimalSupported());
+        currencyDb.setTransferable(currency.isTransferable());
+        currencyDb.setDefaultCurrency(currency.isDefaultCurrency());
+        currencyDb.setDefaultBalance(currency.getDefaultBalance());
+        currencyDb.setExchangeRate(currency.getExchangeRate());
+        currencyDb.setSymbol(currency.getSymbol());
+        currencyDb.setTexture(currency.getTexture());
+        currencyDb.setInterchangeableWith(convertListToEntity(currency.getInterchangeableCurrencies()));
+    }
+
+    public static ICurrency toDomainReference(CurrencyDb entity) {
+        if (entity == null) return null;
+
+        return Currency.builder()
+                .setUuid(UUID.fromString(entity.getUuid()))
+                .setSingular(entity.getSingular())
+                .setPlural(entity.getPlural())
+                .setSymbol(entity.getSymbol())
+                .setTexture(entity.getTexture())
+                .setColor(entity.getColor())
+                .setDecimalSupported(entity.isDecimalSupported())
+                .setTransferable(entity.isTransferable())
+                .setDefaultCurrency(entity.isDefaultCurrency())
+                .setDefaultBalance(entity.getDefaultBalance())
+                .setExchangeRate(entity.getExchangeRate())
+                .build();
+    }
+    public static CurrencyDb toEntityReference(ICurrency domain) {
+        if (domain == null) return null;
+        CurrencyDb entityDb = new CurrencyDb();
+        entityDb.setUuid(domain.getUuid().toString());
+        return entityDb;
+    }
+
+    private static List<CurrencyDb> convertListToEntity(List<ICurrency> domainList) {
+        return domainList.stream()
+                .map(CurrencyMapper::toEntityReference)
+                .collect(Collectors.toList());
+    }
+
+    private static List<ICurrency> convertListToDomain(List<CurrencyDb> currencyDbs) {
+        return currencyDbs.stream()
+                .map(CurrencyMapper::toDomainReference)
+                .collect(Collectors.toList());
+    }
+
 }

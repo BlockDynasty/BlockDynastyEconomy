@@ -19,6 +19,7 @@ package lib.commands.templates.users;
 import BlockDynasty.Economy.aplication.useCase.account.balance.GetBalanceUseCase;
 import BlockDynasty.Economy.domain.entities.balance.Money;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.Result;
 import lib.commands.abstractions.IEntityCommands;
 import lib.commands.abstractions.AbstractCommand;
@@ -47,7 +48,7 @@ public class BalanceCommand extends AbstractCommand {
             sender.sendMessage(resultBalances.getErrorMessage()+ " "+resultBalances.getErrorCode());
         }else{
             for (Money entry : resultBalances.getValue()) {
-                Currency currency = entry.getCurrency();
+                ICurrency currency = entry.getCurrency();
                 sender.sendMessage(MessageService.getMessage("Messages.balance.list", Map.of("currencycolor", ChatColor.stringValueOf(currency.getColor()),"format",entry.format()) ));
             }
         }

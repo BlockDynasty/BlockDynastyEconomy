@@ -18,6 +18,7 @@ package lib.commands.templates.administrators.EconomySubcommand.CurrencySubcomma
 
 import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import lib.commands.abstractions.IEntityCommands;
 import lib.commands.abstractions.AbstractCommand;
 import lib.util.colors.ChatColor;
@@ -37,9 +38,9 @@ public class ListCommand extends AbstractCommand {
         if(!super.execute( sender, args)){
             return false;
         }
-        List<Currency> currencies = searchCurrencyUseCase.getCurrencies();
+        List<ICurrency> currencies = searchCurrencyUseCase.getCurrencies();
         sender.sendMessage( "There are " + currencies.size() + " currencies.");
-        for (Currency currency : currencies) {
+        for (ICurrency currency : currencies) {
             sender.sendMessage(">> " + ChatColor.stringValueOf(currency.getColor()) + currency.getSingular());
         }
         return true;

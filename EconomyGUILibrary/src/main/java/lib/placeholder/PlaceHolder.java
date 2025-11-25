@@ -23,6 +23,7 @@ import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.entities.balance.Money;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.Result;
 import lib.commands.abstractions.IEntityCommands;
 import lib.util.colors.ChatColor;
@@ -62,13 +63,13 @@ public class PlaceHolder {
         }
 
         // Obtener la moneda predeterminada
-        Result<Currency> defaultCurrencyResult = searchCurrencyUseCase.getDefaultCurrency();
+        Result<ICurrency> defaultCurrencyResult = searchCurrencyUseCase.getDefaultCurrency();
         if (!defaultCurrencyResult.isSuccess()) {
             return "Default currency not found";
         }
 
         Account account = accountResult.getValue();
-        Currency defaultCurrency = defaultCurrencyResult.getValue();
+        ICurrency defaultCurrency = defaultCurrencyResult.getValue();
 
         // Placeholder para balance (ejemplo: %blockdynastyeconomy_balance_dinero%)
         if (s.startsWith("balance_")) {
@@ -171,7 +172,7 @@ public class PlaceHolder {
     // Manejar el placeholder "balance"
     //ejemplo de usos : %blockdynastyeconomy_balance_dinero%
     // %blockdynastyeconomy_balance_dinero_formatted%
-    private String handleBalancePlaceholder(String placeholder, Account account, Currency defaultCurrency) {
+    private String handleBalancePlaceholder(String placeholder, Account account, ICurrency defaultCurrency) {
         if (placeholder.equals("balance_default")) {
             return String.valueOf(Math.round(account.getMoney(defaultCurrency).getAmount().doubleValue()));
         }
@@ -188,11 +189,11 @@ public class PlaceHolder {
 
         String currencyName = parts[1];
 
-        Result<Currency> result = searchCurrencyUseCase.getCurrency(currencyName);
+        Result<ICurrency> result = searchCurrencyUseCase.getCurrency(currencyName);
         if (!result.isSuccess()) {
             return "Currency not found";
         }
-        Currency currency = result.getValue();
+        ICurrency currency = result.getValue();
 
         if (placeholder.equals("balance_" + currencyName + "_formatted")) {  //todo, permit use _symbol for formated with symbol
             return ChatColor.formatColorToPlaceholder(currency.getColor()) + currency.format(account.getMoney(currency).getAmount());//%BlockDynastyEconomy_balance_Dinero_formatted%

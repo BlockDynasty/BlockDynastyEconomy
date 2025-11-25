@@ -16,6 +16,7 @@
 
 package BlockDynasty.Economy.aplication.useCase.currency;
 
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.courier.Courier;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
@@ -44,7 +45,7 @@ public class CreateCurrencyUseCase {
         if (currencyService.currencyExist(singular) || currencyService.currencyExist(plural)){
             throw new CurrencyAlreadyExist("Currency already exist");
         }
-        Currency currency = new Currency(UUID.randomUUID(), singular, plural);
+        ICurrency currency = Currency.builder().setSingular(singular).setPlural(plural).build();
         currency.setExchangeRate(1.0);
         if(currencyService.getCurrencies().isEmpty()) {  //setear por defecto si es la unica moneda en el sistema
             currency.setDefaultCurrency(true);

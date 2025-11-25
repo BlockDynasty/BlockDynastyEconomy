@@ -17,12 +17,15 @@
 package repository.Models;
 
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import jakarta.persistence.*;
 import repository.Mappers.CurrencyMapper;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "currency")
@@ -61,7 +64,7 @@ public class CurrencyDb {
     @Column(name = "exchange_rate")
     private double exchangeRate;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "currency_interchangeable",
             joinColumns = @JoinColumn(name = "currency_uuid"),
@@ -76,120 +79,80 @@ public class CurrencyDb {
     public CurrencyDb() {
     }
 
+    //setter y getter
     public String getUuid() {
         return uuid;
     }
-
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
-
     public String getSingular() {
         return singular;
     }
-
     public void setSingular(String singular) {
         this.singular = singular;
     }
-
     public String getPlural() {
         return plural;
     }
-
     public void setPlural(String plural) {
         this.plural = plural;
-    }
 
+    }
     public String getSymbol() {
         return symbol;
     }
-
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
-
     public String getTexture() {
         return texture;
     }
-
     public void setTexture(String texture) {
         this.texture = texture;
     }
-
     public String getColor() {
         return color;
     }
-
     public void setColor(String color) {
         this.color = color;
-    }
 
+    }
     public boolean isDecimalSupported() {
         return decimalSupported;
     }
-
     public void setDecimalSupported(boolean decimalSupported) {
         this.decimalSupported = decimalSupported;
     }
-
     public boolean isTransferable() {
         return transferable;
     }
-
     public void setTransferable(boolean transferable) {
         this.transferable = transferable;
     }
-
     public boolean isDefaultCurrency() {
         return defaultCurrency;
     }
-
     public void setDefaultCurrency(boolean defaultCurrency) {
         this.defaultCurrency = defaultCurrency;
     }
-
     public BigDecimal getDefaultBalance() {
         return defaultBalance;
     }
-
     public void setDefaultBalance(BigDecimal defaultBalance) {
         this.defaultBalance = defaultBalance;
     }
-
     public double getExchangeRate() {
         return exchangeRate;
     }
-
     public void setExchangeRate(double exchangeRate) {
         this.exchangeRate = exchangeRate;
     }
+    public List<CurrencyDb> getInterchangeableWith() {
+        return interchangeableWith;
+    }
+    public void setInterchangeableWith(List<CurrencyDb> interchangeableWith) {
+        this.interchangeableWith = interchangeableWith;
+    }
 
-    public void setInterchangeableWith(List<Currency> interchangeableWith) {
-        List<CurrencyDb> mappedInterchangeable = new ArrayList<>();
-        interchangeableWith.forEach(c -> {
-            mappedInterchangeable.add(CurrencyMapper.toEntity(c));
-        });
-        this.interchangeableWith = mappedInterchangeable;
-    }
-    public List<Currency> getInterchangeableWith() {
-        List<Currency> interchangeable= new ArrayList<>();
-        this.interchangeableWith.forEach(c -> {
-            interchangeable.add(CurrencyMapper.toDomain(c));
-        });
-        return interchangeable;
-    }
-    // Actualizar campos (excepto ID/UUID)
-    public void update(Currency currency) {
-        setSingular(currency.getSingular());
-        setPlural(currency.getPlural());
-        setColor(currency.getColor());
-        setDecimalSupported(currency.isDecimalSupported());
-        setTransferable(currency.isTransferable());
-        setDefaultCurrency(currency.isDefaultCurrency());
-        setDefaultBalance(currency.getDefaultBalance());
-        setExchangeRate(currency.getExchangeRate());
-        setSymbol(currency.getSymbol());
-        setTexture(currency.getTexture());
-        setInterchangeableWith(currency.getInterchangeableWith());
-    }
 }

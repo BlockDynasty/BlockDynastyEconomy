@@ -106,22 +106,6 @@ public class AccountService implements IAccountService {
         return account;
     }
 
-    //synchronization methods
-    /*public void syncOnlineAccount(Account account){
-        UUID uuid = account.getUuid();
-        Account cachedAccount = this.getAccountOnline(uuid);
-        if (cachedAccount != null) {
-            for (Money updatedMoney : account.getBalances()) {
-                Money cachedMoney = cachedAccount.getMoney(updatedMoney.getCurrency());
-                if (cachedMoney != null) {
-                    cachedMoney.setAmount(updatedMoney.getAmount());
-                } else {
-                    cachedAccount.getBalances().add(new Money(updatedMoney.getCurrency(), updatedMoney.getAmount()));
-                }
-            }
-        }
-    }*/
-
     public void syncOnlineAccount(Account account){
         UUID uuid = account.getUuid();
         Account cachedAccount = this.getAccountOnline(uuid);
@@ -175,18 +159,25 @@ public class AccountService implements IAccountService {
     }*/
 
     private void syncWalletWithSystemCurrencies(Account account) {
+        Bool update = new Bool(false);
         List<Money> updatedMonies = this.currencyService.getCurrencies().stream()
                 .map(systemCurrency -> {
                     Optional<Money> existing = account.getBalances().stream()
                             .filter(balance -> balance.getCurrency().getUuid().equals(systemCurrency.getUuid()))
                             .findFirst();
                     // Build a new Money that uses the canonical systemCurrency instance and preserves amount
-                    return existing
-                            .map(b -> new Money(systemCurrency, b.getAmount()))
-                            .orElseGet(() -> new Money(systemCurrency));
+                    return existing.map(b -> new Money(systemCurrency, b.getAmount())).orElseGet(() -> {update.set(true); return new Money(systemCurrency);});
                 })
                 .collect(Collectors.toList());
         account.setBalances(updatedMonies);
+
+        if(update.get()){
+            try {
+                dataStore.saveAccount(account);
+            } catch (TransactionException e) {
+                throw new TransactionException("Error in transaction", e);
+            }
+        }
     }
     //---------------
 
@@ -230,4 +221,20 @@ public class AccountService implements IAccountService {
         //System.out.println("Top list cache cleared");
         scheduler.scheduleAtFixedRate(this::clearTopList, 0,expireCacheTopMinutes, TimeUnit.MINUTES);
     }
+
+    private class Bool{
+        public boolean value;
+        public Bool(boolean value){
+            this.value = value;
+        }
+
+        public void set(boolean value) {
+            this.value = value;
+        }
+
+        public boolean get(){
+            return this.value;
+        }
+    }
+
 }

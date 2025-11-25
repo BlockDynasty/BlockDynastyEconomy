@@ -19,6 +19,7 @@ package api;
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.services.IAccountService;
 
 
@@ -36,7 +37,7 @@ public interface IApi {
     EconomyResponse deposit(UUID uuid, BigDecimal amount);
     EconomyResponse deposit(String name, BigDecimal amount);
 
-    Currency getDefaultCurrency();
+    ICurrency getDefaultCurrency();
 
     EventManager getEventManager();
 
@@ -134,6 +135,7 @@ public interface IApi {
     String format(BigDecimal amount, String currency);
 
     List<String> getCurrenciesNamesList();
+    List<ICurrency> getCurrencies();
 
     EconomyResponse createAccount(final UUID accountID, final String name);
 
@@ -159,7 +161,7 @@ public interface IApi {
     EconomyResponse setPluralName(String currentName, String newName);
     EconomyResponse setPayable(String currencyName, boolean isPayable);
 
-    Currency getCurrency(String name );
+    ICurrency getCurrency(String name );
 
     IAccountService getAccountService();
 

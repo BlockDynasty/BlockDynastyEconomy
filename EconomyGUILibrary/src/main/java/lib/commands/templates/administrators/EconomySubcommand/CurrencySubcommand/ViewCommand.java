@@ -18,6 +18,7 @@ package lib.commands.templates.administrators.EconomySubcommand.CurrencySubcomma
 
 import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.Result;
 import lib.commands.abstractions.IEntityCommands;
 import lib.commands.abstractions.AbstractCommand;
@@ -40,13 +41,13 @@ public class ViewCommand extends AbstractCommand {
             return false;
         }
 
-        Result<Currency> resultCurrency = searchCurrencyUseCase.getCurrency(args[0]);
+        Result<ICurrency> resultCurrency = searchCurrencyUseCase.getCurrency(args[0]);
         if (!resultCurrency.isSuccess()) {
             sender.sendMessage(resultCurrency.getErrorMessage()+ " "+resultCurrency.getErrorCode());
             return false;
         }
 
-        Currency currency = resultCurrency.getValue();
+        ICurrency currency = resultCurrency.getValue();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(ChatColor.stringValueOf(Colors.GREEN)+"--- Currency Info ---")
                 .append("\n")

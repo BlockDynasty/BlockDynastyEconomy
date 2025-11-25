@@ -19,6 +19,7 @@ package lib.gui.templates.users.Exchange;
 import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.IExchangeUseCase;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.Result;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.ITextInput;
@@ -32,18 +33,18 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 public class ExchangeSecondPanel extends CurrencySelectorAndAmount {
-    private final Currency currencyFrom;
+    private final ICurrency currencyFrom;
     private final IExchangeUseCase exchangeUseCase;
 
     public ExchangeSecondPanel(IEntityGUI player, SearchCurrencyUseCase searchCurrencyUseCase, IExchangeUseCase exchangeUseCase,
-                               Currency currencyFrom, ExchangeFirstPanel parentGUI, ITextInput textInput) {
+                               ICurrency currencyFrom, ExchangeFirstPanel parentGUI, ITextInput textInput) {
         super(player, searchCurrencyUseCase, parentGUI,currencyFrom, textInput);
         this.currencyFrom = currencyFrom;
         this.exchangeUseCase = exchangeUseCase;
     }
 
     @Override
-    protected String execute(IEntityGUI sender, Currency currencyTo, BigDecimal amountTo){
+    protected String execute(IEntityGUI sender, ICurrency currencyTo, BigDecimal amountTo){
         Result<BigDecimal> result= exchangeUseCase.execute(sender.getUniqueId(),currencyFrom.getSingular(),currencyTo.getSingular(),null, amountTo);
         if(result.isSuccess()){
             return "success";

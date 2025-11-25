@@ -30,7 +30,6 @@ public class ItemStack implements IItemStack {
 
     @Override
     public IItemStack setTexture(String texture) {
-        // Mock implementation does not handle textures
         return this;
     }
 

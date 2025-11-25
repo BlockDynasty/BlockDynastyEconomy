@@ -19,6 +19,7 @@ package lib.gui.templates.users.Offers;
 import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.aplication.useCase.offer.CreateOfferUseCase;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import lib.gui.components.IGUI;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.ITextInput;
@@ -35,7 +36,7 @@ public class CreateOfferFirstPanel extends CurrencySelectorAndAmount {
     private final BlockDynasty.Economy.domain.entities.account.Player target;
     private final SearchCurrencyUseCase searchCurrencyUseCase;
     protected final CreateOfferUseCase createOfferUseCase;
-    private Currency currency;
+    private ICurrency currency;
     private BigDecimal amount;
     private final ITextInput textInput;
 
@@ -48,7 +49,7 @@ public class CreateOfferFirstPanel extends CurrencySelectorAndAmount {
         this.createOfferUseCase = createOfferUseCase;
     }
 
-    protected Currency getCurrency() {
+    protected ICurrency getCurrency() {
         return currency;
     }
 
@@ -57,7 +58,7 @@ public class CreateOfferFirstPanel extends CurrencySelectorAndAmount {
     }
 
     @Override
-    protected String execute(IEntityGUI sender, Currency currency, java.math.BigDecimal amount) {
+    protected String execute(IEntityGUI sender, ICurrency currency, java.math.BigDecimal amount) {
         this.currency = currency;
         this.amount = amount;
         new CreateOfferSecondPanel(sender, target, searchCurrencyUseCase,createOfferUseCase, this,textInput).open();

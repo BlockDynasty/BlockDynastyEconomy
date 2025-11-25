@@ -17,6 +17,7 @@
 package BlockDynasty.Economy.domain.entities.currency;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 public interface ICurrency {
@@ -31,7 +32,7 @@ public interface ICurrency {
      String format(BigDecimal amount);
      boolean isValidAmount(BigDecimal amount);
      boolean isDefaultCurrency();
-     void setStartBalance(BigDecimal startBalance);
+     boolean isInterchangeableWith(ICurrency currency);
      void setDefaultBalance(BigDecimal defaultBalance);
      void setDefaultCurrency(boolean defaultCurrency);
      boolean isTransferable();
@@ -42,9 +43,14 @@ public interface ICurrency {
      void setColor(String color);
      String getSymbol();
      String getTexture();
+     void setTexture(String texture);
      void setSymbol(String symbol);
      double getExchangeRate();
      void setExchangeRate(double exchangeRate);
      boolean equals(Object o) ;
      int hashCode();
+     void addInterchangeableCurrency(ICurrency currency);
+     void removeInterchangeableCurrency(ICurrency currency);
+     void setInterchangeableCurrencies(List<ICurrency> currencies);
+     List<ICurrency> getInterchangeableCurrencies();
 }

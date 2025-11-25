@@ -18,6 +18,7 @@ package lib.gui.templates.administrators.subMenus.currencies;
 
 import BlockDynasty.Economy.aplication.useCase.currency.EditCurrencyUseCase;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -39,11 +40,11 @@ import java.util.Map;
 
 public class EditCurrencyPanel extends AbstractPanel {
     private final IEntityGUI player;
-    private final Currency currency;
+    private final ICurrency currency;
     private final EditCurrencyUseCase editCurrencyUseCase;
     private final ITextInput textInput;
 
-    public EditCurrencyPanel(IEntityGUI player, Currency currency, EditCurrencyUseCase editCurrencyUseCase, IGUI parentGUI, ITextInput textInput) {
+    public EditCurrencyPanel(IEntityGUI player, ICurrency currency, EditCurrencyUseCase editCurrencyUseCase, IGUI parentGUI, ITextInput textInput) {
         super(Message.process(Map.of("currency",currency.getSingular()),"EditCurrencyPanel.title"), 5,player, parentGUI);
         this.player = player;
         this.currency = currency;

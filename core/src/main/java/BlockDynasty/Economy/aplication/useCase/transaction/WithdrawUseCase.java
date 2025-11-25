@@ -19,6 +19,7 @@ package BlockDynasty.Economy.aplication.useCase.transaction;
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.useCase.transaction.genericOperations.SingleAccountSingleCurrencyOp;
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.IWithdrawUseCase;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.events.Context;
 import BlockDynasty.Economy.domain.events.transactionsEvents.WithdrawEvent;
 import BlockDynasty.Economy.domain.services.IAccountService;
@@ -50,7 +51,7 @@ public class WithdrawUseCase extends SingleAccountSingleCurrencyOp implements IW
     }
 
     @Override
-    public Result<Void> execute(Account account, Currency currency, BigDecimal amount, Context context) {
+    public Result<Void> execute(Account account, ICurrency currency, BigDecimal amount, Context context) {
         if (account.isBlocked()){
             return Result.failure("Account is blocked", ErrorCode.ACCOUNT_BLOCKED);
         }

@@ -19,6 +19,7 @@ package BlockDynasty.Economy.aplication.useCase.transaction;
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.useCase.transaction.genericOperations.SingleAccountSingleCurrencyOp;
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.IDepositUseCase;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.events.Context;
 import BlockDynasty.Economy.domain.events.transactionsEvents.DepositEvent;
 import BlockDynasty.Economy.domain.services.IAccountService;
@@ -51,7 +52,7 @@ public class DepositUseCase extends SingleAccountSingleCurrencyOp implements IDe
     }
 
     @Override
-    public Result<Void> execute(Account account, Currency currency, BigDecimal amount, Context context) {
+    public Result<Void> execute(Account account, ICurrency currency, BigDecimal amount, Context context) {
         if (!account.canReceiveCurrency()) {
             return Result.failure("Account can't receive currency", ErrorCode.ACCOUNT_CAN_NOT_RECEIVE);
         }

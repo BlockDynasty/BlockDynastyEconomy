@@ -16,6 +16,7 @@
 
 package BlockDynasty.Economy.domain.entities.balance;
 
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
@@ -23,25 +24,25 @@ import BlockDynasty.Economy.domain.entities.currency.Currency;
 import java.math.BigDecimal;
 
 public class Money implements IMoney{
-    private Currency currency;
+    private ICurrency currency;
     private BigDecimal amount;
 
-    public Money(Currency currency){
+    public Money(ICurrency currency){
         this.currency= currency;
         this.amount = currency.getDefaultBalance();
     }
 
-    public Money(Currency currency, BigDecimal amount){
+    public Money(ICurrency currency, BigDecimal amount){
         this.currency= currency;
         this.amount = amount;
     }
 
     public Money(Money money){
-        this.currency = new Currency(money.getCurrency());
+        this.currency = Currency.builder().copy(money.getCurrency()).build();
         this.amount = money.getAmount();
     }
 
-    public void setCurrency(Currency currency){
+    public void setCurrency(ICurrency currency){
         this.currency = currency;
     }
 
@@ -49,7 +50,7 @@ public class Money implements IMoney{
         return this.amount;
     }
 
-    public Currency getCurrency() {
+    public ICurrency getCurrency() {
         return currency;
     }
 

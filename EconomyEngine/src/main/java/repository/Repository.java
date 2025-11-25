@@ -21,6 +21,7 @@ import BlockDynasty.Economy.domain.entities.account.Exceptions.AccountAlreadyExi
 import BlockDynasty.Economy.domain.entities.account.Exceptions.AccountNotFoundException;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.Exceptions.CurrencyNotFoundException;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.persistence.Exceptions.RepositoryException;
 import BlockDynasty.Economy.domain.persistence.entities.IAccountRepository;
 import BlockDynasty.Economy.domain.persistence.entities.ICurrencyRepository;
@@ -51,13 +52,13 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public List<Currency> loadCurrencies() {
+    public List<ICurrency> loadCurrencies() {
         return currencyRepository.findAll();
     }
 
-    public Result<Currency> loadCurrencyByName(String name) {
+    public Result<ICurrency> loadCurrencyByName(String name) {
         try {
-            Currency currency = currencyRepository.findByName(name);
+            ICurrency currency = currencyRepository.findByName(name);
             return Result.success(currency);
         } catch (CurrencyNotFoundException e) {
             return Result.failure("Currency with name " + name + " not found.", ErrorCode.CURRENCY_NOT_FOUND);
@@ -66,9 +67,9 @@ public class Repository implements IRepository {
         }
     }
 
-    public Result<Currency> loadCurrencyByUuid(String uuid) {
+    public Result<ICurrency> loadCurrencyByUuid(String uuid) {
         try {
-            Currency currency = currencyRepository.findByUuid(uuid);
+            ICurrency currency = currencyRepository.findByUuid(uuid);
             return Result.success(currency);
         } catch (CurrencyNotFoundException e) {
             return Result.failure("Currency with UUID " + uuid + " not found.", ErrorCode.CURRENCY_NOT_FOUND);
@@ -77,9 +78,9 @@ public class Repository implements IRepository {
         }
     }
 
-    public Result<Currency> loadDefaultCurrency() {
+    public Result<ICurrency> loadDefaultCurrency() {
         try {
-            Currency currency = currencyRepository.findDefaultCurrency();
+            ICurrency currency = currencyRepository.findDefaultCurrency();
             return Result.success(currency);
         } catch (CurrencyNotFoundException e) {
             return Result.failure("Default currency not found.", ErrorCode.CURRENCY_NOT_FOUND);
@@ -89,7 +90,7 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public void saveCurrency(Currency currency) {
+    public void saveCurrency(ICurrency currency) {
         try {
             currencyRepository.save(currency);
         }catch (CurrencyNotFoundException e) {
@@ -100,7 +101,7 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public void deleteCurrency(Currency currency) {
+    public void deleteCurrency(ICurrency currency) {
         try {
             currencyRepository.delete(currency);
         }catch (CurrencyNotFoundException e) {
@@ -223,32 +224,32 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public Result<TransferResult> transfer(String fromUuid, String toUuid, Currency currency, BigDecimal amount) {
+    public Result<TransferResult> transfer(String fromUuid, String toUuid, ICurrency currency, BigDecimal amount) {
         return transactionsRepository.transfer(fromUuid, toUuid, currency, amount);
     }
 
     @Override
-    public Result<Account> withdraw(String accountUuid, Currency currency, BigDecimal amount) {
+    public Result<Account> withdraw(String accountUuid, ICurrency currency, BigDecimal amount) {
         return transactionsRepository.withdraw( accountUuid, currency, amount);
     }
 
     @Override
-    public Result<Account> deposit(String accountUuid, Currency currency, BigDecimal amount) {
+    public Result<Account> deposit(String accountUuid, ICurrency currency, BigDecimal amount) {
         return transactionsRepository.deposit( accountUuid, currency, amount);
     }
 
     @Override
-    public Result<Account> exchange(String fromUuid, Currency fromCurrency, BigDecimal amountFrom, Currency toCurrency, BigDecimal amountTo) {
+    public Result<Account> exchange(String fromUuid, ICurrency fromCurrency, BigDecimal amountFrom, ICurrency toCurrency, BigDecimal amountTo) {
         return transactionsRepository.exchange(fromUuid, fromCurrency, amountFrom, toCurrency, amountTo);
     }
 
     @Override
-    public Result<TransferResult> trade(String fromUuid, String toUuid, Currency fromCurrency, Currency toCurrency, BigDecimal amountFrom, BigDecimal amountTo) {
+    public Result<TransferResult> trade(String fromUuid, String toUuid, ICurrency fromCurrency, ICurrency toCurrency, BigDecimal amountFrom, BigDecimal amountTo) {
         return transactionsRepository.trade(fromUuid, toUuid, fromCurrency, toCurrency, amountFrom, amountTo);
     }
 
     @Override
-    public Result<Account> setBalance(String accountUuid, Currency currency, BigDecimal amount) {
+    public Result<Account> setBalance(String accountUuid, ICurrency currency, BigDecimal amount) {
         return transactionsRepository.setBalance(accountUuid, currency, amount);
     }
 }

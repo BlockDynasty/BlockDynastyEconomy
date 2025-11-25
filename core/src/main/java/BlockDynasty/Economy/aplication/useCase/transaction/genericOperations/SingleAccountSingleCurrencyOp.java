@@ -5,6 +5,7 @@ import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAcco
 import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.events.Context;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 import BlockDynasty.Economy.domain.result.Result;
@@ -48,12 +49,12 @@ public abstract class SingleAccountSingleCurrencyOp extends Operation{
             return Result.failure(accountResult.getErrorMessage(), accountResult.getErrorCode());
         }
 
-        Result<Currency> currencyResult = currencyName == null ? this.searchCurrencyUseCase.getDefaultCurrency() : this.searchCurrencyUseCase.getCurrency(currencyName);
+        Result<ICurrency> currencyResult = currencyName == null ? this.searchCurrencyUseCase.getDefaultCurrency() : this.searchCurrencyUseCase.getCurrency(currencyName);
         if (!currencyResult.isSuccess()) {
             return Result.failure(currencyResult.getErrorMessage(), currencyResult.getErrorCode());
         }
         return execute(accountResult.getValue(), currencyResult.getValue(), amount,context);
     }
 
-    public abstract Result<Void> execute(Account account, Currency currency, BigDecimal amount, Context context);
+    public abstract Result<Void> execute(Account account, ICurrency currency, BigDecimal amount, Context context);
 }

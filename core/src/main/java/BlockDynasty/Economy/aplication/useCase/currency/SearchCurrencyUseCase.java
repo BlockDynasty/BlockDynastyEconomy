@@ -16,6 +16,7 @@
 
 package BlockDynasty.Economy.aplication.useCase.currency;
 
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
@@ -34,33 +35,33 @@ public class SearchCurrencyUseCase {
         this.datastore = datastore;
     }
 
-    public Result<Currency> getCurrency(String name) {
-        Currency currency = currencyService.getCurrency(name);
+    public Result<ICurrency> getCurrency(String name) {
+        ICurrency currency = currencyService.getCurrency(name);
         if (currency == null) {
-            Result<Currency> result = datastore.loadCurrencyByName(name);
+            Result<ICurrency> result = datastore.loadCurrencyByName(name);
             if(result.isSuccess()){
                 currency = result.getValue();
             }else {
                 return Result.failure("Currency not found", ErrorCode.CURRENCY_NOT_FOUND);
             }
         }
-        return Result.success(new Currency(currency));
+        return Result.success(Currency.builder().copy(currency).build());
     }
 
-    public Result<Currency>  getDefaultCurrency() {
-        Currency defaultCurrency = currencyService.getDefaultCurrency();
+    public Result<ICurrency>  getDefaultCurrency() {
+        ICurrency defaultCurrency = currencyService.getDefaultCurrency();
         if(defaultCurrency == null){
-            Result<Currency> result = datastore.loadDefaultCurrency();
+            Result<ICurrency> result = datastore.loadDefaultCurrency();
             if(result.isSuccess()){
                 defaultCurrency = result.getValue();
             }else {
                 return Result.failure("Currency not found", ErrorCode.CURRENCY_NOT_FOUND);
             }
         }
-        return Result.success(new Currency(defaultCurrency));
+        return Result.success(Currency.builder().copy(defaultCurrency).build());
     }
 
-    public List<Currency> getCurrencies(){
+    public List<ICurrency> getCurrencies(){
         return new ArrayList<>(currencyService.getCurrencies());
     }
 }

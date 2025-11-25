@@ -19,6 +19,7 @@ package lib.gui.templates.users.Offers;
 import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.aplication.useCase.offer.CreateOfferUseCase;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.Result;
 import lib.gui.GUIFactory;
 import lib.gui.components.IEntityGUI;
@@ -45,7 +46,7 @@ public class CreateOfferSecondPanel extends CurrencySelectorAndAmount {
     }
 
     @Override
-    protected String  execute(IEntityGUI sender, Currency currency, java.math.BigDecimal amount){
+    protected String  execute(IEntityGUI sender, ICurrency currency, java.math.BigDecimal amount){
         Result<Void> result= createOfferUseCase.execute(
                 sender.getUniqueId(),
                 target.getUuid(),

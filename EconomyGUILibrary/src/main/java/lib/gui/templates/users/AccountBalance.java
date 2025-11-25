@@ -19,6 +19,7 @@ package lib.gui.templates.users;
 import BlockDynasty.Economy.aplication.useCase.account.balance.GetBalanceUseCase;
 import BlockDynasty.Economy.domain.entities.balance.Money;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.Result;
 import lib.gui.components.IGUI;
 import lib.gui.components.IItemStack;
@@ -72,7 +73,7 @@ public class AccountBalance extends PaginatedPanel<Money> {
 
     @Override
     protected IItemStack createItemFor(Money money) {
-        Currency currency = money.getCurrency();
+        ICurrency currency = money.getCurrency();
         return createItem(RecipeItem.builder()
                 .setMaterial(Materials.GOLD_INGOT)
                 .setName(Message.process(Map.of("currency",ChatColor.stringValueOf(currency.getColor()) + currency.getSingular()),"AccountBalance.button1.nameItem"))

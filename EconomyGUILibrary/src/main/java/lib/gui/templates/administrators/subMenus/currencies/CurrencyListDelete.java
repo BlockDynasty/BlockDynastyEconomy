@@ -20,6 +20,7 @@ import BlockDynasty.Economy.aplication.useCase.currency.DeleteCurrencyUseCase;
 import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.Exceptions.CurrencyNotFoundException;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.persistence.Exceptions.TransactionException;
 import lib.gui.components.IGUI;
 import lib.gui.components.IEntityGUI;
@@ -41,11 +42,11 @@ public class CurrencyListDelete extends CurrencySelectorAndAmount {
     }
 
     @Override
-    public void functionLeftItemClick(Currency currency) {
+    public void functionLeftItemClick(ICurrency currency) {
         openAnvilConfirmation(currency);
     }
 
-    public void openAnvilConfirmation(Currency currency) {
+    public void openAnvilConfirmation(ICurrency currency) {
         textInput.open(this, player, "Confirm Deletion", "Type 'delete' to confirm", input -> {
             if ("delete".equalsIgnoreCase(input)) {
                 return execute(currency);
@@ -57,7 +58,7 @@ public class CurrencyListDelete extends CurrencySelectorAndAmount {
         });
     }
 
-    private String execute(Currency currency){
+    private String execute(ICurrency currency){
         try {
             deleteCurrencyUseCase.deleteCurrency(currency.getSingular());
             //player.sendMessage(Message.getPrefix() + "§7Deleted currency: §a" + currency.getSingular());

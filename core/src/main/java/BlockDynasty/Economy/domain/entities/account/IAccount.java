@@ -18,6 +18,7 @@ package BlockDynasty.Economy.domain.entities.account;
 
 import BlockDynasty.Economy.domain.entities.balance.Money;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.entities.wallet.Wallet;
 import BlockDynasty.Economy.domain.result.Result;
 
@@ -26,16 +27,16 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IAccount {
-    Result<Void> subtract(Currency currency, BigDecimal amount);
-    Result<Void> add(Currency currency, BigDecimal amount);
-    Result<Void> setMoney(Currency currency, BigDecimal amount);
+    Result<Void> subtract(ICurrency currency, BigDecimal amount);
+    Result<Void> add(ICurrency currency, BigDecimal amount);
+    Result<Void> setMoney(ICurrency currency, BigDecimal amount);
 
     void setBalances(List<Money> wallet);
     boolean hasCurrency( String currencyName);
-    Money getMoney(Currency currency);
+    Money getMoney(ICurrency currency);
     Money getMoney();
     Money getMoney(String currencyName);
-    boolean hasEnough(Currency currency, BigDecimal amount);
+    boolean hasEnough(ICurrency currency, BigDecimal amount);
     Wallet getWallet();
     void setWallet(Wallet wallet);
     boolean hasEnoughDefaultCurrency(BigDecimal amount);

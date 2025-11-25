@@ -19,6 +19,7 @@ package BlockDynasty.Economy.aplication.useCase.transaction;
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.useCase.transaction.genericOperations.SingleAccountSingleCurrencyOp;
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.ISetBalanceUseCase;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.events.Context;
 import BlockDynasty.Economy.domain.events.transactionsEvents.SetEvent;
 import BlockDynasty.Economy.domain.services.IAccountService;
@@ -51,7 +52,7 @@ public class SetBalanceUseCase extends SingleAccountSingleCurrencyOp implements 
     }
 
     @Override
-    public Result<Void> execute(Account account, Currency currency, BigDecimal amount, Context context) {
+    public Result<Void> execute(Account account, ICurrency currency, BigDecimal amount, Context context) {
         if(amount.compareTo(BigDecimal.ZERO) < 0){
             return Result.failure("Amount must be greater than -1", ErrorCode.INVALID_AMOUNT);
         }

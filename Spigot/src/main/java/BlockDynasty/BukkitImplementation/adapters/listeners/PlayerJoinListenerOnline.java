@@ -40,12 +40,12 @@ public class PlayerJoinListenerOnline implements Listener {
      * PlayerLoginEvent Deprecated on paper > 1.21.7
      * Not Critical for this plugin,recommended to use PlayerJoinEvent only.
      * **/
-    @Deprecated
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onLogin(PlayerLoginEvent event) {
-        Player player = event.getPlayer();
-        Scheduler.run(ContextualTask.build(() -> loadPlayerAccount(player)));
-    }
+    //@Deprecated
+    //@EventHandler(priority = EventPriority.LOWEST)
+    //public void onLogin(PlayerLoginEvent event) {
+    //    Player player = event.getPlayer();
+    //    Scheduler.run(ContextualTask.build(() -> loadPlayerAccount(player)));
+    //}
 
     @EventHandler(priority = EventPriority.LOW)
     public void onJoin(PlayerJoinEvent event) {

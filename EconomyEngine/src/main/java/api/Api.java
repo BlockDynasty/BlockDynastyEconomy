@@ -31,6 +31,7 @@ import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.*;
 import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.entities.balance.Money;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.log.Log;
@@ -132,7 +133,7 @@ public class Api implements IApi {
     }
 
     @Override
-    public Currency getDefaultCurrency() {
+    public ICurrency getDefaultCurrency() {
         return this.searchCurrencyUseCase.getDefaultCurrency().getValue();
     }
 
@@ -277,7 +278,7 @@ public class Api implements IApi {
 
     @Override
     public boolean existCurrency(String nameCurrency) {
-        Result<Currency> currencyResult =  this.searchCurrencyUseCase.getCurrency(nameCurrency);
+        Result<ICurrency> currencyResult =  this.searchCurrencyUseCase.getCurrency(nameCurrency);
         return currencyResult.isSuccess();
     }
 
@@ -295,7 +296,7 @@ public class Api implements IApi {
 
     @Override
     public String getDefaultCurrencyNamePlural() {
-        Result<Currency> currencyResult =  this.searchCurrencyUseCase.getDefaultCurrency();
+        Result<ICurrency> currencyResult =  this.searchCurrencyUseCase.getDefaultCurrency();
         if (currencyResult.isSuccess()) {
             return currencyResult.getValue().getPlural();
         }
@@ -304,7 +305,7 @@ public class Api implements IApi {
 
     @Override
     public String getDefaultCurrencyNameSingular() {
-        Result<Currency> currencyResult =  this.searchCurrencyUseCase.getDefaultCurrency();
+        Result<ICurrency> currencyResult =  this.searchCurrencyUseCase.getDefaultCurrency();
         if (currencyResult.isSuccess()) {
             return currencyResult.getValue().getSingular();
         }
@@ -313,9 +314,9 @@ public class Api implements IApi {
 
     @Override
     public String format(BigDecimal amount) {
-        Result<Currency> currencyResult =  this.searchCurrencyUseCase.getDefaultCurrency();
+        Result<ICurrency> currencyResult =  this.searchCurrencyUseCase.getDefaultCurrency();
         if (currencyResult.isSuccess()) {
-            Currency currency = currencyResult.getValue();
+            ICurrency currency = currencyResult.getValue();
             return currency.format(amount);
         } else {
             return amount.toString();
@@ -324,9 +325,9 @@ public class Api implements IApi {
 
     @Override
     public String format(BigDecimal amount, String currency) {
-        Result<Currency> currencyResult =  this.searchCurrencyUseCase.getCurrency(currency);
+        Result<ICurrency> currencyResult =  this.searchCurrencyUseCase.getCurrency(currency);
         if (currencyResult.isSuccess()) {
-            Currency curr = currencyResult.getValue();
+            ICurrency curr = currencyResult.getValue();
             return curr.format(amount);
         } else {
             return amount.toString();
@@ -335,8 +336,13 @@ public class Api implements IApi {
 
     @Override
     public List<String> getCurrenciesNamesList() {
-        List<Currency> currenciesResult =  this.searchCurrencyUseCase.getCurrencies();
-        return currenciesResult.stream().map(Currency::getPlural).collect(Collectors.toList());
+        List<ICurrency> currenciesResult =  this.searchCurrencyUseCase.getCurrencies();
+        return currenciesResult.stream().map(ICurrency::getPlural).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ICurrency> getCurrencies() {
+        return this.searchCurrencyUseCase.getCurrencies();
     }
 
     @Override
@@ -470,7 +476,7 @@ public class Api implements IApi {
         return null;
     }
 
-    public Currency getCurrency(String name){
+    public ICurrency getCurrency(String name){
         return  this.searchCurrencyUseCase.getCurrency(name).getValue();
     }
 

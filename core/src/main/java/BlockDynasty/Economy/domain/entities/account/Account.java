@@ -17,6 +17,7 @@
 package BlockDynasty.Economy.domain.entities.account;
 
 import BlockDynasty.Economy.domain.entities.balance.Money;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.entities.wallet.Wallet;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
@@ -59,7 +60,7 @@ public class Account implements IAccount {
         this.blocked = account.isBlocked();
     }
 
-    public Result<Void> subtract(Currency currency, BigDecimal amount){
+    public Result<Void> subtract(ICurrency currency, BigDecimal amount){
         Money money = getMoney(currency);
         if (money == null) {
             return Result.failure("No balance found for currency" , ErrorCode.ACCOUNT_NOT_HAVE_BALANCE);
@@ -71,7 +72,7 @@ public class Account implements IAccount {
         return Result.success(null);
     }
 
-    public Result<Void> add(Currency currency, BigDecimal amount) {
+    public Result<Void> add(ICurrency currency, BigDecimal amount) {
         Money money = getMoney(currency);
         if (money == null) {
             return Result.failure("No balance found for currency" , ErrorCode.ACCOUNT_NOT_HAVE_BALANCE);
@@ -84,7 +85,7 @@ public class Account implements IAccount {
         return Result.success(null);
     }
 
-    public Result<Void> setMoney(Currency currency, BigDecimal amount) {
+    public Result<Void> setMoney(ICurrency currency, BigDecimal amount) {
         Money money = getMoney(currency);
         if (money == null) {
             createBalance(currency, amount);
@@ -108,7 +109,7 @@ public class Account implements IAccount {
         return wallet.hasCurrency(currencyName);
     }
 
-    public Money getMoney(Currency currency) {
+    public Money getMoney(ICurrency currency) {
         return wallet.getMoney(currency);
     }
 
@@ -120,7 +121,7 @@ public class Account implements IAccount {
         return wallet.getMoney(currencyName);
     }
 
-    public boolean hasEnough(Currency currency, BigDecimal amount){
+    public boolean hasEnough(ICurrency currency, BigDecimal amount){
         Money money = getMoney(currency);
         if (money == null) {
             return false;
@@ -144,7 +145,7 @@ public class Account implements IAccount {
         return money.hasEnough(amount);
     };
 
-    private void createBalance(Currency currency, BigDecimal amount) {
+    private void createBalance(ICurrency currency, BigDecimal amount) {
         wallet.createBalance(currency, amount);
     }
 

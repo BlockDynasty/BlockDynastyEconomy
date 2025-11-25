@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.useCase.currency.EditCurrencyUseCase;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.events.transactionsEvents.PayEvent;
 import mockClass.CourierTest;
 import BlockDynasty.Economy.aplication.services.CurrencyService;
@@ -52,15 +53,15 @@ public class PayUseCaseTest {
     SearchCurrencyUseCase searchCurrencyUseCase;
     EditCurrencyUseCase editCurrencyUseCase;
     PayUseCase payUseCase;
-    Currency coin;
-    Currency dinero;
-    Currency plata;
+    ICurrency coin;
+    ICurrency dinero;
+    ICurrency plata;
 
     @BeforeEach
     void setUp() {
-        coin = new Currency(UUID.randomUUID(),"Coin","Coins");
-        dinero = new Currency(UUID.randomUUID(),"dinero","dinero");
-        plata = new Currency(UUID.randomUUID(),"plata","plata");
+        coin = Currency.builder().setSingular("Coin").setPlural("Coins").build();
+        dinero = Currency.builder().setSingular("dinero").setPlural("dinero").build();
+        plata = Currency.builder().setSingular("plata").setPlural("plata").build();
 
         nullplague = new Account(UUID.randomUUID(), "nullplague");
         cris = new Account(UUID.randomUUID(), "cris");

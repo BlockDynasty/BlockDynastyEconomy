@@ -17,6 +17,7 @@
 package BlockDynasty.Economy.aplication.services;
 
 import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
@@ -26,9 +27,9 @@ import java.util.List;
 import java.util.UUID;
 
 public class CurrencyService implements ICurrencyService {
-    private List<Currency> currencies ;
+    private List<ICurrency> currencies ;
     private IRepository repository;
-    public Currency defaultCurrency;
+    public ICurrency defaultCurrency;
 
     public CurrencyService(IRepository repository) {
         this.repository = repository;
@@ -36,19 +37,21 @@ public class CurrencyService implements ICurrencyService {
         this.currencies = repository.loadCurrencies();
 
         if(currencies.isEmpty()){
-            Currency defaultCurrency = new Currency(UUID.randomUUID(), "Money", "Money");
-            defaultCurrency.setColor("GREEN");
-            defaultCurrency.setDefaultCurrency(true);
+            ICurrency defaultCurrency = Currency.builder()
+                    .setSingular("Money")
+                    .setPlural("Money")
+                    .setColor("GREEN")
+                    .setDefaultCurrency(true)
+                    .build();
             repository.saveCurrency(defaultCurrency);
             currencies.add(defaultCurrency);
         }
 
         updateDefaultCurrency();
-
     }
 
     public void syncCurrency(UUID uuid){
-        Result<Currency> result = repository.loadCurrencyByUuid(uuid.toString());
+        Result<ICurrency> result = repository.loadCurrencyByUuid(uuid.toString());
         if(!result.isSuccess()){
             return;
         }
@@ -57,39 +60,39 @@ public class CurrencyService implements ICurrencyService {
         //updateDefaultCurrency();
     }
 
-    public void add(Currency currency) {
+    public void add(ICurrency currency) {
         if(currencies.contains(currency))return;
 
         currencies.add(currency);
     }
 
-    public void add(List<Currency> currencyList) {
+    public void add(List<ICurrency> currencyList) {
         currencies.addAll(currencyList);
     }
 
-    public void remove(Currency currency){
+    public void remove(ICurrency currency){
         currencies.remove(currency);
     }
 
-    public List<Currency> getCurrencies() {
+    public List<ICurrency> getCurrencies() {
         return currencies;
     }
 
-    public Currency getCurrency(String name) {
+    public ICurrency getCurrency(String name) {
         return currencies.stream()
                 .filter(currency -> currency.getSingular().equalsIgnoreCase(name) || currency.getPlural().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
     }
 
-    public Currency getCurrency(UUID uuid) {
+    public ICurrency getCurrency(UUID uuid) {
         return currencies.stream()
                 .filter(currency -> currency.getUuid().equals(uuid))
                 .findFirst()
                 .orElse(null);
     }
 
-    public Currency getDefaultCurrency() {
+    public ICurrency getDefaultCurrency() {
         return this.defaultCurrency;
     }
 
@@ -100,14 +103,14 @@ public class CurrencyService implements ICurrencyService {
 
     public void updateDefaultCurrency() {
         defaultCurrency = currencies.stream()
-                .filter(Currency::isDefaultCurrency)
+                .filter(ICurrency::isDefaultCurrency)
                 .findFirst()
                 .orElse(defaultCurrency);
     }
 
     @Override
     public boolean existsDefaultCurrency() {
-        return this.currencies.stream().anyMatch(Currency::isDefaultCurrency);
+        return this.currencies.stream().anyMatch(ICurrency::isDefaultCurrency);
     }
 
 }

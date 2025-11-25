@@ -19,6 +19,7 @@ package BlockDynasty.Economy.aplication.useCase.transaction;
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.useCase.transaction.genericOperations.MultiAccountSingleCurrencyOp;
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.ITransferUseCase;
+import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.events.transactionsEvents.TransferEvent;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
@@ -49,7 +50,7 @@ public class TransferFundsUseCase extends MultiAccountSingleCurrencyOp implement
         this.accountService = accountService;
     }
 
-    public Result<Void> execute(Account accountFrom, Account accountTo, Currency currency, BigDecimal amount) {
+    public Result<Void> execute(Account accountFrom, Account accountTo, ICurrency currency, BigDecimal amount) {
         if(!currency.isTransferable()){
             return Result.failure("Currency is not transferable", ErrorCode.CURRENCY_NOT_PAYABLE);
         }
@@ -82,7 +83,7 @@ public class TransferFundsUseCase extends MultiAccountSingleCurrencyOp implement
         return Result.success();
     }
 
-    private void updateCacheAndEmitEvents(Account accountFrom, Account accountTo, Currency currency, BigDecimal amount, Result<TransferResult> result) {
+    private void updateCacheAndEmitEvents(Account accountFrom, Account accountTo, ICurrency currency, BigDecimal amount, Result<TransferResult> result) {
         this.accountService.syncOnlineAccount(result.getValue().getTo());
         this.accountService.syncOnlineAccount(result.getValue().getFrom());
         this.updateForwarder.sendUpdateMessage("event",new TransferEvent(accountFrom.getPlayer(),accountTo.getPlayer(), currency, amount).toJson(), accountTo.getUuid().toString());
@@ -90,15 +91,15 @@ public class TransferFundsUseCase extends MultiAccountSingleCurrencyOp implement
         emitEvent(accountFrom, accountTo, currency, amount);
     }
 
-    protected void logSuccess(Account accountFrom, Account accountTo, Currency currency, BigDecimal amount){
+    protected void logSuccess(Account accountFrom, Account accountTo, ICurrency currency, BigDecimal amount){
         this.logger.log("[TRANSFER] Account: " + accountFrom.getNickname() + " send " + currency.format(amount) + " to " + accountTo.getNickname());
     };
 
-    protected void logFailure(Account accountFrom, Account accountTo, Currency currency, BigDecimal amount, Result<TransferResult> result){
+    protected void logFailure(Account accountFrom, Account accountTo, ICurrency currency, BigDecimal amount, Result<TransferResult> result){
         this.logger.log("[TRANSFER Failed] Account: " + accountFrom.getNickname() + " pay " + currency.format(amount) + " to " + accountTo.getNickname() + " Error: " + result.getErrorMessage() + " Code: " + result.getErrorCode());
     };
 
-    protected void emitEvent(Account accountFrom, Account accountTo, Currency currency, BigDecimal amount){
+    protected void emitEvent(Account accountFrom, Account accountTo, ICurrency currency, BigDecimal amount){
         this.eventManager.emit(new TransferEvent(accountFrom.getPlayer(),accountTo.getPlayer(), currency, amount));
     };
 }

@@ -21,6 +21,7 @@ import BlockDynasty.Economy.domain.entities.account.Exceptions.AccountNotFoundEx
 import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.persistence.entities.IAccountRepository;
+import org.junit.jupiter.api.AfterAll;
 import repository.AccountRepository;
 import repository.CurrencyRepository;
 import repositoryTest.ConnectionHandler.MockConnectionHibernateH2;
@@ -86,5 +87,10 @@ public class CrudAccountTest {
         accountRepository.delete(account);
 
         assertThrows(AccountNotFoundException.class ,()->{ accountRepository.findByUuid(account.getUuid().toString()); });
+    }
+
+    @AfterAll
+    public static void cleanUp() {
+
     }
 }

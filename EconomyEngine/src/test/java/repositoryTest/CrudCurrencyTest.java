@@ -21,6 +21,7 @@ import BlockDynasty.Economy.domain.entities.currency.Exceptions.CurrencyNotFound
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.persistence.entities.ICurrencyRepository;
 
+import org.junit.jupiter.api.AfterAll;
 import repository.CurrencyRepository;
 import repositoryTest.ConnectionHandler.MockConnectionHibernateH2;
 import org.junit.jupiter.api.BeforeEach;
@@ -108,6 +109,11 @@ public class CrudCurrencyTest {
             ICurrency currencyFind =currencyRepository.findByName(currency.getSingular());
 
             assertEquals(currencyFind.getSingular(), currency.getSingular());
+        }
+
+        @AfterAll
+        public static void cleanUp() {
+
         }
 
 }

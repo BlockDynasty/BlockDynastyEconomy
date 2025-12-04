@@ -18,17 +18,17 @@ package BlockDynasty.BukkitImplementation.adapters.commands;
 
 import BlockDynasty.BukkitImplementation.BlockDynastyEconomy;
 import lib.commands.abstractions.Command;
-import lib.commands.CommandsFactory;
+import lib.commands.CommandService;
 import org.bukkit.command.PluginCommand;
 
 import java.util.List;
 
 public class CommandRegister {
-    private static List<Command> commands = CommandsFactory.Commands.getMainCommands();
+    private static List<Command> commands = CommandService.getMainCommands();
     private static final BlockDynastyEconomy plugin= BlockDynastyEconomy.getInstance();
 
     public static void registerAllEconomySystem(){
-        CommandsFactory.Commands.registerSubCommand("eco",new ReloadCommand(plugin));
+        CommandService.registerSubCommand("eco",new ReloadCommand(plugin));
 
         for(Command command: commands){
             CommandAdapter commandAdapter = new CommandAdapter(command);

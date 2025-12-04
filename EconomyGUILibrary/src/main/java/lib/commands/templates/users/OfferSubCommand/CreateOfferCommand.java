@@ -18,18 +18,21 @@ package lib.commands.templates.users.OfferSubCommand;
 
 import BlockDynasty.Economy.aplication.useCase.offer.CreateOfferUseCase;
 import BlockDynasty.Economy.domain.result.Result;
+import lib.abstractions.PlatformAdapter;
 import lib.commands.abstractions.IEntityCommands;
 import lib.commands.abstractions.AbstractCommand;
-import lib.commands.CommandsFactory;
+import lib.commands.CommandService;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public class CreateOfferCommand extends AbstractCommand {
     private final CreateOfferUseCase createOfferUseCase;
+    private final PlatformAdapter platformAdapter;
 
-    public CreateOfferCommand(CreateOfferUseCase createOfferUseCase ) {
+    public CreateOfferCommand(CreateOfferUseCase createOfferUseCase, PlatformAdapter platformAdapter) {
         super("create","", List.of("amount","currencyAmount","price","currencyPrice","player"));
+        this.platformAdapter = platformAdapter;
         this.createOfferUseCase = createOfferUseCase;
     }
 
@@ -52,7 +55,7 @@ public class CreateOfferCommand extends AbstractCommand {
         //CAPTURAR LOS TIPOS DE MONEDA y target
         String tipoCantidad = args[1];
         String tipoMonto = args[3];
-        IEntityCommands target = CommandsFactory.getPlatformAdapter().getPlayer(args[4]);
+        IEntityCommands target = platformAdapter.getPlayer(args[4]);
 
         //si target no existe no se puede ofertar o no esta en linea
         if (target == null || !target.isOnline()) {

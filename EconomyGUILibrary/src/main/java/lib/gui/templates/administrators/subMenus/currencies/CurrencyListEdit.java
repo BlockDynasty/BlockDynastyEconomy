@@ -17,13 +17,12 @@
 package lib.gui.templates.administrators.subMenus.currencies;
 
 import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import lib.gui.GUIFactory;
 import lib.gui.components.IGUI;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.ITextInput;
-import lib.gui.components.abstractions.CurrencySelectorAndAmount;
+import lib.gui.components.generics.CurrencySelectorAndAmount;
 
 public class CurrencyListEdit extends CurrencySelectorAndAmount {
     private final IEntityGUI player;

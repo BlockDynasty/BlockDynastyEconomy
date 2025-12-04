@@ -16,7 +16,6 @@
 
 package api;
 
-import BlockDynasty.Economy.Core;
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.useCase.UseCaseFactory;
 import BlockDynasty.Economy.aplication.useCase.account.*;
@@ -30,7 +29,6 @@ import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.*;
 import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.entities.balance.Money;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.services.IAccountService;
@@ -41,7 +39,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-//todo : la api deberia proporcionar/exponer, todos los casos de usos existentes
 public class Api implements IApi {
     private final SearchCurrencyUseCase searchCurrencyUseCase;
     private final GetBalanceUseCase getBalanceUseCase;
@@ -59,13 +56,10 @@ public class Api implements IApi {
     private final CreateCurrencyUseCase createCurrencyUseCase;
     private final DeleteCurrencyUseCase deleteCurrencyUseCase;
     private final GetTopAccountsUseCase topAccounts;
-
     private final IAccountService accountService;
-    private final EventManager eventManager;
 
-    public Api(Core core) {
-        UseCaseFactory factory = core.getUseCaseFactory();
-        accountService = core.getServicesManager().getAccountService();
+
+    public Api(UseCaseFactory factory,IAccountService accountService) {
         searchCurrencyUseCase = factory.searchCurrency();
         getBalanceUseCase = factory.getBalance();
         createAccountUseCase = factory.createAccount();
@@ -83,13 +77,11 @@ public class Api implements IApi {
         tradeCurrenciesUseCase = factory.tradeCurrencies();
         transferFundsUseCase = factory.transferFunds();
         exchangeUseCase = factory.exchange();
+        this.accountService = accountService;
 
-        this.eventManager= core.getServicesManager().getEventManager();
     }
 
-    public Api(Core core, Log log){
-        UseCaseFactory factory = core.getUseCaseFactory();
-        accountService = core.getServicesManager().getAccountService();
+    public Api(UseCaseFactory factory,IAccountService accountService, Log log){
         searchCurrencyUseCase = factory.searchCurrency();
         getBalanceUseCase = factory.getBalance();
         createAccountUseCase = factory.createAccount();
@@ -107,13 +99,10 @@ public class Api implements IApi {
         tradeCurrenciesUseCase = factory.tradeCurrencies(log);
         transferFundsUseCase = factory.transferFunds(log);
         exchangeUseCase = factory.exchange(log);
+        this.accountService = accountService;
 
-        this.eventManager= core.getServicesManager().getEventManager();
     }
 
-    public EventManager getEventManager(){
-        return eventManager;
-    }
 
     private EconomyResponse handleResult(Result<Void> result){
         if (result.isSuccess()) {
@@ -135,6 +124,11 @@ public class Api implements IApi {
     @Override
     public ICurrency getDefaultCurrency() {
         return this.searchCurrencyUseCase.getDefaultCurrency().getValue();
+    }
+
+    @Override
+    public List<Account> getAccountsOffline() {
+        return accountService.getAccountsOffline();
     }
 
     public EconomyResponse deposit(UUID uuid, BigDecimal amount, String currency){
@@ -480,7 +474,4 @@ public class Api implements IApi {
         return  this.searchCurrencyUseCase.getCurrency(name).getValue();
     }
 
-    public IAccountService getAccountService(){
-        return this.accountService;
-    }
 }

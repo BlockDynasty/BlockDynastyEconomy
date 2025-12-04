@@ -64,13 +64,13 @@ public class economyHook implements EconomyProvider {
 
     @Override
     public @NotNull CompletableFuture<Collection<UUID>> retrievePlayerAccountIds() {
-        List<Account> accounts = api.getAccountService().getAccountsOffline();
+        List<Account> accounts = api.getAccountsOffline();
         return CompletableFuture.completedFuture(accounts.stream().map(Account::getUuid).toList());
     }
 
     @Override
     public @NotNull CompletableFuture<Collection<NamespacedKey>> retrieveNonPlayerAccountIds() {
-        List<Account> accounts = api.getAccountService().getAccountsOffline();
+        List<Account> accounts = api.getAccountsOffline();
         List<String> list = accounts.stream().map(Account::getNickname).toList();
         return CompletableFuture.completedFuture(list.stream().map(name -> NamespacedKey.of("blockdynasty",name)).toList());
     }

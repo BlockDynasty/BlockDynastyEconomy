@@ -16,16 +16,11 @@
 
 package repository.Models;
 
-import BlockDynasty.Economy.domain.entities.currency.Currency;
-import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import jakarta.persistence.*;
-import repository.Mappers.CurrencyMapper;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "currency")
@@ -64,13 +59,15 @@ public class CurrencyDb {
     @Column(name = "exchange_rate")
     private double exchangeRate;
 
+    //@OnDelete(action = OnDeleteAction.CASCADE)
+    //@OneToMany(mappedBy = "currency", cascade = CascadeType.ALL, orphanRemoval = true)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "currency_interchangeable",
             joinColumns = @JoinColumn(name = "currency_uuid"),
             inverseJoinColumns = @JoinColumn(name = "interchangeable_uuid")
     )
-    private List<CurrencyDb> interchangeableWith  = new ArrayList<>();;
+    private List<CurrencyDb> interchangeableWith  = new ArrayList<>();
 
     //esto se agrega para que hibernate elimine en cascada los balances asociados a esta moneda
     @OneToMany(mappedBy = "currency", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -1,7 +1,9 @@
-package lib.util.colors;
+package lib.messages;
 
 import lib.abstractions.IMessages;
 
+//used in gui system
+//File for message processing
 public class Message {
     private static IMessages messages;
 

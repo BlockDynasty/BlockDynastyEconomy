@@ -35,12 +35,7 @@ public class MinecraftServer {
 
     public static void connectPlayer(Player player){
         onlinePlayers.add(player);
-        if (onlineMode){
-            getEconomy().getPlayerJoinListener().loadOnlinePlayerAccount(player);
-        }else {
-            getEconomy().getPlayerJoinListener().loadOfflinePlayerAccount(player);
-        }
-
+        getEconomy().getPlayerJoinListener().loadPlayerAccount(player);
     }
 
     public static void disconnectPlayer(Player player){

@@ -29,6 +29,7 @@ import BlockDynasty.Economy.domain.events.transactionsEvents.*;
 import lib.abstractions.PlatformAdapter;
 import lib.commands.abstractions.IEntityCommands;
 import lib.gui.GUIFactory;
+import lib.gui.GUISystem;
 import lib.scheduler.ContextualTask;
 import lib.util.colors.ChatColor;
 import services.Message;
@@ -74,7 +75,7 @@ public class EventListener {
                 player.playNotificationSound();
 
                 Runnable task=()->{
-                    GUIFactory.getGuiService().refresh(player.getUniqueId());
+                    GUISystem.refresh(player.getUniqueId());
                 };
                 platformAdapter.getScheduler().run(ContextualTask.build(task , player));
             }
@@ -84,7 +85,7 @@ public class EventListener {
                 target.playNotificationSound();
 
                 Runnable task=()->{
-                    GUIFactory.getGuiService().refresh(target.getUniqueId());
+                    GUISystem.refresh(target.getUniqueId());
                 };
                 platformAdapter.getScheduler().run(ContextualTask.build(task , target));
             }
@@ -124,7 +125,7 @@ public class EventListener {
                 sender.playNotificationSound();
 
                 Runnable task=()->{
-                    GUIFactory.getGuiService().refresh(sender.getUniqueId());
+                    GUISystem.refresh(sender.getUniqueId());
                 };
                 platformAdapter.getScheduler().run(ContextualTask.build(task , sender));
 
@@ -138,7 +139,7 @@ public class EventListener {
                 receiver.playNotificationSound();
 
                 Runnable task=()->{
-                    GUIFactory.getGuiService().refresh(receiver.getUniqueId());
+                    GUISystem.refresh(receiver.getUniqueId());
                 };
                 platformAdapter.getScheduler().run(ContextualTask.build(task , receiver));
             }
@@ -211,7 +212,7 @@ public class EventListener {
                 receiver.playNotificationSound();
 
                 Runnable task1=()->{
-                    GUIFactory.getGuiService().refresh(offer.getComprador().getUuid());
+                    GUISystem.refresh(offer.getComprador().getUuid());
                 };
                 platformAdapter.getScheduler().run(ContextualTask.build(task1 , receiver));
             }
@@ -226,7 +227,7 @@ public class EventListener {
                 receiver.sendMessage(Message.process(Map.of("playerName",offer.getVendedor().getNickname()),"offerCanceled1"));
 
                 Runnable task = () -> {
-                    GUIFactory.getGuiService().refresh(receiver.getUniqueId());
+                    GUISystem.refresh(receiver.getUniqueId());
                 };
 
                 platformAdapter.getScheduler().run(ContextualTask.build(task , receiver));
@@ -236,7 +237,7 @@ public class EventListener {
                 sender.sendMessage(Message.process(Map.of("playerName",offer.getComprador().getNickname()),"offerCanceled2"));
 
                 Runnable task = () -> {
-                    GUIFactory.getGuiService().refresh(sender.getUniqueId());
+                    GUISystem.refresh(sender.getUniqueId());
                 };
 
                 platformAdapter.getScheduler().run(ContextualTask.build(task , sender));
@@ -251,7 +252,7 @@ public class EventListener {
             if (receiver != null ) {
                 receiver.sendMessage(Message.process(Map.of("playerName", offer.getVendedor().getNickname()),"offerExpired1"));
                 Runnable task = () -> {
-                    GUIFactory.getGuiService().refresh(receiver.getUniqueId());
+                    GUISystem.refresh(receiver.getUniqueId());
                 };
                 platformAdapter.getScheduler().run(ContextualTask.build(task , receiver));
             }
@@ -259,7 +260,7 @@ public class EventListener {
             if (sender != null){
                 sender.sendMessage(Message.process(Map.of("playerName", offer.getComprador().getNickname()),"offerExpired2"));
                 Runnable task = () -> {
-                    GUIFactory.getGuiService().refresh(sender.getUniqueId());
+                    GUISystem.refresh(sender.getUniqueId());
                 };
                 platformAdapter.getScheduler().run(ContextualTask.build(task , sender));
             }
@@ -272,14 +273,14 @@ public class EventListener {
 
             if (receiver != null ) {
                 Runnable task=()->{
-                    GUIFactory.getGuiService().refresh(receiver.getUniqueId());
+                    GUISystem.refresh(receiver.getUniqueId());
                 };
                 platformAdapter.getScheduler().run(ContextualTask.build(task , receiver));
             }
 
             if (sender != null){
                 Runnable task=()->{
-                    GUIFactory.getGuiService().refresh(sender.getUniqueId());
+                    GUISystem.refresh(sender.getUniqueId());
                 };
                 platformAdapter.getScheduler().run(ContextualTask.build(task , sender));
             }

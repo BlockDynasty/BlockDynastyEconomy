@@ -29,24 +29,6 @@ public class ItemStackAdapter implements IItemStack {
     }
 
     @Override
-    public IItemStack setDisplayName(String name) {
-        MaterialAdapter.applyItemName(itemStack, name);
-        return this;
-    }
-
-    @Override
-    public IItemStack setLore(List<String> lore) {
-        MaterialAdapter.applyItemLore(itemStack, lore);
-        return this;
-    }
-
-    @Override
-    public IItemStack setTexture(String texture) {
-        MaterialAdapter.applyTexture(itemStack, texture);
-        return this;
-    }
-
-    @Override
     public Object getHandle() {
         return itemStack;
     }

@@ -15,6 +15,7 @@
  */
 package lib.messages;
 
+@Deprecated
 public interface MessageProvider {
     String getMessage(String key);
 }

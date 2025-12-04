@@ -23,6 +23,7 @@ import java.util.UUID;
 public interface IEntityGUI {
     UUID getUniqueId();
     String getName();
+    boolean hasPermission(String permission);
     void sendMessage(String message);
     Object getRoot();
 

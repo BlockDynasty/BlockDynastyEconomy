@@ -18,16 +18,17 @@ package BlockDynasty.adapters.GUI.adapters;
 
 import lib.gui.components.IInventory;
 import lib.gui.components.IItemStack;
+import lib.gui.components.recipes.RecipeInventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.type.ViewableInventory;
 
 public class InventoryAdapter implements IInventory {
-    ViewableInventory inventory;
-    private int rows;
-    private String title;
+    private ViewableInventory inventory;
+    private RecipeInventory recipeInventory;
 
-    public InventoryAdapter(ViewableInventory inventory) {
+    public InventoryAdapter(ViewableInventory inventory, RecipeInventory recipeInventory) {
         this.inventory = inventory;
+        this.recipeInventory = recipeInventory;
     }
 
     @Override
@@ -35,29 +36,8 @@ public class InventoryAdapter implements IInventory {
         this.inventory.set(slot, (ItemStack) item.getHandle());
     }
 
-    @Override
-    public void setRows(int rows) {
-        this.rows = rows;
-    }
-
-    @Override
-    public int getRows() {
-        return this.rows;
-    }
-
-    @Override
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public String getTitle() {
-        return this.title;
-    }
-
-    @Override
-    public int getSize() {
-        return this.inventory.capacity();
+    public RecipeInventory getRecipe() {
+        return this.recipeInventory;
     }
 
     @Override

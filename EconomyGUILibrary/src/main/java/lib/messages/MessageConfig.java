@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class MessageConfig implements MessageProvider {
     private final Map<String, String> messages = new HashMap<>();
 

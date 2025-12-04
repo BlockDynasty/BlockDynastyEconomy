@@ -16,10 +16,9 @@
 
 package lib.abstractions;
 
-import lib.gui.components.IInventory;
-import lib.gui.components.IItemStack;
-import lib.gui.components.ITextInput;
-import lib.gui.components.RecipeItem;
+import lib.gui.components.*;
+import lib.gui.components.recipes.RecipeInventory;
+import lib.gui.components.recipes.RecipeItem;
 import lib.util.materials.Materials;
 import lib.scheduler.IScheduler;
 
@@ -32,18 +31,16 @@ public interface PlatformAdapter {
     IPlayer getPlayerByUUID(UUID uuid);
     List<IPlayer> getOnlinePlayers();
 
-    @Deprecated
-    IItemStack createItemStack(Materials material);
-
     IItemStack createItemStack(RecipeItem recipeItem);
-    IInventory createInventory(String title, int rows);
-    void dispatchCommand(String command) throws Exception;
+    IInventory createInventory(RecipeInventory recipeInventory);
 
+    void dispatchCommand(String command) throws Exception;
     void sendPluginMessage(String channel, byte[] message);
     IScheduler getScheduler();
     IConsole getConsole();
     File getDataFolder();
     boolean isLegacy();
+    boolean isOnlineMode();
     boolean hasSupportAdventureText();
     ITextInput getTextInput();
 }

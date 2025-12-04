@@ -25,6 +25,7 @@ import BlockDynasty.Economy.domain.persistence.Exceptions.RepositoryException;
 import BlockDynasty.Economy.domain.persistence.entities.IAccountRepository;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -61,7 +62,7 @@ public class AccountRepository implements IAccountRepository {
                 return accounts;
             }catch (Exception e) {
                 tx.rollback();
-                throw new RepositoryException( "Error repositorio: " + e.getMessage(), e);
+                throw new RepositoryException( "Repository Account Error: " + e.getMessage(), e);
             }
         }
     }
@@ -84,10 +85,10 @@ public class AccountRepository implements IAccountRepository {
                 return AccountMapper.toDomain(accountDb);
             } catch (NoResultException e) {
                 tx.rollback();
-                throw new AccountNotFoundException("Account no encontrado: " + uuid);
+                throw new AccountNotFoundException("Account not found: " + uuid);
             } catch (Exception e) {
                 tx.rollback();
-                throw new RepositoryException("Error repositorio: " + e.getMessage(), e);
+                throw new RepositoryException("Repository Account Error: " + e.getMessage(), e);
             }
         }
     }
@@ -113,7 +114,7 @@ public class AccountRepository implements IAccountRepository {
                 throw new AccountNotFoundException(e.getMessage());
             } catch (Exception e) {
                 tx.rollback();
-                throw new RepositoryException("Error repositorio: "+e.getMessage(),e);
+                throw new RepositoryException("Repository Account error: "+e.getMessage(),e);
             }
         }
     }
@@ -143,10 +144,13 @@ public class AccountRepository implements IAccountRepository {
                 tx.commit();
             } catch (NoResultException e) {
                 tx.rollback();
-                throw new AccountNotFoundException("Account no encontrado: " + account.getUuid());
+                throw new AccountNotFoundException("Account not found: " + account.getUuid());
+            }catch (NonUniqueResultException e) {
+                tx.rollback();
+                throw new RepositoryException("Multiple accounts found with the same UUID or nickname: " + account.getUuid(), e);
             } catch (Exception e) {
                 tx.rollback();
-                throw new RepositoryException("Error repositorio: " + e.getMessage(), e);
+                throw new RepositoryException("Repository accounts error: " + e.getMessage(), e);
             }
         }
     }
@@ -198,7 +202,7 @@ public class AccountRepository implements IAccountRepository {
                 session.remove(accountDb);
                 tx.commit();
             } catch (NoResultException e) {
-                throw new AccountNotFoundException("Account no encontrado: " + account.getUuid());
+                throw new AccountNotFoundException("Account not found: " + account.getUuid());
             }catch (Exception e) {
                 tx.rollback();
                 throw new RepositoryException("Error repositorio: " + e.getMessage(), e);
@@ -221,7 +225,7 @@ public class AccountRepository implements IAccountRepository {
                         .getSingleResult();
 
                 if (count > 0) {
-                    throw new AccountAlreadyExist("Account Ya existe: " + account.getUuid());
+                    throw new AccountAlreadyExist("Account already exist: " + account.getUuid());
                 }
 
                 // Create new account
@@ -260,7 +264,7 @@ public class AccountRepository implements IAccountRepository {
                 tx.commit();
             } catch (Exception e) {
                 tx.rollback();
-                throw new RepositoryException("Error repositorio: " + e.getMessage(), e);
+                throw new RepositoryException("Repository Accounts Error: " + e.getMessage(), e);
             }
         }
     }

@@ -22,13 +22,13 @@ import BlockDynasty.Economy.domain.services.courier.Courier;
 import BlockDynasty.Economy.domain.services.log.Log;
 import api.Api;
 import api.IApi;
+import lib.gui.GUISystem;
 import platform.files.Configuration;
 import platform.files.Languages;
 import platform.files.logs.EconomyLogger;
 import platform.files.logs.VaultLogger;
-import lib.commands.CommandsFactory;
+import lib.commands.CommandService;
 import lib.abstractions.PlatformAdapter;
-import lib.gui.GUIFactory;
 import lib.placeholder.PlaceHolder;
 import lib.util.colors.ChatColor;
 import platform.listeners.EventListener;
@@ -68,11 +68,11 @@ public class Economy {
 
         this.core=new Core(repository,60,createCourierImpl(configuration,platformAdapter),new EconomyLogger( configuration,platformAdapter.getScheduler()));
         this.createListener(configuration,platformAdapter);
-        this.api = new Api(core);
+        this.api = new Api(core.getUseCaseFactory(),core.getServicesManager().getAccountService());
         this.placeHolder = new PlaceHolder(core.getUseCaseFactory());
-        this.playerJoinListener = new PlayerJoinListener(core.getUseCaseFactory(),core.getServicesManager().getAccountService());
-        CommandsFactory.init(platformAdapter,core.getUseCaseFactory());
-        GUIFactory.init(core.getUseCaseFactory(),platformAdapter,new Message());
+        this.playerJoinListener = new PlayerJoinListener(core.getUseCaseFactory(),core.getServicesManager().getAccountService(),configuration.getBoolean("online"),platformAdapter.isOnlineMode());
+        CommandService.init(platformAdapter,core.getUseCaseFactory());
+        GUISystem.init(core.getUseCaseFactory(),platformAdapter,new Message(),configuration);
         EventListener.register(core.getServicesManager().getEventManager(),platformAdapter);
     }
 
@@ -82,7 +82,7 @@ public class Economy {
 
     private void initDatabase(Configuration configuration){
         try{
-            Connection connection = getConnection(configuration);
+            Connection connection = getConnectionDatabase(configuration);
             repository = new Repository(connection);
             Console.log("Database connected successfully.");
         }catch (Exception e){
@@ -90,7 +90,7 @@ public class Economy {
             throw new RuntimeException(e.getMessage());
         }
     }
-    private Connection getConnection(Configuration configuration){
+    private Connection getConnectionDatabase(Configuration configuration){
         switch (configuration.getString("sql.type")){
             case "mysql":
                 return new ConnectionHibernateMysql(configuration.getString("sql.host"), configuration.getInt("sql.port"), configuration.getString("sql.database"), configuration.getString("sql.username"), configuration.getString("sql.password"));
@@ -133,7 +133,7 @@ public class Economy {
     }
 
     public IApi getApiWithLog(Log log){
-        return new Api( core, log);
+        return new Api(core.getUseCaseFactory(),core.getServicesManager().getAccountService(), log);
     }
 
     public Configuration getConfiguration(){

@@ -22,9 +22,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class InventoryAdapter implements IInventory {
-    Inventory inventory;
-    int rows;
-    String title;
+    private Inventory inventory;
 
     public InventoryAdapter(Inventory inventory) {
         this.inventory = inventory;
@@ -33,31 +31,6 @@ public class InventoryAdapter implements IInventory {
     @Override
     public void set(int slot, IItemStack item) {
         this.inventory.setItem(slot,(ItemStack) item.getHandle());
-    }
-
-    @Override
-    public void setRows(int rows) {
-        this.rows = rows;
-    }
-
-    @Override
-    public int getRows() {
-        return this.rows;
-    }
-
-    @Override
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public String getTitle() {
-        return this.title;
-    }
-
-    @Override
-    public int getSize() {
-        return this.inventory.getMaxStackSize();
     }
 
     @Override

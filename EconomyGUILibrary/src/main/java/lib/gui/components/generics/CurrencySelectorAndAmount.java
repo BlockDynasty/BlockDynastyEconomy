@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package lib.gui.components.abstractions;
+package lib.gui.components.generics;
 
 import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
+import lib.gui.components.factory.Item;
+import lib.gui.components.recipes.RecipeItem;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.*;
 import lib.util.colors.ChatColor;
-import lib.util.colors.Message;
+import lib.messages.Message;
 import lib.util.materials.Materials;
 
 import java.math.BigDecimal;
@@ -52,30 +53,18 @@ public abstract class CurrencySelectorAndAmount extends PaginatedPanel<ICurrency
         List<ICurrency> currencies = searchCurrencyUseCase.getCurrencies().stream()
                 .filter(c -> !c.equals(exceptCurrency))
                 .collect(Collectors.toList());
-
-        //testing purposes
-        //for (int i = 0; i < 45; i++) {
-        //   currencies.add(new Currency(UUID.randomUUID(),"test","test"));
-        //}
-
         showItemsPage(currencies);
     }
 
     private void showCurrencies() {
         List<ICurrency> currencies = searchCurrencyUseCase.getCurrencies();
-
-        //testing purposes
-        //for (int i = 0; i < 45; i++) {
-        //    currencies.add(new Currency(UUID.randomUUID(),"test","test"));
-        //}
-
         showItemsPage(currencies);
     }
 
     @Override
     protected IItemStack createItemFor(ICurrency currency) {
         String color = ChatColor.stringValueOf(currency.getColor());
-        return createItem(RecipeItem.builder()
+        return Item.of(RecipeItem.builder()
                 .setMaterial(Materials.GOLD_INGOT)
                 .setName(Message.process(Map.of("currency",color+currency.getSingular()),"CurrencySelector.button1.nameItem"))
                 .setTexture(currency.getTexture())

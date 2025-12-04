@@ -18,6 +18,7 @@ package lib.messages;
 
 import java.util.Map;
 
+@Deprecated
 public class MessageParser {
     public static String parse(String message, Map<String, String> variables) {
         if (message == null) return "";

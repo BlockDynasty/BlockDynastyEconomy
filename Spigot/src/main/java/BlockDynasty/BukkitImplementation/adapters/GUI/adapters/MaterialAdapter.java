@@ -19,7 +19,7 @@ package BlockDynasty.BukkitImplementation.adapters.GUI.adapters;
 import BlockDynasty.BukkitImplementation.BlockDynastyEconomy;
 import BlockDynasty.BukkitImplementation.utils.Console;
 import BlockDynasty.BukkitImplementation.utils.Version;
-import lib.gui.components.RecipeItem;
+import lib.gui.components.recipes.RecipeItem;
 import lib.util.materials.Materials;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;

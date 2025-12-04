@@ -3,9 +3,9 @@ package EngineTest;
 import EngineTest.mocks.MinecraftServer;
 import EngineTest.mocks.Player;
 import EngineTest.mocks.TextInput;
-import lib.commands.CommandsFactory;
+import lib.commands.CommandService;
 import lib.commands.abstractions.Command;
-import lib.gui.GUIFactory;
+import lib.gui.GUISystem;
 import lib.gui.components.ClickType;
 import org.junit.jupiter.api.*;
 
@@ -33,7 +33,7 @@ public class EngineGUITest {
 
     @Test
     public void CommandExecutions(){
-        Command command= CommandsFactory.Commands.getCommand("eco");
+        Command command= CommandService.getCommand("eco");
         command.execute(MinecraftServer.getPlayer("Nullplague"), new String[]{"give","Fede","5000","Money"});
         command.execute(MinecraftServer.getPlayer("Nullplague"), new String[]{"give","Nullplague","3000","Money"});
     }
@@ -41,22 +41,22 @@ public class EngineGUITest {
     @Test
     public void testCreateCurrencyGui(){
         player.addPermission("BlockDynastyEconomy.economy.superUser");
-        Command command= CommandsFactory.Commands.getCommand("eco");
+        Command command= CommandService.getCommand("eco");
         command.execute(MinecraftServer.getPlayer("Nullplague"), new String[]{"menu"});
 
         System.out.println("Clicked on slot 20 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT, 20);
+        GUISystem.handleClick(player, ClickType.LEFT, 20);
         System.out.println("Clicked on slot 10 ->");
         TextInput.setInput("Coin");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT, 10);
+        GUISystem.handleClick(player, ClickType.LEFT, 10);
         System.out.println("Clicked on slot 14 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT, 14);
+        GUISystem.handleClick(player, ClickType.LEFT, 14);
         System.out.println("Clicked on slot 11 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT, 11);
+        GUISystem.handleClick(player, ClickType.LEFT, 11);
         System.out.println("Clicked on slot 15 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT, 15);
+        GUISystem.handleClick(player, ClickType.LEFT, 15);
         System.out.println("Clicked on slot 11 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT, 11);
+        GUISystem.handleClick(player, ClickType.LEFT, 11);
 
 
     }
@@ -65,74 +65,76 @@ public class EngineGUITest {
     public void testGUIWorkFlowDepositBalance(){
         //player.setOp(true);
         player.addPermission("BlockDynastyEconomy.economy.superUser");
-        Command command= CommandsFactory.Commands.getCommand("eco");
+        Command command= CommandService.getCommand("eco");
         command.execute(MinecraftServer.getPlayer("Nullplague"), new String[]{"menu"});
 
         System.out.println("Clicked on slot 24 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,24);
+        GUISystem.handleClick(player, ClickType.LEFT,24);
         System.out.println("Clicked on slot 10 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,10);
+        GUISystem.handleClick(player, ClickType.LEFT,10);
         System.out.println("Clicked on slot 29 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,29);
+        GUISystem.handleClick(player, ClickType.LEFT,29);
         TextInput.setInput("1400");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,10);
+        GUISystem.handleClick(player, ClickType.LEFT,10);
     }
 
     @Test
     public void testGUIWorkFlowTransferOnline(){
         player.addPermission("BlockDynastyEconomy.players.bank");
-        Command command= CommandsFactory.Commands.getCommand("bank");
+        player.addPermission("BlockDynastyEconomy.players.pay");
+        Command command= CommandService.getCommand("bank");
         command.execute(MinecraftServer.getPlayer("Nullplague"), new String[]{});
 
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,15);
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,10);
+        GUISystem.handleClick(player, ClickType.LEFT,15);
+        GUISystem.handleClick(player, ClickType.LEFT,10);
         TextInput.setInput("2000");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,10);
+        GUISystem.handleClick(player, ClickType.LEFT,10);
     }
 
     @Test
     public  void testGUIWorkFlowExchangeCurrency(){
         player.addPermission("BlockDynastyEconomy.economy.superUser");
-        Command command= CommandsFactory.Commands.getCommand("eco");
+        player.addPermission("BlockDynastyEconomy.players.pay");
+        Command command= CommandService.getCommand("eco");
         command.execute(MinecraftServer.getPlayer("Nullplague"), new String[]{"menu"});
         System.out.println("Clicked on slot 20 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,20);
+        GUISystem.handleClick(player, ClickType.LEFT,20);
         System.out.println("Clicked on slot 14 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,14);
+        GUISystem.handleClick(player, ClickType.LEFT,14);
         System.out.println("Clicked on slot 10 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,10);
+        GUISystem.handleClick(player, ClickType.LEFT,10);
         System.out.println("Clicked on slot 14 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,14);
+        GUISystem.handleClick(player, ClickType.LEFT,14);
         System.out.println("Clicked on slot 39 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,39);
+        GUISystem.handleClick(player, ClickType.LEFT,39);
         System.out.println("Clicked on slot 11 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,11);
+        GUISystem.handleClick(player, ClickType.LEFT,11);
         System.out.println("Clicked on slot 10 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,10);
+        GUISystem.handleClick(player, ClickType.LEFT,10);
         System.out.println("Clicked on slot 10 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,10);
+        GUISystem.handleClick(player, ClickType.LEFT,10);
         System.out.println("Clicked on slot 40 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,40);
+        GUISystem.handleClick(player, ClickType.LEFT,40);
     }
 
     @Test
     public void testGUIWorkFlowTransferOffline(){
         MinecraftServer.disconnectPlayer(player2);
         player.addPermission("BlockDynastyEconomy.players.bank");
-        Command command= CommandsFactory.Commands.getCommand("bank");
+        Command command= CommandService.getCommand("bank");
         command.execute(MinecraftServer.getPlayer("Nullplague"), new String[]{});
 
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,16);
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,10);
+        GUISystem.handleClick(player, ClickType.LEFT,16);
+        GUISystem.handleClick(player, ClickType.LEFT,10);
         TextInput.setInput("1400");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,10);
+        GUISystem.handleClick(player, ClickType.LEFT,10);
     }
 
     @Test
     public void hasPermissions(){
         player.setOp(false);
         player.addPermission("BlockDynastyEconomy.players.bank");
-        Command command= CommandsFactory.Commands.getCommand("bank");
+        Command command= CommandService.getCommand("bank");
         command.execute(MinecraftServer.getPlayer("Nullplague"), new String[]{});
         assertEquals(true,player.hasPermission("BlockDynastyEconomy.players.bank"));
     }
@@ -140,17 +142,17 @@ public class EngineGUITest {
     @Test
     public void sellCommand(){
         player.addPermission("BlockDynastyEconomy.economy.superUser");
-        Command command= CommandsFactory.Commands.getCommand("eco");
+        Command command= CommandService.getCommand("eco");
         command.execute(MinecraftServer.getPlayer("Nullplague"), new String[]{"menu"});
 
         System.out.println("Clicked on slot 24 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,24);
+        GUISystem.handleClick(player, ClickType.LEFT,24);
         System.out.println("Clicked on slot 10 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,10);
+        GUISystem.handleClick(player, ClickType.LEFT,10);
         System.out.println("Clicked on slot 22 ->");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,22);
+        GUISystem.handleClick(player, ClickType.LEFT,22);
         TextInput.setInput("1400");
-        GUIFactory.getGuiService().handleClick(player, ClickType.LEFT,10);
+        GUISystem.handleClick(player, ClickType.LEFT,10);
         TextInput.setInput("give Fede Diamond_sword 1");
     }
 

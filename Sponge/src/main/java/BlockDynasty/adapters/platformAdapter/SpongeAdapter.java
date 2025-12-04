@@ -25,10 +25,9 @@ import BlockDynasty.adapters.scheduler.Scheduler;
 import lib.abstractions.IConsole;
 import lib.abstractions.IPlayer;
 import lib.abstractions.PlatformAdapter;
-import lib.gui.components.IInventory;
-import lib.gui.components.IItemStack;
-import lib.gui.components.ITextInput;
-import lib.gui.components.RecipeItem;
+import lib.gui.components.*;
+import lib.gui.components.recipes.RecipeInventory;
+import lib.gui.components.recipes.RecipeItem;
 import lib.util.materials.Materials;
 import lib.scheduler.IScheduler;
 import org.spongepowered.api.Sponge;
@@ -98,12 +97,17 @@ public class SpongeAdapter implements PlatformAdapter {
 
     @Override
     public File getDataFolder() {
-        return SpongePlugin.configPath.toFile();
+        return SpongePlugin.getConfigPath().toFile();
     }
 
     @Override
     public boolean isLegacy() {
         return false;
+    }
+
+    @Override
+    public boolean isOnlineMode() {
+        return Sponge.server().isOnlineModeEnabled();
     }
 
     @Override
@@ -117,27 +121,21 @@ public class SpongeAdapter implements PlatformAdapter {
     }
 
     @Override
-    public IItemStack createItemStack(Materials material) {
-        ItemStack itemStack = ItemStack.of(MaterialAdapter.toSpongeMaterial(material));
-        return  new ItemStackAdapter(itemStack);
-    }
-
-    @Override
     public IItemStack createItemStack(RecipeItem recipeItem){
         ItemStack itemStack = MaterialAdapter.createItemStack(recipeItem);
         return new ItemStackAdapter(itemStack);
     }
 
     @Override
-    public IInventory createInventory(String title, int rows) {
+    public IInventory createInventory(RecipeInventory recipeInventory) {
         ViewableInventory viewableInventory= ViewableInventory.builder()
-                .type(getTypeFromRows(rows))
+                .type(getTypeFromRows(recipeInventory.getRows()))
                 .completeStructure()
                 .plugin(this.pluginContainer)
                 .build();
-
-        return new InventoryAdapter(viewableInventory);
+        return new InventoryAdapter(viewableInventory,recipeInventory);
     }
+
 
     private ContainerType getTypeFromRows(int rows) {
         switch (rows) {

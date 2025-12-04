@@ -19,19 +19,21 @@ package lib.gui.templates.users.Offers;
 import BlockDynasty.Economy.aplication.useCase.offer.CancelOfferUseCase;
 import BlockDynasty.Economy.aplication.useCase.offer.SearchOfferUseCase;
 import BlockDynasty.Economy.domain.entities.account.Player;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.entities.offers.Offer;
 import BlockDynasty.Economy.domain.result.Result;
 import lib.gui.components.IGUI;
 import lib.gui.components.IItemStack;
 import lib.gui.components.IEntityGUI;
+import lib.gui.components.factory.Item;
+import lib.gui.components.generics.Button;
+import lib.gui.components.recipes.RecipeItem;
 import lib.util.materials.Materials;
-import lib.gui.components.abstractions.PaginatedPanel;
+import lib.gui.components.generics.PaginatedPanel;
 import lib.gui.GUIFactory;
 import lib.util.colors.ChatColor;
 import lib.util.colors.Colors;
-import lib.util.colors.Message;
+import lib.messages.Message;
 
 import java.util.List;
 import java.util.Map;
@@ -70,13 +72,16 @@ public class MyActiveOffers extends PaginatedPanel<Offer> {
         ICurrency tipoCantidad = offer.getTipoCantidad();
         ICurrency tipoMonto = offer.getTipoMonto();
 
-        return createItem(
-                Materials.PLAYER_HEAD,
-                Message.process(Map.of("playerName", comprador.getNickname()), "MyActiveOffers.button1.nameItem"),
-                Message.processLines(Map.of(
-                        "amount", ChatColor.stringValueOf(tipoCantidad.getColor()) + tipoCantidad.format(offer.getCantidad()),
-                        "price", ChatColor.stringValueOf(tipoMonto.getColor()) + tipoMonto.format(offer.getMonto()),
-                        "color1", ChatColor.stringValueOf(Colors.GREEN)), "MyActiveOffers.button1.lore")
+
+        return Item.of(
+                RecipeItem.builder()
+                        .setMaterial(Materials.PLAYER_HEAD)
+                        .setName(Message.process(Map.of("playerName", comprador.getNickname()), "MyActiveOffers.button1.nameItem"))
+                        .setLore(Message.processLines(Map.of(
+                                "amount", ChatColor.stringValueOf(tipoCantidad.getColor()) + tipoCantidad.format(offer.getCantidad()),
+                                "price", ChatColor.stringValueOf(tipoMonto.getColor()) + tipoMonto.format(offer.getMonto()),
+                                "color1", ChatColor.stringValueOf(Colors.GREEN)), "MyActiveOffers.button1.lore"))
+                        .build()
             );
     }
     @Override
@@ -93,10 +98,13 @@ public class MyActiveOffers extends PaginatedPanel<Offer> {
 
     @Override
     protected void addCustomButtons() {
-        setItem(4, createItem(Materials.PAPER, Message.process("MyActiveOffers.button2.nameItem"),
-                        Message.process("MyActiveOffers.button2.lore")),
-                unused -> {
-                    refresh();
-                });
+        setButton(4, Button.builder()
+                .setItemStack(Item.of(RecipeItem.builder()
+                        .setMaterial(Materials.PAPER)
+                        .setName(Message.process("MyActiveOffers.button2.nameItem"))
+                        .setLore(Message.processLines("MyActiveOffers.button2.lore"))
+                        .build()))
+                .setLeftClickAction(unused -> {refresh();})
+                .build());
     }
 }

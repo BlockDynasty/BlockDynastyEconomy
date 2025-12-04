@@ -9,7 +9,7 @@ import lib.abstractions.PlatformAdapter;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.IGUI;
 import lib.gui.components.ITextInput;
-import lib.gui.components.abstractions.CurrencySelectorAndAmount;
+import lib.gui.components.generics.CurrencySelectorAndAmount;
 import java.math.BigDecimal;
 
 public class SellCommandPanel extends CurrencySelectorAndAmount {

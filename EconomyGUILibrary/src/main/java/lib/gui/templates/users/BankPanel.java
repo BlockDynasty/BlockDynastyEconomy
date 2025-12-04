@@ -16,102 +16,218 @@
 
 package lib.gui.templates.users;
 
-import BlockDynasty.Economy.aplication.useCase.UseCaseFactory;
+import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByUUIDUseCase;
 import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.result.Result;
 import lib.gui.GUIFactory;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.ITextInput;
+import lib.gui.components.factory.Item;
+import lib.gui.components.generics.Button;
+import lib.gui.components.recipes.RecipeItem;
 import lib.util.materials.Materials;
-import lib.gui.components.abstractions.AbstractPanel;
-import lib.gui.templates.users.Offers.ListPlayerOnlineToOffer;
-import lib.gui.templates.users.Offers.ListPlayersOfflineToOffer;
+import lib.gui.components.generics.AbstractPanel;
 import lib.util.colors.ChatColor;
 import lib.util.colors.Colors;
-import lib.util.colors.Message;
+import lib.messages.Message;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
 public class BankPanel extends AbstractPanel {
     private final IEntityGUI player;
-    private final ITextInput textInput;
-    private final UseCaseFactory useCaseFactory;
+    private GetAccountByUUIDUseCase getAccount;
+    private ITextInput textInput;
+    private static final Map<Integer, Boolean> buttonsEnabled = new HashMap<>();
 
-    public BankPanel(IEntityGUI player, UseCaseFactory useCaseFactory, ITextInput textInput) {
+    public BankPanel(IEntityGUI player, GetAccountByUUIDUseCase getAccount, ITextInput textInput) {
         super(Message.process("BankPanel.title") +" ["+player.getName()+"]", 4, player);
         this.player = player;
-        this.useCaseFactory = useCaseFactory;
+        this.getAccount = getAccount;
         this.textInput = textInput;
-
         setupGUI();
     }
 
     private void setupGUI() {
-        Result<Account> account = useCaseFactory.searchAccountByUUID().execute(player.getUniqueId());
-        boolean isBlocked = false;
-        if (account.isSuccess()){
-            isBlocked = account.getValue().isBlocked();
+
+        if(isButtonEnabled(4)) {
+            Result<Account> account = getAccount.execute(player.getUniqueId());
+            boolean isBlocked = false;
+            if (account.isSuccess()){
+                isBlocked = account.getValue().isBlocked();
+            }
+
+            setButton(4, Button.builder()
+                    .setItemStack(isBlocked
+                            ? Item.of(RecipeItem.builder()
+                            .setMaterial(Materials.RED_CONCRETE)
+                            .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.RED)),"BankPanel.button1.nameItem1"))
+                            .setLore( Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"BankPanel.button1.lore"))
+                            .build())
+                            : Item.of(RecipeItem.builder()
+                            .setMaterial(Materials.LIME_CONCRETE)
+                            .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GREEN)),"BankPanel.button1.nameItem2"))
+                            .setLore(Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"BankPanel.button1.lore"))
+                            .build()))
+                    .build());
         }
-        setItem(4, isBlocked
-                        ? createItem(Materials.RED_CONCRETE,
-                        Message.process(Map.of("color", ChatColor.stringValueOf(Colors.RED)),"BankPanel.button1.nameItem1"),
-                        Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"BankPanel.button1.lore"))
-                        : createItem(Materials.LIME_CONCRETE,
-                        Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GREEN)),"BankPanel.button1.nameItem2"),
-                        Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"BankPanel.button1.lore")),
-                null);
-        setItem(11,createItem(Materials.DIAMOND,
-                        Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)),"BankPanel.button2.nameItem"),
-                        Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"BankPanel.button2.lore")),
-                unused -> {
-                    GUIFactory.exchangeFirstPanel(player,this).open();
-                });
-        setItem(24, createItem(Materials.WRITABLE_BOOK,
-                        Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)),"BankPanel.button3.nameItem"),
-                        Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"BankPanel.button3.lore")),
-                f -> {
-                    new ListPlayerOnlineToOffer(player,this,textInput).open();
-                });
-        setItem(25, createItem(Materials.WRITABLE_BOOK,
-                Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)),"BankPanel.button4.nameItem"),
-                Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"BankPanel.button4.lore")),
-                f -> {
-                    new ListPlayersOfflineToOffer(player,this,useCaseFactory.searchAccountByName(),useCaseFactory.searchOfflineAccounts(),textInput).open();
-                });
-        setItem(22,createItem(Materials.ENDER_CHEST,
-                        Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)),"BankPanel.button5.nameItem"),
-                        Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"BankPanel.button5.lore")),
-                f -> {
-                    GUIFactory.myActiveOffers(player,this).open();
-                });;
-        setItem(13, createItem(Materials.BOOK,
-                        Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)),"BankPanel.button6.nameItem"),
-                        Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"BankPanel.button6.lore")),
-                unused -> {
-                    GUIFactory.balancePanel(player,this).open();
-                });
-        setItem(20,createItem(Materials.CHEST,
-                        Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)),"BankPanel.button7.nameItem"),
-                        Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"BankPanel.button7.lore")),
-                f -> {
-                    GUIFactory.receivedOffers(player,this).open();
-                });
-        setItem(15, createItem(Materials.PLAYER_HEAD,
-                        Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)),"BankPanel.button8.nameItem"),
-                        Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"BankPanel.button8.lore")),
-                unused -> {
-                    GUIFactory.listPlayersOnline(player,this).open();
-                });
-        setItem(16,createItem(Materials.PLAYER_HEAD,
-                        Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)),"BankPanel.button9.nameItem"),
-                        Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"BankPanel.button9.lore")),
-                f->{
-                    GUIFactory.listPlayersFromDb(player,this).open();
-                });
-        setItem(31, createItem(Materials.BARRIER,
-                        Message.process(Map.of("color", ChatColor.stringValueOf(Colors.RED)),"BankPanel.button10.nameItem"),
-                        Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"BankPanel.button10.lore")),
-                unused -> this.close());
+
+        if (isButtonEnabled(11)) {
+            setButton(11,Button.builder()
+                    .setItemStack(Item.of(RecipeItem.builder()
+                            .setMaterial(Materials.DIAMOND)
+                            .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)),"BankPanel.button2.nameItem"))
+                            .setLore(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"BankPanel.button2.lore"))
+                            .build()))
+                    .setLeftClickAction( unused -> {
+                        if(player.hasPermission("BlockDynastyEconomy.players.exchange")){
+                            GUIFactory.exchangeFirstPanel(player,this).open();
+                        }else{
+                            player.sendMessage(ChatColor.stringValueOf(Colors.RED)+"You don't have permission");
+                        }
+                    })
+                    .build());
+        }
+
+        if (isButtonEnabled(24)) {
+            setButton(24, Button.builder()
+                    .setItemStack(Item.of(RecipeItem.builder()
+                            .setMaterial(Materials.WRITABLE_BOOK)
+                            .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)), "BankPanel.button3.nameItem"))
+                            .setLore(Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)), "BankPanel.button3.lore"))
+                            .build()))
+                    .setLeftClickAction(f -> {
+                        if(player.hasPermission("BlockDynastyEconomy.players.offer")){
+                            GUIFactory.listPlayerOnlineToOffer(player, this).open();
+                        }else {
+                            player.sendMessage(ChatColor.stringValueOf(Colors.RED)+"You don't have permission");
+                        }
+                    })
+                    .build());
+        }
+
+        if (isButtonEnabled(25)) {
+            setButton(25, Button.builder()
+                    .setItemStack(Item.of(RecipeItem.builder()
+                            .setMaterial(Materials.WRITABLE_BOOK)
+                            .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)), "BankPanel.button4.nameItem"))
+                            .setLore(Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)), "BankPanel.button4.lore"))
+                            .build()))
+                    .setLeftClickAction(f -> {
+                        if(player.hasPermission("BlockDynastyEconomy.players.offer")) {
+                            GUIFactory.listPlayersOfflineToOffer(player, this).open();
+                        }else {
+                            player.sendMessage(ChatColor.stringValueOf(Colors.RED)+"You don't have permission");
+                        }
+                    })
+                    .build());
+        }
+
+        if (isButtonEnabled(22)) {
+            setButton(22, Button.builder()
+                    .setItemStack(Item.of(RecipeItem.builder()
+                            .setMaterial(Materials.ENDER_CHEST)
+                            .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)), "BankPanel.button5.nameItem"))
+                            .setLore(Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)), "BankPanel.button5.lore"))
+                            .build()))
+                    .setLeftClickAction(f -> {
+                        if(player.hasPermission("BlockDynastyEconomy.players.offer")) {
+                            GUIFactory.myActiveOffers(player, this).open();
+                        }else{
+                            player.sendMessage(ChatColor.stringValueOf(Colors.RED)+"You don't have permission");
+                        }
+                    })
+                    .build());
+        }
+
+        if (isButtonEnabled(13)) {
+            setButton(13, Button.builder()
+                    .setItemStack(Item.of(RecipeItem.builder()
+                            .setMaterial(Materials.BOOK)
+                            .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)), "BankPanel.button6.nameItem"))
+                            .setLore(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)), "BankPanel.button6.lore"))
+                            .build()))
+                    .setLeftClickAction(unused -> {
+                        if(player.hasPermission("BlockDynastyEconomy.players.balance")){
+                        GUIFactory.balancePanel(player, this).open();
+                        }else{
+                            player.sendMessage(ChatColor.stringValueOf(Colors.RED)+"You don't have permission");
+                        }
+                    })
+                    .build());
+        }
+
+        if (isButtonEnabled(20)) {
+            setButton(20, Button.builder()
+                    .setItemStack(Item.of(RecipeItem.builder()
+                            .setMaterial(Materials.CHEST)
+                            .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)), "BankPanel.button7.nameItem"))
+                            .setLore(Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)), "BankPanel.button7.lore"))
+                            .build()))
+                    .setLeftClickAction(f -> {
+                        if(player.hasPermission("BlockDynastyEconomy.players.offer")) {
+                            GUIFactory.receivedOffers(player, this).open();
+                        }else{
+                            player.sendMessage(ChatColor.stringValueOf(Colors.RED)+"You don't have permission");
+                        }
+                    })
+                    .build());
+        }
+        if (isButtonEnabled(15)) {
+            setButton(15, Button.builder()
+                    .setItemStack(Item.of(RecipeItem.builder()
+                            .setMaterial(Materials.PLAYER_HEAD)
+                            .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)), "BankPanel.button8.nameItem"))
+                            .setLore(Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)), "BankPanel.button8.lore"))
+                            .build()))
+                    .setLeftClickAction(unused -> {
+                        if(player.hasPermission("BlockDynastyEconomy.players.pay")){
+                        GUIFactory.listPlayersOnline(player, this).open();
+                        }else{
+                            player.sendMessage(ChatColor.stringValueOf(Colors.RED)+"You don't have permission");
+                        }
+                    })
+                    .build());
+        }
+
+        if (isButtonEnabled(16)) {
+            setButton(16, Button.builder()
+                    .setItemStack(Item.of(RecipeItem.builder()
+                            .setMaterial(Materials.PLAYER_HEAD)
+                            .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GOLD)), "BankPanel.button9.nameItem"))
+                            .setLore(Message.processLines(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)), "BankPanel.button9.lore"))
+                            .build()))
+                    .setLeftClickAction(f -> {
+                        if(player.hasPermission("BlockDynastyEconomy.players.pay")) {
+                            GUIFactory.listPlayersFromDb(player, this).open();
+                        }else{
+                            player.sendMessage(ChatColor.stringValueOf(Colors.RED)+"You don't have permission");
+                        }
+                    })
+                    .build());
+        }
+
+        if (isButtonEnabled(31)) {
+            setButton(31, Button.builder()
+                    .setItemStack(Item.of(RecipeItem.builder()
+                            .setMaterial(Materials.BARRIER)
+                            .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.RED)), "BankPanel.button10.nameItem"))
+                            .setLore(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)), "BankPanel.button10.lore"))
+                            .build()))
+                    .setLeftClickAction(unused -> this.close())
+                    .build());
+        }
+    }
+
+    public static boolean isButtonEnabled(int slot) {
+        return buttonsEnabled.getOrDefault(slot, true);
+    }
+    public static void setButtonsState(Map<Integer, Boolean> buttonsState) {
+        buttonsEnabled.putAll(buttonsState);
+    }
+    public static void switchButtonState(int slot) {
+        boolean currentState = buttonsEnabled.getOrDefault(slot, true);
+        buttonsEnabled.put(slot, !currentState);
     }
 }

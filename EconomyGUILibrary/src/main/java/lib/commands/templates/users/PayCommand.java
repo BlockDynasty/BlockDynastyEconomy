@@ -18,7 +18,8 @@ package lib.commands.templates.users;
 
 import BlockDynasty.Economy.aplication.useCase.transaction.PayUseCase;
 import BlockDynasty.Economy.domain.result.Result;
-import lib.commands.CommandsFactory;
+import lib.abstractions.PlatformAdapter;
+import lib.commands.CommandService;
 import lib.commands.abstractions.IEntityCommands;
 import lib.commands.abstractions.AbstractCommand;
 
@@ -27,9 +28,11 @@ import java.util.List;
 
 public class PayCommand extends AbstractCommand {
     private final PayUseCase pay;
+    private final PlatformAdapter platformAdapter;
 
-    public PayCommand(PayUseCase pay) {
+    public PayCommand(PayUseCase pay, PlatformAdapter platformAdapter) {
         super("pay","BlockDynastyEconomy.players.pay", List.of("player","amount","currency"));
+        this.platformAdapter = platformAdapter;
         this.pay = pay;
     }
 
@@ -41,7 +44,7 @@ public class PayCommand extends AbstractCommand {
 
         String targetName = args[0]; //nombre del jugador
 
-        IEntityCommands target = CommandsFactory.getPlatformAdapter().getPlayer(targetName);
+        IEntityCommands target = platformAdapter.getPlayer(targetName);
         if(target==null){
             sender.sendMessage("The player is not online");
             return false;

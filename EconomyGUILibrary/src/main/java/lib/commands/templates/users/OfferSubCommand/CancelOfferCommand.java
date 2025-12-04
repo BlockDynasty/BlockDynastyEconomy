@@ -19,17 +19,20 @@ package lib.commands.templates.users.OfferSubCommand;
 import BlockDynasty.Economy.aplication.useCase.offer.CancelOfferUseCase;
 import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.result.Result;
+import lib.abstractions.PlatformAdapter;
 import lib.commands.abstractions.IEntityCommands;
 import lib.commands.abstractions.AbstractCommand;
-import lib.commands.CommandsFactory;
+import lib.commands.CommandService;
 
 import java.util.List;
 
 public class CancelOfferCommand extends AbstractCommand {
-
     private final CancelOfferUseCase cancelOfferUseCase;
-    public CancelOfferCommand(CancelOfferUseCase cancelOfferUseCase ) {
+    private final PlatformAdapter platformAdapter;
+
+    public CancelOfferCommand(CancelOfferUseCase cancelOfferUseCase,PlatformAdapter platformAdapter) {
         super("cancel", "", List.of("player"));
+        this.platformAdapter = platformAdapter;
         this.cancelOfferUseCase = cancelOfferUseCase;
     }
 
@@ -40,7 +43,7 @@ public class CancelOfferCommand extends AbstractCommand {
         }
 
         String playerNme = args[0];
-        IEntityCommands playerFrom = CommandsFactory.getPlatformAdapter().getPlayer(playerNme);
+        IEntityCommands playerFrom = platformAdapter.getPlayer(playerNme);
         if (playerFrom == null || !playerFrom.isOnline()) {
             sender.sendMessage("");
             return false;

@@ -16,7 +16,7 @@
 
 package BlockDynasty.adapters.GUI.adapters;
 
-import lib.gui.components.RecipeItem;
+import lib.gui.components.recipes.RecipeItem;
 import lib.util.materials.Materials;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -26,12 +26,16 @@ import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.profile.GameProfile;
+import org.spongepowered.api.profile.property.ProfileProperty;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class MaterialAdapter {
+    private static final Map<String, GameProfile> profileCacheHeadsTextures = new ConcurrentHashMap<>();
     private static final Map<Materials, ItemType> MATERIAL_MAP = new HashMap<>();
     private static final ItemType FALLBACK = ItemTypes.STONE.get();
 
@@ -54,7 +58,7 @@ public class MaterialAdapter {
 
     public static void applyItemName(ItemStack item, String displayName){
         if(displayName != null){
-            if(item.type().equals( ItemTypes.PLAYER_HEAD.get())){
+            if(item.type().equals(ItemTypes.PLAYER_HEAD.get())){
                 Optional<ServerPlayer> optional= Sponge.server().player(displayName);
                 optional.ifPresent(serverPlayer -> item.offer(Keys.GAME_PROFILE, serverPlayer.profile()));
             }
@@ -72,13 +76,40 @@ public class MaterialAdapter {
     }
 
     public static void applyTexture(ItemStack item, String texture){
-        //nothing to do here
+        if (texture == null || texture.isEmpty()) return;
+        GameProfile profile = crearGameProfileDesdeTextureURL(texture);
+        item.offer(Keys.GAME_PROFILE, profile);
+    }
+
+    private static GameProfile crearGameProfileDesdeTextureURL(String textureURL) {
+        return profileCacheHeadsTextures.computeIfAbsent(textureURL, url -> {
+            GameProfile profile = GameProfile.of(UUID.randomUUID(), "CustomHead");
+            String textureData = crearTextureData(textureURL);
+
+            ProfileProperty textureProperty = ProfileProperty.of(
+                    ProfileProperty.TEXTURES,
+                    textureData
+            );
+            return profile.withProperty(textureProperty);
+        });
+    }
+
+    private static String crearTextureData(String textureURL) {
+        String jsonTexture = String.format(
+                "{\"textures\":{\"SKIN\":{\"url\":\"%s\"}}}",
+                textureURL
+        );
+        return Base64.getEncoder().encodeToString(jsonTexture.getBytes());
     }
 
     public static ItemStack createItemStack(RecipeItem recipeItem){
         ItemStack itemStack = null;
         if(recipeItem.getMaterial() != null){
             ItemType itemType = toSpongeMaterial(recipeItem.getMaterial());
+            if(recipeItem.getTexture() != null && !recipeItem.getTexture().isEmpty()){
+                itemType = ItemTypes.PLAYER_HEAD.get();
+            }
+
             itemStack = ItemStack.of(itemType);
             applyItemName(itemStack, recipeItem.getName());
             applyItemLore(itemStack, List.of(recipeItem.getLore()));

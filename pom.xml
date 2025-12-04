@@ -17,11 +17,7 @@
         <module>EconomyEngine</module>
         <module>Velocity</module>
         <module>BungeeCord</module>
+        <module>Minestom</module>
     </modules>
 
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 </project>

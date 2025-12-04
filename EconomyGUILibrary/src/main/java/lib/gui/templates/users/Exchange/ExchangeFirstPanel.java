@@ -18,16 +18,18 @@ package lib.gui.templates.users.Exchange;
 
 import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.IExchangeUseCase;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import lib.gui.components.IGUI;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.ITextInput;
+import lib.gui.components.factory.Item;
+import lib.gui.components.generics.Button;
+import lib.gui.components.recipes.RecipeItem;
 import lib.util.materials.Materials;
-import lib.gui.components.abstractions.CurrencySelectorAndAmount;
+import lib.gui.components.generics.CurrencySelectorAndAmount;
 import lib.util.colors.ChatColor;
 import lib.util.colors.Colors;
-import lib.util.colors.Message;
+import lib.messages.Message;
 
 import java.util.Map;
 
@@ -52,9 +54,14 @@ public class ExchangeFirstPanel extends CurrencySelectorAndAmount {
 
     @Override
     public void addCustomButtons() {
-        setItem(4, createItem(Materials.PAPER, Message.process(Map.of("color",ChatColor.stringValueOf(Colors.GREEN)),"Exchange.button2.nameItem"),
-                        Message.processLines(Map.of("color",ChatColor.stringValueOf(Colors.WHITE)),"Exchange.button2.lore")),
-                null);
+
+        setButton(4, Button.builder()
+                .setItemStack(Item.of(RecipeItem.builder()
+                        .setMaterial(Materials.PAPER)
+                        .setName(Message.process(Map.of("color",ChatColor.stringValueOf(Colors.GREEN)),"Exchange.button2.nameItem"))
+                        .setLore(Message.processLines(Map.of("color",ChatColor.stringValueOf(Colors.WHITE)),"Exchange.button2.lore"))
+                        .build()))
+                .build());
 
     }
 }

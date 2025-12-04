@@ -25,9 +25,12 @@ import lib.gui.GUIFactory;
 import lib.gui.components.IGUI;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.ITextInput;
+import lib.gui.components.factory.Item;
+import lib.gui.components.generics.Button;
+import lib.gui.components.recipes.RecipeItem;
 import lib.util.materials.Materials;
-import lib.gui.components.abstractions.AccountsList;
-import lib.util.colors.Message;
+import lib.gui.components.generics.AccountsList;
+import lib.messages.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,14 +52,6 @@ public class AccountSelectorToEdit extends AccountsList {
                     .sorted((a, b) -> a.getNickname().compareToIgnoreCase(b.getNickname()))
                     .collect(Collectors.toList()));
 
-            //test
-            /*for (int i=0; i < 45 ; i++) {
-               players.add(new Player("empty", "empty"));
-            }
-            players.add(new Player("empty", "Cristian"));
-            players.add(new Player("empty", "Daniel"));
-            players.add(new Player("empty", "Alberto"));
-            */
             showPlayers(players);
         }else {showPlayers(new ArrayList<>());}
     }
@@ -64,9 +59,12 @@ public class AccountSelectorToEdit extends AccountsList {
     @Override
     protected void addCustomButtons(){
         super.addCustomButtons();
-        setItem(4, createItem(Materials.PAPER, Message.process("AccountSelectorToEdit.button1.nameItem"),
-                        Message.processLines("AccountSelectorToEdit.button1.lore")),
-                null);
+        RecipeItem recipe = RecipeItem.builder()
+                .setMaterial(Materials.PAPER)
+                .setName( Message.process("AccountSelectorToEdit.button1.nameItem"))
+                .setLore( Message.processLines("AccountSelectorToEdit.button1.lore"))
+                .build();
+        setButton(4, Button.builder().setItemStack(Item.of(recipe)).build());
     }
     @Override
     public Player findPlayerByName(String playerName) {

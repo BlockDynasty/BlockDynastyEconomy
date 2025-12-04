@@ -16,12 +16,8 @@
 
 package api;
 
-import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.domain.entities.account.Account;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
-import BlockDynasty.Economy.domain.services.IAccountService;
-
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -38,8 +34,7 @@ public interface IApi {
     EconomyResponse deposit(String name, BigDecimal amount);
 
     ICurrency getDefaultCurrency();
-
-    EventManager getEventManager();
+    List<Account> getAccountsOffline();
 
     /**
      *
@@ -162,7 +157,4 @@ public interface IApi {
     EconomyResponse setPayable(String currencyName, boolean isPayable);
 
     ICurrency getCurrency(String name );
-
-    IAccountService getAccountService();
-
 }

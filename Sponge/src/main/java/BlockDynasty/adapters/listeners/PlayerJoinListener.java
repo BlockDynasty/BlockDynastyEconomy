@@ -5,15 +5,15 @@ import platform.listeners.IPlayerJoin;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.network.ServerSideConnectionEvent;
 
-public class PlayerJoinListenerOnline {
+public class PlayerJoinListener {
     private final IPlayerJoin playerJoin;
 
-    public PlayerJoinListenerOnline(IPlayerJoin playerJoin) {
+    public PlayerJoinListener(IPlayerJoin playerJoin) {
         this.playerJoin = playerJoin;
     }
 
     @Listener
     public void onPlayerJoin(final ServerSideConnectionEvent.Join event) {
-        playerJoin.loadOnlinePlayerAccount(EntityPlayerAdapter.of(event.player()));
+        playerJoin.loadPlayerAccount(EntityPlayerAdapter.of(event.player()));
     }
 }

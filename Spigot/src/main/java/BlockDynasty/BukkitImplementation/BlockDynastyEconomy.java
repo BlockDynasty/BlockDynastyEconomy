@@ -26,8 +26,7 @@ import BlockDynasty.BukkitImplementation.Integrations.vault.Vault;
 
 import BlockDynasty.BukkitImplementation.adapters.platformAdapter.BukkitAdapter;
 import BlockDynasty.BukkitImplementation.adapters.commands.CommandRegister;
-import BlockDynasty.BukkitImplementation.adapters.listeners.PlayerJoinListenerOffline;
-import BlockDynasty.BukkitImplementation.adapters.listeners.PlayerJoinListenerOnline;
+import BlockDynasty.BukkitImplementation.adapters.listeners.PlayerJoinListener;
 
 import BlockDynasty.BukkitImplementation.utils.Console;
 import BlockDynasty.BukkitImplementation.utils.Updater;
@@ -35,11 +34,9 @@ import BlockDynasty.BukkitImplementation.utils.Version;
 import Main.Economy;
 import api.IApi;
 import org.bukkit.Bukkit;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.event.HandlerList;
 import platform.files.Configuration;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BlockDynastyEconomy extends JavaPlugin {
@@ -47,11 +44,6 @@ public class BlockDynastyEconomy extends JavaPlugin {
     private static Economy economy;
     private static Configuration configuration;
     private Metrics metrics;
-
-    @Override
-    public void onLoad() {
-
-    }
 
     @Override
     public void onEnable() {
@@ -63,10 +55,10 @@ public class BlockDynastyEconomy extends JavaPlugin {
         }
         instance = this;
         try {
-            initCoreServices();
+            registerEconomyCore();
             registerCommands();
             registerEvents();
-            setupIntegrations();
+            registerIntegrations();
             Console.log("§aPlugin enabled successfully!");
         } catch (Exception e) {
             getLogger().severe("An error occurred during plugin initialization: " + e.getMessage());
@@ -87,16 +79,10 @@ public class BlockDynastyEconomy extends JavaPlugin {
         ChannelRegister.unhook(this);
         Economy.shutdown();
         try {
-            initCoreServices();
+            registerEconomyCore();
             registerEvents();
-            Bukkit.getOnlinePlayers().forEach(player -> {
-                if(configuration.getBoolean("online")) {
-                    economy.getPlayerJoinListener().loadOnlinePlayerAccount(EntityPlayerAdapter.of(player));
-                }else{
-                    economy.getPlayerJoinListener().loadOfflinePlayerAccount(EntityPlayerAdapter.of(player));
-                }
-            });
-            setupIntegrations();
+            Bukkit.getOnlinePlayers().forEach(player -> {economy.getPlayerJoinListener().loadPlayerAccount(EntityPlayerAdapter.of(player));});
+            registerIntegrations();
             Console.log("§aPlugin enabled successfully!");
         } catch (Exception e) {
             Console.logError("during plugin initialization: " + e.getMessage());
@@ -114,39 +100,21 @@ public class BlockDynastyEconomy extends JavaPlugin {
         }
     }
 
-    private void initCoreServices() {
+    private void registerEconomyCore() {
         //int expireCacheTopMinutes = getConfig().getInt("expireCacheTopMinutes", 60);
         economy = Economy.init(new BukkitAdapter());
         configuration = economy.getConfiguration();
     }
-
     private void registerCommands(){
         CommandRegister.registerAllEconomySystem();
     }
-
     private void registerEvents() {
-        Listener economyListener=new PlayerJoinListenerOnline(economy.getPlayerJoinListener());
-        if(configuration.getBoolean("online")) {
-            if(!getServer().getOnlineMode()){
-                Console.logError("THE SERVER IS IN OFFLINE MODE but the plugin is configured to work in ONLINE mode, please change the configuration to avoid issues.");
-            }
-            economyListener = new PlayerJoinListenerOnline(economy.getPlayerJoinListener());
-            Console.log("Online mode is enabled. The plugin will use UUID to identify players.");
-        }
-        if (!configuration.getBoolean("online")){
-            if(getServer().getOnlineMode()){
-                Console.logError("THE SERVER IS IN ONLINE MODE but the plugin is configured to work in OFFLINE mode, please change the configuration to avoid issues.");
-            }
-            economyListener = new PlayerJoinListenerOffline(economy.getPlayerJoinListener());
-            Console.log("Online mode is disabled, The plugin will use NICKNAME to identify players.");
-        }
-
-        getServer().getPluginManager().registerEvents(economyListener, this);
+        getServer().getPluginManager().registerEvents(new PlayerJoinListener(economy.getPlayerJoinListener()), this);
         getServer().getPluginManager().registerEvents(new ClickListener(),this);
         getServer().getPluginManager().registerEvents(new CloseListener(),this);
 
     }
-    private void setupIntegrations() {
+    private void registerIntegrations() {
         Vault.init(economy.getApiWithLog(economy.getVaultLogger()));
         PlaceHolder.register(economy.getPlaceHolder());
         TreasuryHook.register();
@@ -156,11 +124,9 @@ public class BlockDynastyEconomy extends JavaPlugin {
     public static BlockDynastyEconomy getInstance() {
         return instance;
     }
-
     public static Configuration getConfiguration() {
         return configuration;
     }
-
     public static IApi getApi() {
         return economy.getApi();
     }

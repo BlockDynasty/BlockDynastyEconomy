@@ -16,23 +16,27 @@
 
 package lib.gui.templates.users.Offers;
 
+import lib.abstractions.PlatformAdapter;
 import lib.gui.GUIFactory;
 import lib.gui.components.IGUI;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.ITextInput;
+import lib.gui.components.factory.Item;
+import lib.gui.components.generics.Button;
+import lib.gui.components.recipes.RecipeItem;
 import lib.util.materials.Materials;
 import lib.gui.templates.users.ListPlayersOnline;
 import lib.util.colors.ChatColor;
 import lib.util.colors.Colors;
-import lib.util.colors.Message;
+import lib.messages.Message;
 
 import java.util.Map;
 
 public class ListPlayerOnlineToOffer extends ListPlayersOnline {
     private final IEntityGUI sender;
 
-    public ListPlayerOnlineToOffer(IEntityGUI sender, IGUI parent, ITextInput textInput) {
-        super(sender,parent ,textInput);
+    public ListPlayerOnlineToOffer(IEntityGUI sender, IGUI parent, ITextInput textInput, PlatformAdapter platformAdapter) {
+        super(sender,parent ,textInput,platformAdapter);
         this.sender = sender;
     }
 
@@ -44,8 +48,12 @@ public class ListPlayerOnlineToOffer extends ListPlayersOnline {
     @Override
     public void addCustomButtons() {
         super.addCustomButtons();
-        setItem(4, createItem(Materials.PAPER, Message.process(Map.of("color",ChatColor.stringValueOf(Colors.GREEN)),"OfferListPlayer.button1.nameItem"),
-                        Message.processLines(Map.of("color",ChatColor.stringValueOf(Colors.WHITE)),"OfferListPlayer.button1.lore")),
-                null);
+        setButton(4, Button.builder()
+                .setItemStack(Item.of(RecipeItem.builder()
+                        .setMaterial(Materials.PAPER)
+                        .setName( Message.process(Map.of("color",ChatColor.stringValueOf(Colors.GREEN)),"OfferListPlayer.button1.nameItem"))
+                        .setLore(Message.processLines(Map.of("color",ChatColor.stringValueOf(Colors.WHITE)),"OfferListPlayer.button1.lore"))
+                        .build()))
+                .build());
     }
 }

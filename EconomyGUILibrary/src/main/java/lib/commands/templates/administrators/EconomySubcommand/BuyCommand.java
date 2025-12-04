@@ -18,9 +18,10 @@ package lib.commands.templates.administrators.EconomySubcommand;
 
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.IWithdrawUseCase;
 import BlockDynasty.Economy.domain.result.Result;
+import lib.abstractions.PlatformAdapter;
 import lib.commands.abstractions.IEntityCommands;
 import lib.commands.abstractions.AbstractCommand;
-import lib.commands.CommandsFactory;
+import lib.commands.CommandService;
 import lib.messages.MessageService;
 
 import java.math.BigDecimal;
@@ -28,9 +29,11 @@ import java.util.List;
 
 public class BuyCommand extends AbstractCommand {
     private final IWithdrawUseCase withdraw;
+    private final PlatformAdapter platformAdapter;
 
-    public BuyCommand(IWithdrawUseCase withdraw) {
+    public BuyCommand(IWithdrawUseCase withdraw, PlatformAdapter platformAdapter) {
         super("buy","",List.of("player", "amount", "currency", "command..."));
+        this.platformAdapter = platformAdapter;
         this.withdraw = withdraw;
     }
 
@@ -40,7 +43,7 @@ public class BuyCommand extends AbstractCommand {
             return false;
         }
 
-        IEntityCommands player = CommandsFactory.getPlatformAdapter().getPlayer(args[0]);
+        IEntityCommands player = platformAdapter.getPlayer(args[0]);
 
         if(player==null) {
             sender.sendMessage("player is offline");
@@ -67,7 +70,7 @@ public class BuyCommand extends AbstractCommand {
 
         if(result.isSuccess()){
             try{
-                CommandsFactory.getPlatformAdapter().dispatchCommand(cmd);
+                platformAdapter.dispatchCommand(cmd);
                 player.sendMessage(MessageService.getMessage("buy_success"));
             }catch (Exception e){
                 sender.sendMessage("Error dispatch command: " + e.getMessage());

@@ -66,7 +66,7 @@ public class CommandAdapter implements CommandExecutor {
 
 
         try {
-            command.execute(sender, argList.toArray(new String[0])); //se puede esperar un objeto resultado
+            command.execute(sender, argList.toArray(new String[0]));
             //return success ? CommandResult.success() : CommandResult.error( Component.text("Command execution failed") );
             return CommandResult.success();
         } catch (Exception e) {

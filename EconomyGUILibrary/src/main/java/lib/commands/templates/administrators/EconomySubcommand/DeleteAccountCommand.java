@@ -18,17 +18,20 @@ package lib.commands.templates.administrators.EconomySubcommand;
 
 import BlockDynasty.Economy.aplication.useCase.account.DeleteAccountUseCase;
 import BlockDynasty.Economy.domain.result.Result;
+import lib.abstractions.PlatformAdapter;
 import lib.commands.abstractions.IEntityCommands;
 import lib.commands.abstractions.AbstractCommand;
-import lib.commands.CommandsFactory;
+import lib.commands.CommandService;
 
 import java.util.List;
 
 public class DeleteAccountCommand extends AbstractCommand {
-    private DeleteAccountUseCase deleteAccountUseCase;
+    private final DeleteAccountUseCase deleteAccountUseCase;
+    private final PlatformAdapter platformAdapter;
 
-    public DeleteAccountCommand(DeleteAccountUseCase deleteAccountUseCase) {
+    public DeleteAccountCommand(DeleteAccountUseCase deleteAccountUseCase, PlatformAdapter platformAdapter) {
         super("deleteAccount","", List.of("player"));
+        this.platformAdapter = platformAdapter;
         this.deleteAccountUseCase = deleteAccountUseCase;
     }
 
@@ -39,7 +42,7 @@ public class DeleteAccountCommand extends AbstractCommand {
         }
 
         String playerName = args[0];
-        IEntityCommands player = CommandsFactory.getPlatformAdapter().getPlayer(playerName);
+        IEntityCommands player = platformAdapter.getPlayer(playerName);
         Result<Void> result =deleteAccountUseCase.execute(playerName);
         if (result.isSuccess()) {
             sender.kickPlayer("Your account has been deleted by an administrator.");

@@ -26,13 +26,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class PlayerJoinListenerOnline implements Listener {
+public class PlayerJoinListener implements Listener {
     private IPlayerJoin playerJoin;
 
-    public PlayerJoinListenerOnline(IPlayerJoin playerJoin) {
+    public PlayerJoinListener(IPlayerJoin playerJoin) {
         this.playerJoin = playerJoin;
     }
 
@@ -69,7 +68,7 @@ public class PlayerJoinListenerOnline implements Listener {
 
     //si se comienza a trabajar en online se van a buscar las cuentas por uuid y se va a preguntar si cambio el nombre para actualizar en sistema.
     protected void loadPlayerAccount(Player player) {
-        playerJoin.loadOnlinePlayerAccount( EntityPlayerAdapter.of(player));
+        playerJoin.loadPlayerAccount( EntityPlayerAdapter.of(player));
     }
 }
 

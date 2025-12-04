@@ -18,8 +18,7 @@ package BlockDynasty;
 
 import BlockDynasty.adapters.commands.CommandRegister;
 import BlockDynasty.adapters.platformAdapter.SpongeAdapter;
-import BlockDynasty.adapters.listeners.PlayerJoinListenerOffline;
-import BlockDynasty.adapters.listeners.PlayerJoinListenerOnline;
+import BlockDynasty.adapters.listeners.PlayerJoinListener;
 import BlockDynasty.adapters.proxy.ProxyReceiverImp;
 import BlockDynasty.adapters.integrations.spongeEconomyApi.EconomyServiceAdapter;
 import BlockDynasty.adapters.integrations.spongeEconomyApi.MultiCurrencyService;
@@ -28,7 +27,7 @@ import Main.Economy;
 import api.IApi;
 import com.google.inject.Inject;
 import platform.files.Configuration;
-import lib.commands.CommandsFactory;
+import lib.commands.CommandService;
 
 import org.apache.logging.log4j.Logger;
 
@@ -56,7 +55,7 @@ public class SpongePlugin {
     private static Logger logger;
     private static Economy economy;
     private static Configuration configuration;
-    public static Path configPath;
+    private static Path configPath;
     private static RawDataChannel channel;
     private final Metrics metrics;
 
@@ -70,7 +69,6 @@ public class SpongePlugin {
         metrics = factory.make(27472);
     }
 
-
     @Listener
     public void onRegisterChannel(final RegisterChannelEvent event) {
         channel = event.register(ResourceKey.resolve(ProxyData.getChannelName()),RawDataChannel.class);
@@ -79,8 +77,6 @@ public class SpongePlugin {
 
     @Listener
     public void onConstructPlugin(final ConstructPluginEvent event) {
-        //metrics.startup(event);
-        // Perform any one-time setup
         try {
             economy = Economy.init(new SpongeAdapter());
             configuration = economy.getConfiguration();
@@ -104,46 +100,29 @@ public class SpongePlugin {
     @Listener
     public void onServerStopping(final StoppingEngineEvent<Server> event) {
         Economy.shutdown();
-        //metrics.shutdown();
     }
 
     @Listener
     public void onRegisterCommands(final RegisterCommandEvent<Command.Parameterized> event) {
         //TestEconomyCommand.registerTestCommand( event, container);
-        CommandRegister.registerCommands(event, container, CommandsFactory.Commands.getMainCommands());
+        CommandRegister.registerCommands(event, container, CommandService.getMainCommands());
     }
 
     private void registerEvents(){
-        if(configuration.getBoolean("online")){
-            if(!Sponge.server().isOnlineModeEnabled()){
-                Console.logError("THE SERVER IS IN OFFLINE MODE but the plugin is configured to work in ONLINE mode, please change the configuration to avoid issues.");
-            }
-            Sponge.eventManager().registerListeners(container, new PlayerJoinListenerOnline(economy.getPlayerJoinListener()), MethodHandles.lookup());
-            Console.log("Online mode is enabled. The plugin will use UUID to identify players.");
-        }
-
-        if (!configuration.getBoolean("online")) {
-            if(Sponge.server().isOnlineModeEnabled()){
-                Console.logError("THE SERVER IS IN ONLINE MODE but the plugin is configured to work in OFFLINE mode, please change the configuration to avoid issues.");
-            }
-            Sponge.eventManager().registerListeners(container, new PlayerJoinListenerOffline(economy.getPlayerJoinListener()),MethodHandles.lookup());
-            Console.log("Online mode is disabled, The plugin will use NICKNAME to identify players.");
-        }
+        Sponge.eventManager().registerListeners(container, new PlayerJoinListener(economy.getPlayerJoinListener()), MethodHandles.lookup());
     }
 
     public static Logger getLogger() {
         return logger;
     }
-
     public static PluginContainer getPlugin() {
         return container;
     }
     public static RawDataChannel getChannel() {
         return channel;
     }
-
-    public static Configuration getConfiguration() {
-        return configuration;
+    public static Path getConfigPath() {
+        return configPath;
     }
 
     public IApi getApi() {

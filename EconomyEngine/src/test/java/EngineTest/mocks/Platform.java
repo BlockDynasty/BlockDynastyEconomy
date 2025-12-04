@@ -6,10 +6,11 @@ import com.google.gson.JsonParser;
 import lib.abstractions.IConsole;
 import lib.abstractions.IPlayer;
 import lib.abstractions.PlatformAdapter;
+import lib.gui.components.recipes.RecipeItem;
 import lib.gui.components.IInventory;
 import lib.gui.components.IItemStack;
 import lib.gui.components.ITextInput;
-import lib.util.materials.Materials;
+import lib.gui.components.recipes.RecipeInventory;
 import lib.scheduler.IScheduler;
 
 import java.io.ByteArrayInputStream;
@@ -38,18 +39,13 @@ public class Platform implements PlatformAdapter {
     }
 
     @Override
-    public IItemStack createItemStack(Materials material) {
-        return new ItemStack(material);
+    public IItemStack createItemStack(RecipeItem recipeItem) {
+        return new ItemStack(recipeItem);
     }
 
     @Override
-    public ItemStack createItemStack(lib.gui.components.RecipeItem recipeItem) {
-        return new ItemStack(recipeItem.getMaterial());
-    }
-
-    @Override
-    public IInventory createInventory(String title, int rows) {
-        return new Inventory(title, rows);
+    public IInventory createInventory(RecipeInventory recipeInventory) {
+        return new Inventory(recipeInventory);
     }
 
     @Override
@@ -88,6 +84,11 @@ public class Platform implements PlatformAdapter {
     @Override
     public boolean isLegacy() {
         return false;
+    }
+
+    @Override
+    public boolean isOnlineMode() {
+        return true;
     }
 
     @Override

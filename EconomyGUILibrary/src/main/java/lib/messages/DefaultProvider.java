@@ -19,6 +19,8 @@ package lib.messages;
 import lib.util.colors.ChatColor;
 import lib.util.colors.Colors;
 
+//used in command system
+@Deprecated
 public class DefaultProvider implements MessageProvider{
     private final MessageConfig messageConfig= new MessageConfig();
 
@@ -27,7 +29,7 @@ public class DefaultProvider implements MessageProvider{
     }
 
     private void loadMessages(){
-        messageConfig.addDefault("prefix", "BlockDynasty> ");
+        messageConfig.addDefault("prefix", "DynastyEconomy> ");
         messageConfig.addDefault("nopermission", ChatColor.stringValueOf(Colors.RED)+"You don't have permission to do this.");
         messageConfig.addDefault("noconsole", "Console cannot do this.");
         messageConfig.addDefault("invalidamount", "Not a valid amount.");
@@ -69,36 +71,36 @@ public class DefaultProvider implements MessageProvider{
         messageConfig.addDefault("balance_top.next", "{currencycolor}/gbaltop {currencyplural} {page} for more.");
         messageConfig.addDefault("balance_top.nosupport", "{storage} doesn't support /baltop.");
 
-        messageConfig.addDefault("withdraw_success","Se ha retirado {amount} de tu cuenta.");
-        messageConfig.addDefault("deposit_success","Se ha depositado {amount} en tu cuenta.");
-        messageConfig.addDefault("setbalance_success","Se ha establecido tu balance a {amount}.");
+        messageConfig.addDefault("withdraw_success","{amount} has been withdrawn from your account.");
+        messageConfig.addDefault("deposit_success","{amount} has been deposited into your account.");
+        messageConfig.addDefault("setbalance_success","Your balance has been set to {amount}.");
 
-        //--------------------------new--Offer-----------------------------------------------------
-        messageConfig.addDefault("too_far","El jugador objetivo está demasiado lejos. Deben estar dentro de {limit} bloques de distancia." );
-        messageConfig.addDefault("offer_yourself","No puedes ofrecerte a ti mismo." );
-        messageConfig.addDefault("offline","El jugador que te hizo la oferta ya no está en línea.");
-        messageConfig.addDefault("not_offers","No tienes ofertas pendientes.");
-        messageConfig.addDefault("already_offer","Ya tienes una oferta pendiente para este jugador.");
-        messageConfig.addDefault("only_players",">> §cSolo los jugadores pueden hacer esto.");
+//--------------------------new--Offer-----------------------------------------------------
+        messageConfig.addDefault("too_far","The target player is too far away. They must be within {limit} blocks distance.");
+        messageConfig.addDefault("offer_yourself","You cannot offer to yourself.");
+        messageConfig.addDefault("offline","The player who made you an offer is no longer online.");
+        messageConfig.addDefault("not_offers","You have no pending offers.");
+        messageConfig.addDefault("already_offer","You already have a pending offer for this player.");
+        messageConfig.addDefault("only_players",">> §cOnly players can do this.");
 
-        messageConfig.addDefault("send_offer", "Has ofrecido{currencycolorOffert} {amountOffert} por{currencycolorValue} {amountValue} a {player}.");
-        messageConfig.addDefault("receive_offer", "Has recibido una oferta de{currencycolorOffert} {amountOffert} por{currencycolorValue} {amountValue} del jugador {player}. Usa /offer accept {player}, o /offer accept {player}."); //todo aqui
-        messageConfig.addDefault("accept_offer_to", "Has aceptado la oferta de §a{player}.");
-        messageConfig.addDefault("accept_offer", "Tu oferta para {player} ha sido aceptada.");
-        messageConfig.addDefault("cancel_offer_to","Has cancelado la oferta para {player}."); //cancelado
-        messageConfig.addDefault("cancel_offer","{player} cancelo la oferta."); //cancelado
-        messageConfig.addDefault("deny_offer_to","Has rechazado la oferta de {player}."); //denegada
-        messageConfig.addDefault("deny_offer","Tu oferta para §a{player} ha sido rechazada."); //denagada
+        messageConfig.addDefault("send_offer", "You have offered{currencycolorOffert} {amountOffert} for{currencycolorValue} {amountValue} to {player}.");
+        messageConfig.addDefault("receive_offer", "You have received an offer of{currencycolorOffert} {amountOffert} for{currencycolorValue} {amountValue} from player {player}. Use /offer accept {player}, or /offer accept {player}."); //todo here
+        messageConfig.addDefault("accept_offer_to", "You have accepted the offer from §a{player}.");
+        messageConfig.addDefault("accept_offer", "Your offer to {player} has been accepted.");
+        messageConfig.addDefault("cancel_offer_to","You have canceled the offer to {player}."); //canceled
+        messageConfig.addDefault("cancel_offer","{player} canceled the offer."); //canceled
+        messageConfig.addDefault("deny_offer_to","You have denied the offer from {player}."); //denied
+        messageConfig.addDefault("deny_offer","Your offer to §a{player} has been denied."); //denied
 
-        messageConfig.addDefault("offerExpiredTo","La oferta de §a{player} ha expirado."); //expirado
-        messageConfig.addDefault("offerExpired","Tu oferta a §a{player} ha expirado."); //expirado
+        messageConfig.addDefault("offerExpiredTo","The offer from §a{player} has expired."); //expired
+        messageConfig.addDefault("offerExpired","Your offer to §a{player} has expired."); //expired
 
 
-        //-----------------------------------buy command-------------------------------------------------------
+//-----------------------------------buy command-------------------------------------------------------
 
-        messageConfig.addDefault("buy_success","Compra realizada con exito!");
-        messageConfig.addDefault("buy_no_perms","No tienes permiso para ejecutar el comando de compra.");
-        messageConfig.addDefault("buy_usage",">> §aUso: /eco buycommand <jugador> <cantidad> <tipo> <comandoAEntregar>");
+        messageConfig.addDefault("buy_success","Purchase completed successfully!");
+        messageConfig.addDefault("buy_no_perms","You don't have permission to execute the buy command.");
+        messageConfig.addDefault("buy_usage",">> §aUsage: /eco buycommand <player> <amount> <type> <commandToDeliver>");
     }
 
     @Override

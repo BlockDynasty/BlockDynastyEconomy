@@ -16,12 +16,14 @@
 
 package BlockDynasty.adapters.platformAdapter;
 
+import BlockDynasty.adapters.GUI.adapters.InventoryAdapter;
 import BlockDynasty.adapters.GUI.listener.ClickListener;
 import BlockDynasty.adapters.GUI.listener.CloseListener;
 import lib.commands.abstractions.IEntityCommands;
 import lib.gui.components.IEntityGUI;
 import lib.abstractions.IPlayer;
 import lib.gui.components.IInventory;
+import lib.gui.components.recipes.RecipeInventory;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -117,11 +119,13 @@ public class EntityPlayerAdapter implements IPlayer {
 
     @Override
     public void openInventory(IInventory inventory) {
+        InventoryAdapter inventoryAdapter = (InventoryAdapter) inventory;
+        RecipeInventory recipeInventory = inventoryAdapter.getRecipe();
         if (inventory.getHandle() instanceof ViewableInventory) {
             ViewableInventory spongeInventory = (ViewableInventory) inventory.getHandle();
             InventoryMenu menu = spongeInventory.asMenu();
 
-            menu.setReadOnly(true).setTitle(Component.text(inventory.getTitle()));
+            menu.setReadOnly(true).setTitle(Component.text(recipeInventory.getTitle()));
             menu.registerSlotClick(new ClickListener());
             menu.registerClose(new CloseListener());
 

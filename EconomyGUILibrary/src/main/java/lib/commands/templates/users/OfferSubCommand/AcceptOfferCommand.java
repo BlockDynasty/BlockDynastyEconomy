@@ -18,17 +18,20 @@ package lib.commands.templates.users.OfferSubCommand;
 
 import BlockDynasty.Economy.aplication.useCase.offer.AcceptOfferUseCase;
 import BlockDynasty.Economy.domain.result.Result;
+import lib.abstractions.PlatformAdapter;
 import lib.commands.abstractions.IEntityCommands;
 import lib.commands.abstractions.AbstractCommand;
-import lib.commands.CommandsFactory;
+import lib.commands.CommandService;
 
 import java.util.List;
 
 public class AcceptOfferCommand extends AbstractCommand {
     private final AcceptOfferUseCase acceptOfferUseCase;
+    private final PlatformAdapter platformAdapter;
 
-    public AcceptOfferCommand(AcceptOfferUseCase acceptOfferUseCase) {
+    public AcceptOfferCommand(AcceptOfferUseCase acceptOfferUseCase, PlatformAdapter platformAdapter) {
         super("accept","", List.of("player"));
+        this.platformAdapter = platformAdapter;
         this.acceptOfferUseCase = acceptOfferUseCase;
     }
 
@@ -39,7 +42,7 @@ public class AcceptOfferCommand extends AbstractCommand {
         }
 
         String playerNme = args[0];
-        IEntityCommands playerFrom = CommandsFactory.getPlatformAdapter().getPlayer(playerNme);
+        IEntityCommands playerFrom = platformAdapter.getPlayer(playerNme);
 
         if (playerFrom == null || !playerFrom.isOnline()) {
             sender.sendMessage(" El jugador no está en línea.");

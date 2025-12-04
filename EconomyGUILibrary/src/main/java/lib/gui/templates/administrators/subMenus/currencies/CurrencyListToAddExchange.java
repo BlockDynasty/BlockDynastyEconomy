@@ -2,17 +2,17 @@ package lib.gui.templates.administrators.subMenus.currencies;
 
 import BlockDynasty.Economy.aplication.useCase.currency.EditCurrencyUseCase;
 import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import lib.gui.GUIFactory;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.IGUI;
 import lib.gui.components.IItemStack;
-import lib.gui.components.RecipeItem;
+import lib.gui.components.factory.Item;
+import lib.gui.components.recipes.RecipeItem;
 import lib.util.materials.Materials;
-import lib.gui.components.abstractions.PaginatedPanel;
+import lib.gui.components.generics.PaginatedPanel;
 import lib.util.colors.ChatColor;
-import lib.util.colors.Message;
+import lib.messages.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class CurrencyListToAddExchange extends PaginatedPanel<ICurrency> {
     @Override
     protected IItemStack createItemFor(ICurrency currency) {
         String color = ChatColor.stringValueOf(currency.getColor());
-        return createItem(RecipeItem.builder().setMaterial(Materials.GOLD_INGOT)
+        return Item.of(RecipeItem.builder().setMaterial(Materials.GOLD_INGOT)
                 .setName(Message.process(Map.of("currency",color+currency.getSingular()),"CurrencySelector.button1.nameItem"))
                 .setLore("Click to add")
                 .setTexture(currency.getTexture())

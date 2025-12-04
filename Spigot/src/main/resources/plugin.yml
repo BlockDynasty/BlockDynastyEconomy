@@ -1,6 +1,6 @@
 name: BlockDynastyEconomy
 main: BlockDynasty.BukkitImplementation.BlockDynastyEconomy
-version: 1.1.1
+version: 1.1.2
 author: federkone
 description: A multi-currency economy plugin for spigot servers!
 load: STARTUP

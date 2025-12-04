@@ -44,9 +44,9 @@ public class GUIService implements IGUIService {
         IGUI gui = openGUIs.get(player.getUniqueId());
         if (gui != null) {
             if (ClickType.LEFT == clickType) {
-                gui.handleLeftClick(indexSlot, player);
+                gui.handleLeftClick(indexSlot);
             } else if (ClickType.RIGHT == clickType) {
-                gui.handleRightClick(indexSlot, player);
+                gui.handleRightClick(indexSlot);
 
             }
         }

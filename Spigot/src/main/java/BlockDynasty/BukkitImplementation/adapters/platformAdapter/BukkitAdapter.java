@@ -27,10 +27,9 @@ import BlockDynasty.BukkitImplementation.utils.Version;
 import lib.abstractions.IConsole;
 import lib.abstractions.IPlayer;
 import lib.abstractions.PlatformAdapter;
-import lib.gui.components.IInventory;
-import lib.gui.components.IItemStack;
-import lib.gui.components.ITextInput;
-import lib.gui.components.RecipeItem;
+import lib.gui.components.*;
+import lib.gui.components.recipes.RecipeInventory;
+import lib.gui.components.recipes.RecipeItem;
 import lib.util.materials.Materials;
 import lib.scheduler.ContextualTask;
 import lib.scheduler.IScheduler;
@@ -89,15 +88,13 @@ public class BukkitAdapter implements PlatformAdapter {
     }
 
     @Override
-    public boolean hasSupportAdventureText() {
-        return Version.hasSupportAdventureText();
+    public boolean isOnlineMode() {
+        return Bukkit.getServer().getOnlineMode();
     }
 
-
     @Override
-    public IItemStack createItemStack(Materials material) {
-        ItemStack itemStack = MaterialAdapter.createItemStack(material);
-        return new ItemStackAdapter(itemStack);
+    public boolean hasSupportAdventureText() {
+        return Version.hasSupportAdventureText();
     }
 
     @Override
@@ -107,8 +104,8 @@ public class BukkitAdapter implements PlatformAdapter {
     }
 
     @Override
-    public IInventory createInventory(String title, int rows) {
-        Inventory inventory = Bukkit.createInventory(null, rows * 9, title);
+    public IInventory createInventory(RecipeInventory recipeInventory) {
+        Inventory inventory = Bukkit.createInventory(null, recipeInventory.getRows() * 9, recipeInventory.getTitle());
         return new InventoryAdapter(inventory);
     }
 

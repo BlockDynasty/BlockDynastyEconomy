@@ -19,32 +19,11 @@ package BlockDynasty.adapters.GUI.adapters;
 import lib.gui.components.IItemStack;
 import org.spongepowered.api.item.inventory.ItemStack;
 
-import java.util.List;
-
-
 public class ItemStackAdapter implements IItemStack {
-    ItemStack itemStack;
+    private ItemStack itemStack;
 
     public ItemStackAdapter(ItemStack itemStack) {
         this.itemStack = itemStack;
-    }
-
-    @Override
-    public IItemStack setDisplayName(String name) {
-        MaterialAdapter.applyItemName(itemStack, name);
-        return this;
-    }
-
-    @Override
-    public IItemStack setLore(List<String> lore) {
-        MaterialAdapter.applyItemLore(itemStack, lore);
-        return this;
-    }
-
-    @Override
-    public IItemStack setTexture(String texture) {
-        MaterialAdapter.applyTexture(itemStack, texture);
-        return this;
     }
 
     @Override

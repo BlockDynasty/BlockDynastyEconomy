@@ -2,17 +2,18 @@ package EngineTest.mocks;
 
 import lib.gui.components.IInventory;
 import lib.gui.components.IItemStack;
+import lib.gui.components.recipes.RecipeInventory;
 
 public class Inventory implements IInventory {
     //matriz de items [][]
-    private String title="Inventory";
+    private RecipeInventory recipeInventory;
     private final int columns=9;
     private IItemStack[][] inventory;
 
 
-    public Inventory(String title, int rows) {
-        this.title = title;
-        inventory = new IItemStack[columns][rows];
+    public Inventory(RecipeInventory recipeInventory) {
+        this.recipeInventory = recipeInventory;
+        inventory = new IItemStack[columns][recipeInventory.getRows()];
     }
 
     @Override
@@ -21,31 +22,6 @@ public class Inventory implements IInventory {
         int row= slot / columns;
         this.inventory[column][row] = item;
         //System.out.println(this.inventory[column][row].toString());
-    }
-
-    @Override
-    public void setRows(int rows) {
-        inventory = new IItemStack[columns][rows];
-    }
-
-    @Override
-    public int getRows() {
-        return inventory[0].length;
-    }
-
-    @Override
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public String getTitle() {
-        return this.title;
-    }
-
-    @Override
-    public int getSize() {
-        return columns*getRows();
     }
 
     @Override
@@ -58,16 +34,16 @@ public class Inventory implements IInventory {
         StringBuilder sb = new StringBuilder();
         int slotWidth = 16;
         int slotHeight = 2; // Doble altura
-        int titlePadding = (columns * (slotWidth + 1) + 1 - title.length() - 12) / 2;
+        int titlePadding = (columns * (slotWidth + 1) + 1 - recipeInventory.getTitle().length() - 12) / 2;
 
         // Título centrado dinámicamente
         sb.append("+");
         sb.append("-".repeat(Math.max(0, titlePadding)));
-        sb.append(" ").append(title).append(" ");
+        sb.append(" ").append(recipeInventory.getTitle()).append(" ");
         sb.append("-".repeat(Math.max(0, titlePadding)));
         sb.append("+\n");
 
-        for (int r = 0; r < getRows(); r++) {
+        for (int r = 0; r < this.recipeInventory.getRows(); r++) {
             // Borde superior con números de slot
             sb.append("|");
             for (int c = 0; c < columns; c++) {

@@ -19,11 +19,14 @@ package lib.gui.templates.administrators.mainMenus;
 import lib.gui.GUIFactory;
 import lib.gui.components.IGUI;
 import lib.gui.components.IEntityGUI;
+import lib.gui.components.factory.Item;
+import lib.gui.components.generics.Button;
+import lib.gui.components.recipes.RecipeItem;
 import lib.util.materials.Materials;
-import lib.gui.components.abstractions.AbstractPanel;
+import lib.gui.components.generics.AbstractPanel;
 import lib.util.colors.ChatColor;
 import lib.util.colors.Colors;
-import lib.util.colors.Message;
+import lib.messages.Message;
 
 import java.util.Map;
 
@@ -38,35 +41,54 @@ public class CurrencyAdminPanel extends AbstractPanel {
 
     private void setupGUI() {
         // Create Currency button
-        setItem(10, createItem(Materials.EMERALD, Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GREEN)),"CurrencyAdminPanel.button1.nameItem"),
-                Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"CurrencyAdminPanel.button1.lore")), unused -> {
-            GUIFactory.createCurrencyPanel(player,this);
-
-        });
+        setButton(10, Button.builder()
+                .setItemStack(Item.of(RecipeItem.builder()
+                                .setMaterial(Materials.EMERALD)
+                                .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GREEN)),"CurrencyAdminPanel.button1.nameItem"))
+                                .setLore(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"CurrencyAdminPanel.button1.lore"))
+                                .build()))
+                .setLeftClickAction( unused -> {GUIFactory.createCurrencyPanel(player,this);})
+                .build());
 
         // Delete Currency button
-        setItem(12, createItem(Materials.REDSTONE, Message.process(Map.of("color", ChatColor.stringValueOf(Colors.RED)),"CurrencyAdminPanel.button2.nameItem"),
-                Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"CurrencyAdminPanel.button2.lore")), unused -> {
-            GUIFactory.currencyListToDeletePanel(player, this).open();
-        });
+        setButton(12, Button.builder()
+                .setItemStack(Item.of(RecipeItem.builder()
+                                .setMaterial(Materials.REDSTONE)
+                                .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.RED)),"CurrencyAdminPanel.button2.nameItem"))
+                                .setLore(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"CurrencyAdminPanel.button2.lore"))
+                                .build()))
+                .setLeftClickAction(unused -> {GUIFactory.currencyListToDeletePanel(player, this).open();})
+                .build());
 
         // Edit Currency button
-        setItem(14, createItem(Materials.BOOK, Message.process(Map.of("color", ChatColor.stringValueOf(Colors.YELLOW)),"CurrencyAdminPanel.button3.nameItem"),
-                Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"CurrencyAdminPanel.button3.lore")), unused -> {
-            GUIFactory.currencyListToEditPanel(player, this).open();
-        });
+        setButton(14, Button.builder()
+                .setItemStack(Item.of(RecipeItem.builder()
+                        .setMaterial(Materials.BOOK)
+                        .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.YELLOW)),"CurrencyAdminPanel.button3.nameItem"))
+                        .setLore(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"CurrencyAdminPanel.button3.lore"))
+                        .build()))
+                .setLeftClickAction( unused -> {GUIFactory.currencyListToEditPanel(player, this).open();})
+                .build());
 
         // Toggle Features button
-        setItem(16, createItem(Materials.PAPER, Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GREEN)),"CurrencyAdminPanel.button4.nameItem"),
-                Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"CurrencyAdminPanel.button4.lore")), unused -> {
-            player.sendMessage("[Bank] This feature is not implemented yet.");
-        });
+        setButton(16, Button.builder()
+                .setItemStack(Item.of(RecipeItem.builder()
+                    .setMaterial(Materials.PAPER)
+                    .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.GREEN)),"CurrencyAdminPanel.button4.nameItem"))
+                    .setLore(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"CurrencyAdminPanel.button4.lore"))
+                    .build()))
+                .setLeftClickAction( unused -> {player.sendMessage("[Bank] This feature is not implemented yet.");})
+                .build());
 
         // Exit button
-        setItem(22, createItem(Materials.BARRIER, Message.process(Map.of("color", ChatColor.stringValueOf(Colors.RED)),"CurrencyAdminPanel.button5.nameItem"),
-                Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"CurrencyAdminPanel.button5.lore")), unused -> {
-            this.openParent();
-        });
+        setButton(22, Button.builder()
+                .setItemStack(Item.of(RecipeItem.builder()
+                        .setMaterial(Materials.BARRIER)
+                        .setName(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.RED)),"CurrencyAdminPanel.button5.nameItem"))
+                        .setLore(Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"CurrencyAdminPanel.button5.lore"))
+                        .build()))
+                .setLeftClickAction( unused -> {this.openParent();})
+                .build());
     }
 
 }

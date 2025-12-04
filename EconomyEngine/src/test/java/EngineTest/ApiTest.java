@@ -4,6 +4,7 @@ import EngineTest.mocks.MinecraftServer;
 import EngineTest.mocks.Player;
 import api.EconomyResponse;
 import api.IApi;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -71,5 +72,10 @@ public class ApiTest {
         assertTrue(response.isSuccess());
         assertEquals(balanceNew1, balanceAct1.add(BigDecimal.valueOf(2000)));
         assertEquals(balanceNew2, balanceAct2.subtract(BigDecimal.valueOf(2000)));
+    }
+
+    @AfterAll
+    public static void tearDown(){
+        MinecraftServer.stop();
     }
 }

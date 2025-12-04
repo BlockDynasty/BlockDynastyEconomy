@@ -29,7 +29,6 @@ import lib.util.colors.Colors;
 public class CreateCurrencyGUI {
     private final IEntityGUI player;
     private final CreateCurrencyUseCase createCurrencyUseCase;
-    //private final SearchCurrencyUseCase searchCurrencyUseCase;
     private String singularName;
     private final IGUI parent;
     private final ITextInput textInput;
@@ -38,7 +37,6 @@ public class CreateCurrencyGUI {
         this.player = player;
         this.textInput = textInput;
         this.createCurrencyUseCase = createCurrencyUseCase;
-        //this.searchCurrencyUseCase = searchCurrencyUseCase;
         openSingularNameInput();
     }
 
@@ -61,11 +59,6 @@ public class CreateCurrencyGUI {
         try {
             createCurrencyUseCase.execute(singular, plural);
             player.sendMessage(ChatColor.stringValueOf(Colors.GREEN)+"[Bank] "+ChatColor.stringValueOf(Colors.GRAY)+"The currency " + singular + ChatColor.stringValueOf(Colors.GREEN)+" has been created successfully.");
-
-            //Result<Currency> result = searchCurrencyUseCase.getCurrency(singular);
-            //if (result.isSuccess()) {
-            //    GUIFactory.editCurrencyPanel(player, result.getValue(), parent).open();
-            //}
             GUIFactory.currencyPanel(player, parent).open();
         }
         catch (CurrencyException e) {

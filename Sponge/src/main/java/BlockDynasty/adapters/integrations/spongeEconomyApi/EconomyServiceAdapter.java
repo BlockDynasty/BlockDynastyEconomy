@@ -30,10 +30,12 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 public class EconomyServiceAdapter implements MultiCurrencyService {
-    private IApi api;
+    private static IApi api;
 
-    public EconomyServiceAdapter(IApi api) {
-        this.api = api;
+    public static void init(IApi api)
+    {
+        EconomyServiceAdapter.api = api;
+
     }
 
     @Override

@@ -16,6 +16,7 @@
 
 package BlockDynasty;
 
+import BlockDynasty.adapters.commands.CommandAdapter;
 import BlockDynasty.adapters.commands.CommandRegister;
 import BlockDynasty.adapters.platformAdapter.SpongeAdapter;
 import BlockDynasty.adapters.listeners.PlayerJoinListener;
@@ -26,90 +27,84 @@ import BlockDynasty.utils.Console;
 import Main.Economy;
 import api.IApi;
 import com.google.inject.Inject;
-import platform.files.Configuration;
-import lib.commands.CommandService;
 
+import lib.commands.CommandService;
 import org.apache.logging.log4j.Logger;
 
 import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.Command;
+import org.spongepowered.api.command.manager.CommandManager;
+import org.spongepowered.api.command.registrar.CommandRegistrar;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.*;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
+import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
 import platform.proxy.ProxyData;
-import org.bstats.sponge.Metrics;
 
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Path;
 
-
 @Plugin("blockdynastyeconomy")
-
 public class SpongePlugin {
     private static PluginContainer container;
     private static Logger logger;
     private static Economy economy;
-    private static Configuration configuration;
     private static Path configPath;
     private static RawDataChannel channel;
-    private final Metrics metrics;
-
+    //private final Metrics metrics;
 
     @Inject
-    public SpongePlugin(Metrics.Factory factory ,final PluginContainer container, final Logger logger,@ConfigDir(sharedRoot = false) final Path configDir) {
+    public SpongePlugin(final PluginContainer container, final Logger logger,@ConfigDir(sharedRoot = false) final Path configDir) {
         SpongePlugin.container = container;
         SpongePlugin.logger = logger;
         SpongePlugin.configPath = configDir;
 
-        metrics = factory.make(27472);
+        //metrics = factory.make(27472);
     }
 
     @Listener
-    public void onRegisterChannel(final RegisterChannelEvent event) {
-        channel = event.register(ResourceKey.resolve(ProxyData.getChannelName()),RawDataChannel.class);
-        ProxyReceiverImp.register().addHandler(channel);
+    public void onStartedServer(final ConstructPluginEvent event) { //primero
+
     }
 
     @Listener
-    public void onConstructPlugin(final ConstructPluginEvent event) {
+    public void onEngineStarting(StartingEngineEvent<Server> event) {
+        Console.log("Registering StartingEngineEvent...");
         try {
             economy = Economy.init(new SpongeAdapter());
-            configuration = economy.getConfiguration();
             Console.log("Plugin constructed...");
         }catch (Exception e){
             Console.logError("Error during plugin construction: " + e.getMessage());
             throw new RuntimeException();
         }
+        Sponge.eventManager().registerListeners(container, new PlayerJoinListener(economy.getPlayerJoinListener()), MethodHandles.lookup());
+        CommandManager manager = Sponge.server().commandManager();
+        CommandRegistrar<Command.Parameterized> a = manager.registrar(Command.Parameterized.class).get();
+        CommandRegister.registerCommands( a,container, CommandService.getMainCommands());
+        EconomyServiceAdapter.init(economy.getApi());
+        //TestEconomyCommand.registerTestCommand(a, container);
     }
 
     @Listener
-    public void registerEconomyService(final ProvideServiceEvent.EngineScoped<MultiCurrencyService> event) {
-        event.suggest(() -> new EconomyServiceAdapter( economy.getApi() ));
+    public void onRegisterChannel(final RegisterChannelEvent event) { //segundo
+        Console.log("Registering RegisterChannelEvent...");
+        channel = event.register(ResourceKey.resolve(ProxyData.getChannelName()),RawDataChannel.class);
+        ProxyReceiverImp.register().addHandler(channel);
     }
 
     @Listener
-    public void onServerStarting(final StartingEngineEvent<Server> event) {
-        registerEvents();
+    public void registerEconomyService(ProvideServiceEvent.EngineScoped<EconomyService> event) {
+        event.suggest(EconomyServiceAdapter::new);
     }
 
     @Listener
     public void onServerStopping(final StoppingEngineEvent<Server> event) {
         Economy.shutdown();
-    }
-
-    @Listener
-    public void onRegisterCommands(final RegisterCommandEvent<Command.Parameterized> event) {
-        //TestEconomyCommand.registerTestCommand( event, container);
-        CommandRegister.registerCommands(event, container, CommandService.getMainCommands());
-    }
-
-    private void registerEvents(){
-        Sponge.eventManager().registerListeners(container, new PlayerJoinListener(economy.getPlayerJoinListener()), MethodHandles.lookup());
     }
 
     public static Logger getLogger() {

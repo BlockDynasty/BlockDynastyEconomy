@@ -30,6 +30,7 @@ import lib.gui.components.recipes.RecipeInventory;
 import lib.gui.components.recipes.RecipeItem;
 import lib.util.materials.Materials;
 import lib.scheduler.IScheduler;
+import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.item.inventory.ContainerType;
@@ -48,8 +49,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class SpongeAdapter implements PlatformAdapter {
-    PluginContainer pluginContainer = SpongePlugin.getPlugin();
-    RawDataChannel channel = SpongePlugin.getChannel();
+    private PluginContainer pluginContainer = SpongePlugin.getPlugin();
+    private RawDataChannel channel = SpongePlugin.getChannel();
 
     @Override
     public IPlayer getPlayer(String name) {

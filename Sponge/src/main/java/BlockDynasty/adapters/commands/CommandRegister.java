@@ -20,6 +20,7 @@ import lib.commands.abstractions.Command;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandCompletion;
 import org.spongepowered.api.command.parameter.Parameter;
+import org.spongepowered.api.command.registrar.CommandRegistrar;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
 import org.spongepowered.plugin.PluginContainer;
@@ -27,9 +28,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CommandRegister {
-    private static void registrarComando(RegisterCommandEvent<org.spongepowered.api.command.Command.Parameterized> event, PluginContainer container, Command command){
+    private static void registrarComando(CommandRegistrar<org.spongepowered.api.command.Command.Parameterized> a, PluginContainer container, Command command){
         org.spongepowered.api.command.Command.Builder mainCommandBuilder = registrarComandoRecursivo(command);
-        event.register(container, mainCommandBuilder.build(), command.getName());
+        org.spongepowered.api.command.Command.Parameterized commandBuilt = mainCommandBuilder.build();
+        a.register(container, commandBuilt, command.getName());
     }
 
     private static org.spongepowered.api.command.Command.Builder registrarComandoRecursivo(Command command){
@@ -69,11 +71,11 @@ public class CommandRegister {
         }
         return commandBuilder;
     }
-    public static void registerCommands(RegisterCommandEvent<org.spongepowered.api.command.Command.Parameterized> event,
+    public static void registerCommands( CommandRegistrar<org.spongepowered.api.command.Command.Parameterized> a,
                                         PluginContainer container,
                                         List<Command> commands) {
         for (Command command : commands) {
-            registrarComando(event, container, command);
+            registrarComando(a, container, command);
         }
     }
 }

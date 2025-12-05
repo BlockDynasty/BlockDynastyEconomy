@@ -31,7 +31,7 @@ public class RedisData {
         this.host = configuration.getString("redis.host");
         this.port = configuration.getInt("redis.port");
         this.password = configuration.getString("redis.password");
-        this.username = configuration.getString("redis.username");
+        this.username = configuration.getString("redis.user");
     }
     public String getChannelName() {
         return "proxy:blockdynastyeconomy";

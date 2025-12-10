@@ -124,6 +124,8 @@ public interface IApi {
     boolean existAccount(String name);
 
     String getDefaultCurrencyNamePlural();
+    String getNameCurrencyPlural(String nameCurrency);
+    String getNameCurrencySingular(String nameCurrency);
     String getDefaultCurrencyNameSingular();
 
     String format(BigDecimal amount);

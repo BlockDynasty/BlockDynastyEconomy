@@ -1,0 +1,33 @@
+{
+  "loader": {
+    "name": "java_plain",
+    "version": "1.1.3"
+  },
+  "license": "Apache License, Version 2.0",
+  "plugins": [
+    {
+      "id": "blockdynastyeconomy",
+      "name": "Dynastyeconomy",
+      "version": "${version}",
+      "entrypoint": "spongeV13.SpongePlugin",
+      "description": "Dynasty economy plugin",
+      "branding": {},
+      "links": {
+      },
+      "contributors": [
+        {
+          "name": "Federkone",
+          "description": "Developer"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "spongeapi",
+          "version": "${spongeapi.version}",
+          "load-order": "after",
+          "optional": false
+        }
+      ]
+    }
+  ]
+}

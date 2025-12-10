@@ -298,6 +298,24 @@ public class Api implements IApi {
     }
 
     @Override
+    public String getNameCurrencyPlural(String nameCurrency) {
+        Result<ICurrency> currencyResult =  this.searchCurrencyUseCase.getCurrency(nameCurrency);
+        if (currencyResult.isSuccess()) {
+            return currencyResult.getValue().getPlural();
+        }
+        return "Unknown";
+    }
+
+    @Override
+    public String getNameCurrencySingular(String nameCurrency) {
+        Result<ICurrency> currencyResult =  this.searchCurrencyUseCase.getCurrency(nameCurrency);
+        if (currencyResult.isSuccess()) {
+            return currencyResult.getValue().getSingular();
+        }
+        return "Unknown";
+    }
+
+    @Override
     public String getDefaultCurrencyNameSingular() {
         Result<ICurrency> currencyResult =  this.searchCurrencyUseCase.getDefaultCurrency();
         if (currencyResult.isSuccess()) {

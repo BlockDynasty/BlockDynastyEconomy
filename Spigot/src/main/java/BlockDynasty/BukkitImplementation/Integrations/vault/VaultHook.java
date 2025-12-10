@@ -161,10 +161,14 @@ public class VaultHook extends AbstractEconomy {
         return getBalance(playerName);
     }
 
+
+
     @Override
     public double getBalance(OfflinePlayer player, String world) {
         return getBalance(player);
     }
+
+
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer player, String worldName, double amount) {

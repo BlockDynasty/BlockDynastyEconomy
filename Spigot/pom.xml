@@ -96,13 +96,15 @@
 
     <repositories>
         <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+
         <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public/</url>
@@ -118,6 +120,7 @@
             <id>papermc-repo</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
+
     </repositories>
 
     <dependencies>
@@ -127,11 +130,10 @@
             <version>1.20.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
-            <groupId>com.github.MilkBowl</groupId>
+            <groupId>com.github.federkone</groupId>
             <artifactId>VaultAPI</artifactId>
-            <version>1.7</version>
+            <version>master-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 

@@ -82,6 +82,10 @@
                                     <shadedPattern>com.BlockDynasty.mysql</shadedPattern>
                                 </relocation>
                                 <relocation>
+                                    <pattern>org.mariadb</pattern>
+                                    <shadedPattern>com.BlockDynasty.mariadb</shadedPattern>
+                                </relocation>
+                                <relocation>
                                     <pattern>org.yaml</pattern>
                                     <shadedPattern>com.BlockDynasty.yaml</shadedPattern>
                                 </relocation>
@@ -148,6 +152,13 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
             <scope>compile</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>3.5.6</version>
         </dependency>
 
         <dependency>

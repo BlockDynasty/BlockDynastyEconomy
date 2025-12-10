@@ -35,7 +35,7 @@ transaction_log_vault: false
 transaction_log: true
 
 sql:
-  # You have three valid storage methods, mysql/sqlite/h2. You would have to enter the database credentials below.
+  # You have three valid storage methods, mariadb/mysql/sqlite/h2. You would have to enter the database credentials below.
   type: h2
   # you would have to enter the database credentials down below.
   database: minecraft

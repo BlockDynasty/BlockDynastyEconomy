@@ -94,6 +94,8 @@ public class Economy {
         switch (configuration.getString("sql.type")){
             case "mysql":
                 return new ConnectionHibernateMysql(configuration.getString("sql.host"), configuration.getInt("sql.port"), configuration.getString("sql.database"), configuration.getString("sql.username"), configuration.getString("sql.password"));
+            case "mariadb":
+                return new ConnectionHibernateMariaDb(configuration.getString("sql.host"), configuration.getInt("sql.port"), configuration.getString("sql.database"), configuration.getString("sql.username"), configuration.getString("sql.password"));
             case "h2":
                 return new ConnectionHibernateH2(configuration.getDatabasePath(),configuration.getBoolean("sql.EnableWebEditorSqlServer"));
             case "sqlite":

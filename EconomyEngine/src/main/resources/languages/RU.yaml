@@ -108,7 +108,7 @@ ReceivedOffers:
   title: "Полученные предложения"
   button1:
     nameItem: "{playerName}"
-    lore: "' ',Количество: {amount} ,Цена: {price},' ',{color1}Левый клик - Принять,{color2}Правый клик - Отменить"
+    lore: ",Количество: {amount} ,Цена: {price},,{color1}Левый клик - Принять,{color2}Правый клик - Отменить"
   button2:
     nameItem: "Список полученных предложений"
     lore: "Нажмите для обновления"
@@ -117,7 +117,7 @@ MyActiveOffers:
   title: "Мои активные предложения"
   button1:
     nameItem: "{playerName}"
-    lore: "' ',Количество: {amount} ,Цена: {price},' ',{color2}Правый клик - Отменить"
+    lore: ",Количество: {amount} ,Цена: {price},,{color2}Правый клик - Отменить"
   button2:
     nameItem: "Список предложений"
     lore: "Нажмите для обновления"

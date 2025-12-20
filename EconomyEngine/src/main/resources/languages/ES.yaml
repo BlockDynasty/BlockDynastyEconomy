@@ -107,7 +107,7 @@ ReceivedOffers:
   title: "Ofertas Recibidas"
   button1:
     nameItem: "{playerName}"
-    lore: "' ',Monto: {amount} ,Precio: {price},' ',{color1}Click izquierdo para aceptar,{color2}Click derecho para cancelar"
+    lore: ",Monto: {amount} ,Precio: {price},,{color1}Click izquierdo para aceptar,{color2}Click derecho para cancelar"
   button2:
     nameItem: "Lista de Ofertas Recibidas"
     lore: "Click para refrescar"
@@ -116,7 +116,7 @@ MyActiveOffers:
   title: "Mis Ofertas Activas"
   button1:
     nameItem: "{playerName}"
-    lore: "' ',Monto: {amount} ,Precio: {price},' ',{color2}Click derecho para cancelar"
+    lore: ",Monto: {amount} ,Precio: {price},,{color2}Click derecho para cancelar"
   button2:
     nameItem: "Lista de Ofertas"
     lore: "Click para refrescar"

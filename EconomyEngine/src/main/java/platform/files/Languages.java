@@ -16,7 +16,7 @@
 
 package platform.files;
 
-import org.yaml.snakeyaml.Yaml;
+import platform.files.yaml.YamlConfig;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -25,13 +25,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Languages{
+public class Languages extends YamlConfig {
     private final Configuration config;
     private final String languagePath = "/languages";
-    private String[] languagesFiles = {"EN.yaml", "ES.yaml","RU.yaml","ZH.yaml"};
+    private String[] languagesFiles = {"EN.yaml", "ES.yaml","RU.yaml","ZH.yaml","DE.yaml","FR.yaml","IT.yaml"};
     //string nombre EN, ES, etc y File objeto File
-    private Map<String,File> languageFileMap = new java.util.HashMap<>();
-    private static Map<String, Object> mensajes=new HashMap<>();
+    private Map<String,File> languageFileMap = new HashMap<>();
+    private static Map<Object, Object> mensajes=new HashMap<>();
     private File langDirectory;
     private File rootDirectory;
 
@@ -111,37 +111,12 @@ public class Languages{
                 throw new RuntimeException("No language files available");
             }
         }
-            //buscar mensaje en el archivo encontrado basado en la key
-            try {
-                Yaml yaml = new Yaml();
-                mensajes = yaml.load(Files.newInputStream(langFile.toPath()));
-            }catch (Exception e) {
-                throw new RuntimeException("Failed to load language file: " + langFile.getName(), e);
-            }
+        mensajes = loadFile(langFile, "languages/"+langFile.getName());
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T get(String path, Class<T> type) {
-        String[] parts = path.split("\\.");
-        Map<String, Object> current = mensajes;
-
-        for (int i = 0; i < parts.length - 1; i++) {
-            if (!current.containsKey(parts[i])) return null;
-            current = (Map<String, Object>) current.get(parts[i]);
-        }
-
-        String lastPart = parts[parts.length - 1];
-        if (!current.containsKey(lastPart)) return null;
-
-        Object value = current.get(lastPart);
-        if (type.isInstance(value)) {
-            return type.cast(value);
-        }
-        return null;
-    }
 
     public String getMessage(String key) {
-        return get(key, String.class);
+        return get(key, mensajes, String.class);
     }
 
 }

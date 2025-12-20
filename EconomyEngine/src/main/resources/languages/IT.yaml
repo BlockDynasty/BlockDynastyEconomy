@@ -1,0 +1,227 @@
+prefix: "{color}[Bank] "
+
+#Messaggi degli eventi:
+pay1: "{prefix}{color}Hai pagato {currency}{color} a {playerName}."
+pay2: "{prefix}{color}Hai ricevuto {currency}{color} da {playerName}."
+
+transfer1: "{prefix}{color}Hai trasferito {currency}{color} a {playerName}."
+transfer2: "{prefix}{color}Hai ricevuto {currency}{color} da {playerName}."
+
+exchange: "{prefix}{color}Hai scambiato {fromCurrency}{color} con {toCurrency}{color}."
+
+trade1: "{prefix}{color}Scambi {fromCurrency}{color} con {playerName}{color} in cambio di {toCurrency}{color}."
+trade2: "{prefix}{color}Hai ricevuto {fromCurrency}{color} da {playerName}{color} in cambio di {toCurrency}{color}."
+
+deposit: "{prefix}{color}Ha ricevuto un deposito di {currency}{color}."
+
+withdraw: "{prefix}{color}Ha prelevato {currency}{color}."
+
+set: "{prefix}{color}Il tuo saldo è stato impostato a {currency}{color}."
+
+offerCreated1: "{prefix}{color}Hai inviato un'offerta a {playerName} offrendo {fromCurrency}{color} in cambio di {toCurrency}{color}."
+offerCreated2: "{prefix}{color}Hai ricevuto un'offerta da {playerName} che offre {fromCurrency}{color} in cambio di {toCurrency}{color}."
+
+offerCanceled1: "{prefix}{color}L'offerta da {playerName} è stata annullata."
+offerCanceled2: "{prefix}{color}L'offerta a {playerName} è stata annullata."
+
+offerExpired1: "{prefix}{color}L'offerta da {playerName} è scaduta."
+offerExpired2: "{prefix}{color}L'offerta a {playerName} è scaduta."
+
+#Messaggi della GUI
+#Pannelli utente
+listPlayersOnline:
+  title: "Seleziona giocatore"
+  button1:
+    nameItem: "{color}Seleziona Giocatore da Pagare"
+    lore: "{color}Clicca per selezionare il giocatore che vuoi pagare,{color}#Ordinato per nome"
+
+AccountList:
+  button1:
+    nameItem: "{color}Cerca Giocatore"
+    lore: "{color}Clicca per cercare un giocatore per nome,{color}Distingue maiuscole/minuscole"
+  button2:
+    nameItem: "Cerca Giocatore"
+    lore: "Nome.."
+    response: "Giocatore non trovato!"
+
+listPlayersFromDb:
+  title: "Seleziona giocatore"
+  button1:
+    nameItem: "{color}Seleziona Giocatore da Trasferire"
+    lore: "{color}Clicca per selezionare il giocatore a cui vuoi trasferire,{color}#Ordinato per nome"
+
+CurrencyListToPay:
+  response: "Transazione Riuscita!"
+  button1:
+    nameItem: "{color}Seleziona Valuta da Pagare"
+    lore: "{color}Clicca per selezionare la valuta che vuoi pagare,{color}E prima di ciò l'importo"
+
+BankPanel:
+  title: "Bank"
+  button1:
+    nameItem1: "{color}Account è Bloccato"
+    nameItem2: "{color}Account è Abilitato"
+    lore: "{color}Questo influisce su:,Prelievo,Deposito,Trasferimento,Pagamento,Scambio,Cambio,Tutte le operazioni economiche"
+  button2:
+    nameItem: "{color}Scambia valute"
+    lore: "{color}Clicca per scambiare valute"
+  button3:
+    nameItem: "{color}Crea Offerta a Giocatore online"
+    lore: "{color}Clicca per creare un'offerta per scambiare valute,{color}con altri giocatori Online"
+  button4:
+    nameItem: "{color}Crea Offerta a Giocatore di Rete"
+    lore: "{color}Clicca per creare un'offerta per scambiare valute,{color}con altri giocatori della rete"
+  button5:
+    nameItem: "{color}Le Mie Offerte Attive"
+    lore: "{color}Queste sono le offerte che hai creato,{color}e sono attualmente attive."
+  button6:
+    nameItem: "{color}Vedi Saldo"
+    lore: "{color}Clicca per vedere il tuo saldo"
+  button7:
+    nameItem: "{color}Offerte Ricevute"
+    lore: "{color}Qui puoi visualizzare tutte le offerte inviate,{color}a te da altri giocatori."
+  button8:
+    nameItem: "{color}Paga un Giocatore Online"
+    lore: "{color}Clicca per pagare un altro,{color}Giocatore Online in questo server"
+  button9:
+    nameItem: "{color}Trasferisci a un Giocatore della Rete"
+    lore: "{color}Clicca per trasferire fondi a un altro,{color}Giocatore della rete"
+  button10:
+    nameItem: "{color}Esci"
+    lore: "{color}Clicca per uscire"
+
+AccountBalance:
+  title: "Saldo del Conto"
+  button1:
+    nameItem: "{currency}"
+    lore: "{color}Saldo: {currency}"
+  button2:
+    nameItem: "{color}Nessuna Valuta"
+    lore: "{color}Non ci sono monete nel conto"
+  button3:
+    nameItem: "{color}Saldo del Conto"
+    lore: "{color}Saldi disponibili"
+
+ReceivedOffers:
+  title: "Offerte Ricevute"
+  button1:
+    nameItem: "{playerName}"
+    lore: ",Importo: {amount} ,Prezzo: {price},,{color1}Click Sinistro per Accettare,{color2}Click Destro per Annullare"
+  button2:
+    nameItem: "Lista Offerte Ricevute"
+    lore: "Clicca per Aggiornare"
+
+MyActiveOffers:
+  title: "Le Mie Offerte Attive"
+  button1:
+    nameItem: "{playerName}"
+    lore: ",Importo: {amount} ,Prezzo: {price},,{color2}Click Destro per Annullare"
+  button2:
+    nameItem: "Lista Offerte"
+    lore: "Clicca per aggiornare"
+
+OfferListPlayer:
+  button1:
+    nameItem: "{color}Seleziona Giocatore a cui Offrire"
+    lore: "{color}Clicca per selezionare il giocatore a cui vuoi offrire,{color}E prima di ciò le Valute"
+  button2:
+    nameItem: "{color}Seleziona Valuta da Offrire"
+    lore: "{color}Clicca per selezionare la valuta che vuoi offrire,{color}E prima di ciò l'importo"
+  button3:
+    nameItem: "{color}Seleziona Valuta da Ricevere"
+    lore: "{color}Clicca per selezionare la valuta che vuoi ricevere,{color}E prima di ciò l'importo"
+
+CurrencySelector:
+  title: "Lista Valute"
+  button1:
+    nameItem: "{currency}"
+    lore: "Singolare: {singular},Plurale: {plural},Trasferibile: {transferable},Tasso di Cambio: {exchangeRate}"
+  button2:
+    nameItem: "Importo per {currency}"
+    lore: "0"
+
+Exchange:
+  button1:
+    nameItem: "{color}Seleziona Valuta che vuoi ricevere"
+    lore: "{color}Clicca per selezionare la valuta che vuoi ricevere,{color}E prima di ciò l'importo"
+  button2:
+    nameItem: "{color}Seleziona Valuta che vuoi dare"
+    lore: "{color}Clicca per selezionare la valuta che vuoi dare"
+
+Paginated:
+  button1:
+    nameItem: "{color}Nessun Elemento"
+    lore: "{color}Non ci sono elementi da visualizzare"
+  button2:
+    nameItem: "{color}Pagina Precedente"
+    lore: "{color}Clicca per vedere gli elementi precedenti"
+  button3:
+    nameItem: "{color}Pagina Successiva"
+    lore: "{color}Clicca per vedere più elementi"
+  button4:
+    nameItem: "{color}Indietro"
+    lore: "{color}Clicca per tornare indietro"
+
+#pannello amministratore
+EconomyAdminPanel:
+  title: "Pannello Amministratore Economia"
+  button1:
+    nameItem: "{color}Modifica Valute"
+    lore: "{color}Clicca per modificare le valute"
+  button2:
+    nameItem: "{color}Gestisci Account"
+    lore: "{color}Clicca per gestire gli account dei giocatori"
+  button3:
+    nameItem: "{color}Esci"
+    lore: "{color}Clicca per uscire"
+
+CurrencyAdminPanel:
+  title: "Gestore Valute"
+  button1:
+    nameItem: "{color}Crea Valuta"
+    lore: "{color}Clicca per creare una nuova valuta"
+  button2:
+    nameItem: "{color}Elimina Valuta"
+    lore: "{color}Clicca per eliminare una valuta"
+  button3:
+    nameItem: "{color}Modifica Valuta"
+    lore: "{color}Clicca per modificare una Valuta"
+  button4:
+    nameItem: "{color}Configura Funzioni"
+    lore: "{color}Clicca"
+  button5:
+    nameItem: "{color}Indietro"
+    lore: "{color}Clicca per tornare indietro"
+
+AccountSelectorToEdit:
+  title: "Seleziona giocatore"
+  button1:
+    nameItem: "Seleziona Account da Modificare"
+    lore: "Clicca per selezionare un account, o cerca per nome Ordinato per nome Distingue maiuscole/minuscole"
+
+EditCurrencyPanel:
+  title: "Modifica Valuta: {currency}"
+  button1:
+    nameItem: "{currency}"
+    lore: "Simbolo: {symbol},Colore: {color},Saldo iniziale: {balance},Tasso di cambio: {rate},Trasferibile: {transferable},Valuta predefinita: {default},Supporta decimali: {decimals}"
+  button2:
+    nameItem: "{color}Modifica Saldo Iniziale"
+    lore: "{color}Clicca per modificare il saldo iniziale"
+  button3:
+    nameItem: "{color}Imposta Tasso di Cambio"
+    lore: "{color}Clicca per modificare il tasso di cambio"
+  button4:
+    nameItem: "{color}Modifica Colore"
+    lore: "{color}Clicca per cambiare il colore della valuta"
+  button5:
+    nameItem: "{color}Modifica Simbolo"
+    lore: "{color}Clicca per cambiare il simbolo della valuta"
+  button6:
+    nameItem: "{color}Imposta come Predefinita"
+    lore: "{color}Clicca per rendere questa valuta predefinita"
+  button7:
+    nameItem: "{color}Modifica Nome Singolare"
+    lore: "{color}Clicca per cambiare il nome singolare"
+  button8:
+    nameItem: "{color}Modifica Nome Plurale"
+    lore: "{color}Clicca per cambiare il nome plurale"

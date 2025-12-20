@@ -107,7 +107,7 @@ ReceivedOffers:
   title: "收到的报价"
   button1:
     nameItem: "{playerName}"
-    lore: "' ',数量: {amount} ,价格: {price},' ',{color1}左键接受,{color2}右键取消"
+    lore: ",数量: {amount} ,价格: {price},,{color1}左键接受,{color2}右键取消"
   button2:
     nameItem: "收到的报价列表"
     lore: "点击刷新"
@@ -116,7 +116,7 @@ MyActiveOffers:
   title: "我的活跃报价"
   button1:
     nameItem: "{playerName}"
-    lore: "' ',数量: {amount} ,价格: {price},' ',{color2}右键取消"
+    lore: ",数量: {amount} ,价格: {price},,{color2}右键取消"
   button2:
     nameItem: "报价列表"
     lore: "点击刷新"

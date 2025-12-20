@@ -107,7 +107,7 @@ ReceivedOffers:
   title: "Received Offers"
   button1:
     nameItem: "{playerName}"
-    lore: "' ',Amount: {amount} ,Price: {price},' ',{color1}Left Click to Accept,{color2}Right Click to Cancel"
+    lore: ",Amount: {amount} ,Price: {price},,{color1}Left Click to Accept,{color2}Right Click to Cancel"
   button2:
     nameItem: "Received Offers List"
     lore: "Click to Refresh"
@@ -116,7 +116,7 @@ MyActiveOffers:
   title: "My Active Offers"
   button1:
     nameItem: "{playerName}"
-    lore: "' ',Amount: {amount} ,Price: {price},' ',{color2}Right Click to Cancel"
+    lore: ",Amount: {amount} ,Price: {price},,{color2}Right Click to Cancel"
   button2:
     nameItem: "Offer List"
     lore: "Click to refresh"

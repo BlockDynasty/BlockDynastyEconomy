@@ -29,7 +29,10 @@ import lib.commands.abstractions.IEntityCommands;
 import lib.util.colors.ChatColor;
 import lib.messages.MessageService;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class PlaceHolder {
@@ -169,9 +172,6 @@ public class PlaceHolder {
         return result.toString();
     }
 
-    // Manejar el placeholder "balance"
-    //ejemplo de usos : %blockdynastyeconomy_balance_dinero%
-    // %blockdynastyeconomy_balance_dinero_formatted%
     private String handleBalancePlaceholder(String placeholder, Account account, ICurrency defaultCurrency) {
         if (placeholder.equals("balance_default")) {
             return String.valueOf(Math.round(account.getMoney(defaultCurrency).getAmount().doubleValue()));
@@ -181,7 +181,6 @@ public class PlaceHolder {
             return defaultCurrency.format(account.getMoney(defaultCurrency).getAmount());
         }
 
-        // Manejar balances de otras monedas (ejemplo: %blockdynastyeconomy_balance_dinero%)
         String[] parts = placeholder.split("_");
         if (parts.length < 2) {
             return "Invalid placeholder format";
@@ -194,11 +193,121 @@ public class PlaceHolder {
             return "Currency not found";
         }
         ICurrency currency = result.getValue();
+        BigDecimal amountBD = account.getMoney(currency).getAmount();
+        double amount = amountBD.doubleValue();
 
-        if (placeholder.equals("balance_" + currencyName + "_formatted")) {  //todo, permit use _symbol for formated with symbol
-            return ChatColor.formatColorToPlaceholder(currency.getColor()) + currency.format(account.getMoney(currency).getAmount());//%BlockDynastyEconomy_balance_Dinero_formatted%
+        Locale locale = Locale.US; // default
+        boolean hasLocale = false;
+
+        if (parts.length >= 3) {
+            String possibleLocale = parts[parts.length - 1];
+            if (isValidLocale(possibleLocale)) {
+                locale = translateLocale(possibleLocale);
+                hasLocale = true;
+            }
+        }
+
+        if (placeholder.startsWith("balance_" + currencyName + "_formatted")) {
+            if (hasLocale) {
+                NumberFormat formatter = NumberFormat.getNumberInstance(locale);
+                if (!currency.isDecimalSupported()) {
+                    formatter.setMaximumFractionDigits(0);
+                    formatter.setMinimumFractionDigits(0);
+                } else {
+                    formatter.setMaximumFractionDigits(2);
+                    formatter.setMinimumFractionDigits(2);
+                }
+                return ChatColor.formatColorToPlaceholder(currency.getColor()) + formatter.format(amount);
+            }
+            return ChatColor.formatColorToPlaceholder(currency.getColor()) + currency.format(amountBD);
         } else {
-            return String.valueOf(account.getMoney(currency).getAmount().doubleValue());   //%BlockDynastyEconomy_balance_Dinero%
+            if (!currency.isDecimalSupported()) {
+                int roundedAmount = (int) Math.floor(amount);
+                if (hasLocale) {
+                    NumberFormat formatter = NumberFormat.getNumberInstance(locale);
+                    formatter.setMaximumFractionDigits(0);
+                    formatter.setMinimumFractionDigits(0);
+                    return formatter.format(roundedAmount);
+                }
+                return String.valueOf(roundedAmount);
+            } else {
+                if (hasLocale) {
+                    NumberFormat formatter = NumberFormat.getNumberInstance(locale);
+                    formatter.setMaximumFractionDigits(2);
+                    formatter.setMinimumFractionDigits(2);
+                    return formatter.format(amount);
+                }
+                return String.valueOf(amount);
+            }
+        }
+    }
+
+    private boolean isValidLocale(String localeString) {
+        String lower = localeString.toLowerCase();
+        return lower.equals("english") || lower.equals("en") ||
+                lower.equals("french") || lower.equals("fr") ||
+                lower.equals("german") || lower.equals("de") ||
+                lower.equals("italian") || lower.equals("it") ||
+                lower.equals("japanese") || lower.equals("ja") ||
+                lower.equals("korean") || lower.equals("ko") ||
+                lower.equals("chinese") || lower.equals("zh") ||
+                lower.equals("simplified_chinese") || lower.equals("zh_cn") ||
+                lower.equals("traditional_chinese") || lower.equals("zh_tw") ||
+                lower.equals("france") || lower.equals("germany") ||
+                lower.equals("italy") || lower.equals("japan") ||
+                lower.equals("korea") || lower.equals("uk") ||
+                lower.equals("us") || lower.equals("canada") ||
+                lower.equals("canada_french");
+    }
+
+    private static Locale translateLocale(String localeString){
+        switch (localeString.toLowerCase()){
+            case "english":
+            case "en":
+                return Locale.ENGLISH;
+            case "french":
+            case "fr":
+                return Locale.FRENCH;
+            case "german":
+            case "de":
+                return Locale.GERMAN;
+            case "italian":
+            case "it":
+                return Locale.ITALIAN;
+            case "japanese":
+            case "ja":
+                return Locale.JAPANESE;
+            case "korean":
+            case "ko":
+                return Locale.KOREAN;
+            case "chinese":
+            case "zh":
+                return Locale.CHINESE;
+            case "simplified_chinese":
+            case "zh_cn":
+                return Locale.SIMPLIFIED_CHINESE;
+            case "traditional_chinese":
+            case "zh_tw":
+                return Locale.TRADITIONAL_CHINESE;
+            case "france":
+                return Locale.FRANCE;
+            case "germany":
+                return Locale.GERMANY;
+            case "italy":
+                return Locale.ITALY;
+            case "japan":
+                return Locale.JAPAN;
+            case "korea":
+                return Locale.KOREA;
+            case "uk":
+                return Locale.UK;
+            case "canada":
+                return Locale.CANADA;
+            case "canada_french":
+                return Locale.CANADA_FRENCH;
+            case "us":
+            default:
+                return Locale.US;
         }
     }
 }

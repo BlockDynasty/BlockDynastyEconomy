@@ -1,10 +1,10 @@
 # Main Configuration file.
 # BlockDynastyEconomy Plugin
-# Version: 1.0.3
+# Version: 1.1.5
 
 # Developer(s): @Federkone.
 
-#EN(English), ES(Spanish),RU(Russia),ZH(Chinese) You can also create your own language file in the language folder.
+#EN(English), ES(Spanish),RU(Russia),ZH(Chinese),DE(Deutschland),IT(Italian),FR(French) You can also create your own language file in the language folder.
 lang: EN
 
 #The plugin is designed to work in both offline and online modes.
@@ -42,7 +42,7 @@ sql:
   host: localhost
   port: 3306
   username: root
-  password: password
+  password: ''
   # EnableWebEditorSqlServer is to enable the web sql server for h2/sqlite database in http://localhost:8082,
   # if you want to use the web console of h2/sqlite database, you have to set this to true.
   # With this you can manage the h2/sqlite database from a web browser.

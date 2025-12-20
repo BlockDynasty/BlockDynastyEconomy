@@ -46,7 +46,7 @@ public class PlayerAdapter implements IPlayer {
 
     @Override
     public boolean hasPermission(String permission) {
-        return true;
+        return PermsService.getPermissionsService().hasPermission(player, permission);
     }
 
     @Override

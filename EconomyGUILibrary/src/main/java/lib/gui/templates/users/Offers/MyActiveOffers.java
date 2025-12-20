@@ -72,7 +72,6 @@ public class MyActiveOffers extends PaginatedPanel<Offer> {
         ICurrency tipoCantidad = offer.getTipoCantidad();
         ICurrency tipoMonto = offer.getTipoMonto();
 
-
         return Item.of(
                 RecipeItem.builder()
                         .setMaterial(Materials.PLAYER_HEAD)
@@ -80,7 +79,7 @@ public class MyActiveOffers extends PaginatedPanel<Offer> {
                         .setLore(Message.processLines(Map.of(
                                 "amount", ChatColor.stringValueOf(tipoCantidad.getColor()) + tipoCantidad.format(offer.getCantidad()),
                                 "price", ChatColor.stringValueOf(tipoMonto.getColor()) + tipoMonto.format(offer.getMonto()),
-                                "color1", ChatColor.stringValueOf(Colors.GREEN)), "MyActiveOffers.button1.lore"))
+                                "color2", ChatColor.stringValueOf(Colors.RED)), "MyActiveOffers.button1.lore"))
                         .build()
             );
     }

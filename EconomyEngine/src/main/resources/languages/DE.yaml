@@ -1,0 +1,228 @@
+prefix: "{color}[Bank] "
+
+#Ereignisnachrichten:
+pay1: "{prefix}{color}Du hast {currency}{color} an {playerName} gezahlt."
+pay2: "{prefix}{color}Du hast {currency}{color} von {playerName} erhalten."
+
+transfer1: "{prefix}{color}Du hast {currency}{color} an {playerName} überwiesen."
+transfer2: "{prefix}{color}Du hast {currency}{color} von {playerName} erhalten."
+
+exchange: "{prefix}{color}Du hast {fromCurrency}{color} in {toCurrency}{color} getauscht."
+
+trade1: "{prefix}{color}Du tauschst {fromCurrency}{color} mit {playerName}{color} gegen {toCurrency}{color}."
+trade2: "{prefix}{color}Du hast {fromCurrency}{color} von {playerName}{color} gegen {toCurrency}{color} erhalten."
+
+deposit: "{prefix}{color}Hat eine Einzahlung von {currency}{color} erhalten."
+
+withdraw: "{prefix}{color}Hat {currency}{color} abgehoben."
+
+set: "{prefix}{color}Dein Kontostand wurde auf {currency}{color} festgelegt."
+
+offerCreated1: "{prefix}{color}Du hast ein Angebot an {playerName} gesendet und bietest {fromCurrency}{color} gegen {toCurrency}{color}."
+offerCreated2: "{prefix}{color}Du hast ein Angebot von {playerName} erhalten, der {fromCurrency}{color} gegen {toCurrency}{color} anbietet."
+
+offerCanceled1: "{prefix}{color}Das Angebot von {playerName} wurde storniert."
+offerCanceled2: "{prefix}{color}Das Angebot an {playerName} wurde storniert."
+
+offerExpired1: "{prefix}{color}Das Angebot von {playerName} ist abgelaufen."
+offerExpired2: "{prefix}{color}Das Angebot an {playerName} ist abgelaufen."
+
+#GUI-Nachrichten
+#Benutzerpanels
+listPlayersOnline:
+  title: "Spieler auswählen"
+  button1:
+    nameItem: "{color}Spieler zum Bezahlen auswählen"
+    lore: "{color}Klicken, um den Spieler auszuwählen, den du bezahlen möchtest,{color}#Nach Namen sortiert"
+
+AccountList:
+  button1:
+    nameItem: "{color}Spieler suchen"
+    lore: "{color}Klicken, um einen Spieler nach Namen zu suchen,{color}Groß-/Kleinschreibung beachten"
+  button2:
+    nameItem: "Spieler suchen"
+    lore: "Name.."
+    response: "Spieler nicht gefunden!"
+
+listPlayersFromDb:
+  title: "Spieler auswählen"
+  button1:
+    nameItem: "{color}Spieler zum Überweisen auswählen"
+    lore: "{color}Klicken, um den Spieler auszuwählen, an den du überweisen möchtest,{color}#Nach Namen sortiert"
+
+CurrencyListToPay:
+  response: "Transaktion erfolgreich!"
+  button1:
+    nameItem: "{color}Währung zum Bezahlen auswählen"
+    lore: "{color}Klicken, um die Währung auszuwählen, die du zahlen möchtest,{color}Und vorher den Betrag"
+
+BankPanel:
+  title: "Bank"
+  button1:
+    nameItem1: "{color}Konto ist gesperrt"
+    nameItem2: "{color}Konto ist aktiviert"
+    lore: "{color}Dies betrifft:,Auszahlung,Einzahlung,Überweisung,Bezahlung,Handel,Tausch,Alle Wirtschaftsoperationen"
+  button2:
+    nameItem: "{color}Währungen tauschen"
+    lore: "{color}Klicken, um Währungen zu tauschen"
+  button3:
+    nameItem: "{color}Angebot an Online-Spieler erstellen"
+    lore: "{color}Klicken, um ein Angebot zum Währungshandel zu erstellen,{color}mit anderen Online-Spielern"
+  button4:
+    nameItem: "{color}Angebot an Netzwerk-Spieler erstellen"
+    lore: "{color}Klicken, um ein Angebot zum Währungshandel zu erstellen,{color}mit anderen Spielern aus dem Netzwerk"
+  button5:
+    nameItem: "{color}Meine aktiven Angebote"
+    lore: "{color}Dies sind die Angebote, die du erstellt hast,{color}und die derzeit aktiv sind."
+  button6:
+    nameItem: "{color}Kontostand ansehen"
+    lore: "{color}Klicken, um deinen Kontostand zu sehen"
+  button7:
+    nameItem: "{color}Erhaltene Angebote"
+    lore: "{color}Hier kannst du alle Angebote einsehen, die dir{color}von anderen Spielern gesendet wurden."
+  button8:
+    nameItem: "{color}Online-Spieler bezahlen"
+    lore: "{color}Klicken, um einen anderen Spieler zu bezahlen,{color}Online-Spieler auf diesem Server"
+  button9:
+    nameItem: "{color}An Netzwerk-Spieler überweisen"
+    lore: "{color}Klicken, um Guthaben an einen anderen Spieler zu überweisen,{color}Spieler aus dem Netzwerk"
+  button10:
+    nameItem: "{color}Beenden"
+    lore: "{color}Klicken, um zu beenden"
+
+AccountBalance:
+  title: "Kontostand"
+  button1:
+    nameItem: "{currency}"
+    lore: "{color}Kontostand: {currency}"
+  button2:
+    nameItem: "{color}Keine Währungen"
+    lore: "{color}Es sind keine Münzen auf dem Konto"
+  button3:
+    nameItem: "{color}Kontostand"
+    lore: "{color}Verfügbare Kontostände"
+
+ReceivedOffers:
+  title: "Erhaltene Angebote"
+  button1:
+    nameItem: "{playerName}"
+    lore: ",Betrag: {amount} ,Preis: {price},,{color1}Linksklick zum Annehmen,{color2}Rechtsklick zum Abbrechen"
+  button2:
+    nameItem: "Liste erhaltene Angebote"
+    lore: "Klicken zum Aktualisieren"
+
+MyActiveOffers:
+  title: "Meine aktiven Angebote"
+  button1:
+    nameItem: "{playerName}"
+    lore: ",Betrag: {amount} ,Preis: {price},,{color2}Rechtsklick zum Abbrechen"
+  button2:
+    nameItem: "Angebotsliste"
+    lore: "Klicken zum Aktualisieren"
+
+OfferListPlayer:
+  button1:
+    nameItem: "{color}Spieler für Angebot auswählen"
+    lore: "{color}Klicken, um den Spieler auszuwählen, dem du ein Angebot machen möchtest,{color}Und vorher die Währungen"
+  button2:
+    nameItem: "{color}Währung zum Anbieten auswählen"
+    lore: "{color}Klicken, um die Währung auszuwählen, die du anbieten möchtest,{color}Und vorher den Betrag"
+  button3:
+    nameItem: "{color}Währung zum Erhalten auswählen"
+    lore: "{color}Klicken, um die Währung auszuwählen, die du erhalten möchtest,{color}Und vorher den Betrag"
+
+CurrencySelector:
+  title: "Währungsliste"
+  button1:
+    nameItem: "{currency}"
+    lore: "Singular: {singular},Plural: {plural},Übertragbar: {transferable},Wechselkurs: {exchangeRate}"
+  button2:
+    nameItem: "Betrag für {currency}"
+    lore: "0"
+
+Exchange:
+  button1:
+    nameItem: "{color}Währung zum Erhalten auswählen"
+    lore: "{color}Klicken, um die Währung auszuwählen, die du erhalten möchtest,{color}Und vorher den Betrag"
+  button2:
+    nameItem: "{color}Währung zum Geben auswählen"
+    lore: "{color}Klicken, um die Währung auszuwählen, die du geben möchtest"
+
+Paginated:
+  button1:
+    nameItem: "{color}Keine Elemente"
+    lore: "{color}Es sind keine Elemente zum Anzeigen vorhanden"
+  button2:
+    nameItem: "{color}Vorherige Seite"
+    lore: "{color}Klicken, um vorherige Elemente zu sehen"
+  button3:
+    nameItem: "{color}Nächste Seite"
+    lore: "{color}Klicken, um mehr Elemente zu sehen"
+  button4:
+    nameItem: "{color}Zurück"
+    lore: "{color}Klicken, um zurückzugehen"
+
+#Admin-Panel
+EconomyAdminPanel:
+  title: "Wirtschafts-Admin-Panel"
+  button1:
+    nameItem: "{color}Währungen bearbeiten"
+    lore: "{color}Klicken, um Währungen zu bearbeiten"
+  button2:
+    nameItem: "{color}Konten verwalten"
+    lore: "{color}Klicken, um Spielerkonten zu verwalten"
+  button3:
+    nameItem: "{color}Beenden"
+    lore: "{color}Klicken, um zu beenden"
+
+CurrencyAdminPanel:
+  title: "Währungsmanager"
+  button1:
+    nameItem: "{color}Währung erstellen"
+    lore: "{color}Klicken, um eine neue Währung zu erstellen"
+  button2:
+    nameItem: "{color}Währung löschen"
+    lore: "{color}Klicken, um eine Währung zu löschen"
+  button3:
+    nameItem: "{color}Währung bearbeiten"
+    lore: "{color}Klicken, um eine Währung zu bearbeiten"
+  button4:
+    nameItem: "{color}Funktionen konfigurieren"
+    lore: "{color}Klicken"
+  button5:
+    nameItem: "{color}Zurück"
+    lore: "{color}Klicken, um zurückzugehen"
+
+AccountSelectorToEdit:
+  title: "Spieler auswählen"
+  button1:
+    nameItem: "Konto zum Bearbeiten auswählen"
+    lore: "Klicken, um ein Konto auszuwählen, oder nach Namen suchen Nach Namen sortiert Groß-/Kleinschreibung beachten"
+
+EditCurrencyPanel:
+  title: "Währung bearbeiten: {currency}"
+  button1:
+    nameItem: "{currency}"
+    lore: "Symbol: {symbol},Farbe: {color},Anfangssaldo: {balance},Wechselkurs: {rate},Übertragbar: {transferable},Standardwährung: {default},Unterstützt Dezimalzahlen: {decimals}"
+  button2:
+    nameItem: "{color}Anfangssaldo bearbeiten"
+    lore: "{color}Klicken, um den Anfangssaldo zu ändern"
+  button3:
+    nameItem: "{color}Wechselkurs festlegen"
+    lore: "{color}Klicken, um den Wechselkurs zu ändern"
+  button4:
+    nameItem: "{color}Farbe bearbeiten"
+    lore: "{color}Klicken, um die Farbe der Währung zu ändern"
+  button5:
+    nameItem: "{color}Symbol bearbeiten"
+    lore: "{color}Klicken, um das Währungssymbol zu ändern"
+  button6:
+    nameItem: "{color}Als Standard festlegen"
+    lore: "{color}Klicken, um diese Währung zur Standardwährung zu machen"
+  button7:
+    nameItem: "{color}Singularname bearbeiten"
+    lore: "{color}Klicken, um den Singularnamen zu ändern"
+  button8:
+    nameItem: "{color}Pluralname bearbeiten"
+    lore: "{color}Klicken, um den Pluralnamen zu ändern"
+#COMMANDS MESSAGES

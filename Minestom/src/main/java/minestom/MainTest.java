@@ -16,9 +16,9 @@
 
 package minestom;
 
-import DynastyEconomy.Console;
 import adapters.EconomySystem;
 //import net.minestom.server.Auth;
+import minestom.basicCommands.permsCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
@@ -48,6 +48,9 @@ public class MainTest {
         minecraftServer.start("0.0.0.0", 25565);
         //--------fin basic server setup-------------------------
 
-        EconomySystem.start(true); // <----------Initialize the economy system and this is ready to use!
+        MinecraftServer.getCommandManager().register(new permsCommand()); //test perms command to give basic permissions
+
+
+        EconomySystem.start(true, new PermsServiceDefault()); // <----------Initialize the economy system and this is ready to use!
     }
 }

@@ -30,8 +30,11 @@ public class EconomySystem {
     /**
     * Start the economy system
     * @param onlineModeServer whether the server is in online mode or not "AuthMode"
+    * @param permissionsService the permissions service implementation for the server to handle permissions players
+     *@implNote  PermsServiceDefault class is provided as default implementation
      * **/
-    public static void start(boolean onlineModeServer){
+    public static void start(boolean onlineModeServer,PermissionsService permissionsService) {
+        PermsService.setPermissionsService(permissionsService);
         EconomySystem.economy= Economy.init(new PlatformAdapter(onlineModeServer));
         playerJoinEvent.register(economy.getPlayerJoinListener());
         playerExitEvent.register(economy.getPlayerJoinListener());

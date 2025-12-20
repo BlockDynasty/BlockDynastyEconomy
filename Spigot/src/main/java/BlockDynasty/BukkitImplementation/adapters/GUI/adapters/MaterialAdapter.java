@@ -17,34 +17,38 @@
 package BlockDynasty.BukkitImplementation.adapters.GUI.adapters;
 
 import BlockDynasty.BukkitImplementation.BlockDynastyEconomy;
-import BlockDynasty.BukkitImplementation.utils.Console;
+import BlockDynasty.BukkitImplementation.adapters.GUI.adapters.customTexture.*;
 import BlockDynasty.BukkitImplementation.utils.Version;
+
 import lib.gui.components.recipes.RecipeItem;
 import lib.util.materials.Materials;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.profile.PlayerTextures;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @SuppressWarnings( "deprecation")
 public class MaterialAdapter {
     private static final Map<Materials, Material> MATERIAL_MAP = new HashMap<>();
     private static final Material FALLBACK = Material.STONE;
-    private static final Map<String, org.bukkit.profile.PlayerProfile> profileCacheHeadsTextures = new ConcurrentHashMap<>();
+    private static ItemTextureService itemTextureService = new ItemTextureServiceNull();
 
     static {
+        if(Version.hasSupportCustomProfile()){
+            itemTextureService = new ItemTextureServiceModern();
+        }else{
+            if(Version.hasMojangAuthLib()) {
+                itemTextureService = new ItemTextureServiceVanilla();
+            }
+        }
+
         // Initialize automatically
         for (Materials material : Materials.values()) {
             try {
@@ -133,43 +137,6 @@ public class MaterialAdapter {
         item.setItemMeta(meta);
     }
 
-    public static void applyTexture(ItemStack item,String texture){
-        if (!Version.hasSupportCustomTexture() || texture == null || texture.isEmpty()) return;
-
-        try {
-            URL url = new URL(texture);
-
-            ItemStack clone = item.clone();
-
-            clone.setType(toBukkitMaterial(Materials.PLAYER_HEAD));
-            SkullMeta meta = (SkullMeta) clone.getItemMeta();
-
-            org.bukkit.profile.PlayerProfile profile = getCustomHeadProfile(texture);
-
-            meta.setOwnerProfile(profile);
-            clone.setItemMeta(meta);
-
-            item.setType(clone.getType());
-            item.setItemMeta(clone.getItemMeta());
-        } catch (Exception e) {
-            Console.logError("Process Custom head texture failed, cause: "+e.getMessage());
-        }
-    }
-
-    private static org.bukkit.profile.PlayerProfile getCustomHeadProfile(String textureUrl) {
-        return profileCacheHeadsTextures.computeIfAbsent(textureUrl, url -> {
-            org.bukkit.profile.PlayerProfile profile = Bukkit.createPlayerProfile(UUID.randomUUID(), "CustomHead");
-            PlayerTextures textures = profile.getTextures();
-            try {
-                textures.setSkin(new URL(url), PlayerTextures.SkinModel.CLASSIC);
-                profile.setTextures(textures);
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
-            return profile;
-        });
-    }
-
     public static ItemStack createItemStack(Materials materials) {
         if (Version.isLegacy()) {
             switch (materials) {
@@ -184,6 +151,10 @@ public class MaterialAdapter {
             }
         }
         return new ItemStack(toBukkitMaterial(materials));
+    }
+
+    public static void applyTexture(ItemStack item, String textureUrl) {
+        itemTextureService.applyTexture(item, textureUrl);
     }
 
     public static ItemStack createItemStack(RecipeItem recipeItem) {

@@ -17,20 +17,14 @@
 package platform.files;
 
 import lib.abstractions.IConfiguration;
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.Yaml;
+import platform.files.yaml.YamlConfig;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public class Configuration implements IConfiguration {
+public class Configuration extends YamlConfig implements IConfiguration {
     private Map<Object, Object> config;
     private Map<Object, Object> configButtons;
     private final String databasePath = "/database";
@@ -53,14 +47,14 @@ public class Configuration implements IConfiguration {
             databaseDir.mkdirs();
         }
         if (!this.configFile.exists()) {
-            this.config = createNewConfigFile(configFile, templatePath);
+            this.config = createNewFile(configFile, templatePath);
         } else {
-            this.config = loadConfig(configFile, templatePath);
+            this.config = loadFile(configFile, templatePath);
         }
         if(!this.buttonsFile.exists()) {
-            this.configButtons = createNewConfigFile(buttonsFile,configButtonsName);
+            this.configButtons = createNewFile(buttonsFile,configButtonsName);
         } else {
-            this.configButtons = loadConfig(buttonsFile,configButtonsName);
+            this.configButtons = loadFile(buttonsFile,configButtonsName);
         }
     }
 
@@ -69,7 +63,7 @@ public class Configuration implements IConfiguration {
         Map<Integer, Boolean> bankConfig = (Map<Integer, Boolean>) this.configButtons.get("bank");
         if (bankConfig != null) {
             bankConfig.put(slot, value);
-            writeConfigFile(buttonsFile, this.configButtons);
+            writeFile(buttonsFile, this.configButtons);
         }
     }
 
@@ -80,135 +74,23 @@ public class Configuration implements IConfiguration {
         return new HashMap<>();
     }
 
-    private void writeConfigFile(File file, Map<Object, Object> configAct) {
-        try {
-            DumperOptions options = new DumperOptions();
-            options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-            options.setProcessComments(true);
-            options.setPrettyFlow(true);
-            options.setIndent(2);
-            Yaml yamlWriter = new Yaml(options);
-            String yamlString = yamlWriter.dump(configAct);
-            Files.write(file.toPath(), yamlString.getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to write config buttons file", e);
-        }
-    }
-
-    private Map<Object,Object> createNewConfigFile(File file, String templatePath) {
-        try {
-            if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();
-            }
-
-            try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(templatePath)) {
-                if (inputStream == null) {
-                    throw new IOException("Template resource not found: " + templatePath);
-                }
-                Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            }
-
-            return loadConfig( file, templatePath);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to create config file", e);
-        }
-    }
-
-    private Map<Object,Object> loadConfig(File fileConfig, String templatePath) {
-        try {
-            Yaml yaml = new Yaml();
-            Map<Object,Object> configAct = yaml.load(Files.newInputStream(fileConfig.toPath()));
-
-            try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(templatePath)) {
-                if (inputStream == null) {
-                    throw new IOException("Template resource not found: " + templatePath);
-                }
-                Map<Object, Object> defaultConfig = yaml.load(inputStream);
-                if (defaultConfig != null) {
-                    if(checkIfNeedUpdate(defaultConfig, configAct)) {
-                        mergeConfigs(defaultConfig, configAct);
-                        writeConfigFile(configFile, configAct);
-                    }
-                }
-            }
-            return configAct;
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load config: " + e.getMessage(), e);
-        }
-    }
-
-    private boolean checkIfNeedUpdate(Map<Object, Object> defaultConfig, Map<Object, Object> configAct){
-        for(Map.Entry<Object, Object> entry : defaultConfig.entrySet()) {
-            Object key = entry.getKey();
-            Object defaultValue = entry.getValue();
-
-            if(!configAct.containsKey(key)){
-                return true;
-            }
-
-            Object currentValue = configAct.get(key);
-            if(defaultValue instanceof Map && currentValue instanceof Map){
-                if(checkIfNeedUpdate((Map<Object, Object>) defaultValue, (Map<Object, Object>) currentValue)){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private void mergeConfigs(Map<Object, Object> defaultConfig, Map<Object, Object> configAct) {
-        for (Map.Entry<Object, Object> entry : defaultConfig.entrySet()) {
-            Object key = entry.getKey();
-            Object defaultValue = entry.getValue();
-
-            if (!configAct.containsKey(key)) {
-                configAct.put(key, defaultValue);
-            } else {
-                Object currentValue = configAct.get(key);
-                if (defaultValue instanceof Map && currentValue instanceof Map) {
-                    mergeConfigs((Map<Object, Object>) defaultValue, (Map<Object, Object>) currentValue);
-                }
-            }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> T get(String path, Class<T> type) {
-        String[] parts = path.split("\\.");
-        Map<Object, Object> current = config;
-
-        for (int i = 0; i < parts.length - 1; i++) {
-            if (!current.containsKey(parts[i])) return null;
-            current = (Map<Object, Object>) current.get(parts[i]);
-        }
-
-        String lastPart = parts[parts.length - 1];
-        if (!current.containsKey(lastPart)) return null;
-
-        Object value = current.get(lastPart);
-        if (type.isInstance(value)) {
-            return type.cast(value);
-        }
-        return null;
-    }
-
     public boolean getBoolean(String path) {
-        Boolean value = get(path, Boolean.class);
+        Boolean value = get(path, config, Boolean.class);
         return value != null && value;
     }
 
     public String getString(String path) {
-        String value = get(path, String.class);
+        String value = get(path,config, String.class);
         return value == null ? "Unknown" : value;
     }
 
     public int getInt(String path) {
-        Integer value = get(path, Integer.class);
+        Integer value = get(path,config,Integer.class);
         return value != null ? value : 0;
     }
 
     public double getDouble(String path) {
-        Double value = get(path, Double.class);
+        Double value = get(path,config, Double.class);
         return value != null ? value : 0.0;
     }
 

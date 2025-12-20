@@ -9,7 +9,7 @@
       "id": "blockdynastyeconomy",
       "name": "Dynastyeconomy",
       "version": "${version}",
-      "entrypoint": "spongeV13.SpongePlugin",
+      "entrypoint": "spongeV16.SpongePlugin",
       "description": "Dynasty economy plugin",
       "branding": {},
       "links": {

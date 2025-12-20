@@ -17,6 +17,7 @@ Bukkit: https://dev.bukkit.org/projects/dynastyeconomy
 
 ### 🗃️ Supported Databases
 - **MySQL**: v8.0.38
+- **MariaDb**: v12.1.2
 - **SQLite**: Compatible 
 - **H2**: Compatible
 - **Redis**: "Jedis" 5.2.0

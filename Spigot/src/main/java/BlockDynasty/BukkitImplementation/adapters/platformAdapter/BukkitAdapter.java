@@ -21,30 +21,31 @@ import BlockDynasty.BukkitImplementation.adapters.GUI.adapters.InventoryAdapter;
 import BlockDynasty.BukkitImplementation.adapters.GUI.adapters.ItemStackAdapter;
 import BlockDynasty.BukkitImplementation.adapters.GUI.adapters.MaterialAdapter;
 import BlockDynasty.BukkitImplementation.adapters.GUI.adapters.textInput.TextInputFactory;
+import BlockDynasty.BukkitImplementation.adapters.proxy.ProxySubscriberImp;
 import BlockDynasty.BukkitImplementation.scheduler.Scheduler;
 import BlockDynasty.BukkitImplementation.scheduler.SchedulerFactory;
+import BlockDynasty.BukkitImplementation.utils.Console;
 import BlockDynasty.BukkitImplementation.utils.Version;
 import lib.abstractions.IConsole;
 import lib.abstractions.IPlayer;
+import lib.abstractions.IProxySubscriber;
 import lib.abstractions.PlatformAdapter;
 import lib.gui.components.*;
 import lib.gui.components.recipes.RecipeInventory;
 import lib.gui.components.recipes.RecipeItem;
-import lib.util.materials.Materials;
 import lib.scheduler.ContextualTask;
 import lib.scheduler.IScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import MessageChannel.proxy.ProxyData;
 
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-
-//permite explicarle a la libreria como obtener un jugador y como ejecutar un comando
 public class BukkitAdapter implements PlatformAdapter {
 
     @Override
@@ -65,6 +66,12 @@ public class BukkitAdapter implements PlatformAdapter {
     @Override
     public void sendPluginMessage(String channel, byte[] message) {
         Bukkit.getServer().sendPluginMessage(BlockDynastyEconomy.getInstance(), channel, message);
+    }
+
+    @Override
+    public void registerMessageChannel(IProxySubscriber proxySubscriber) {
+        Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(BlockDynastyEconomy.getInstance(),ProxyData.getChannelName());
+        Bukkit.getServer().getMessenger().registerIncomingPluginChannel(BlockDynastyEconomy.getInstance(),ProxyData.getChannelName(), new ProxySubscriberImp(proxySubscriber));
     }
 
     @Override

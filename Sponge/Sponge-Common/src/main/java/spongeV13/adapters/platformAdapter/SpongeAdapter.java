@@ -16,6 +16,8 @@
 
 package spongeV13.adapters.platformAdapter;
 
+import MessageChannel.proxy.ProxyData;
+import lib.abstractions.IProxySubscriber;
 import spongeV13.adapters.GUI.adapters.InventoryAdapter;
 import spongeV13.adapters.GUI.adapters.ItemStackAdapter;
 import spongeV13.adapters.GUI.adapters.MaterialAdapter;
@@ -39,9 +41,11 @@ import org.spongepowered.api.network.channel.ChannelBuf;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
 import org.spongepowered.api.network.channel.raw.play.RawPlayDataChannel;
 import org.spongepowered.plugin.PluginContainer;
+import spongeV13.utils.Console;
 import spongeV13.utils.Version;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -66,6 +70,12 @@ public class SpongeAdapter implements PlatformAdapter {
                 .map(EntityPlayerAdapter::of)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void registerMessageChannel(IProxySubscriber proxySubscriber) {
+        SpongePluginCommon.getChannel().play().addHandler((buf, connection) -> {
+            proxySubscriber.onPluginMessageReceived(ProxyData.getChannelName(), buf.readBytes(buf.available()));
+        });}
 
     @Override
     public void dispatchCommand(String command) throws Exception {

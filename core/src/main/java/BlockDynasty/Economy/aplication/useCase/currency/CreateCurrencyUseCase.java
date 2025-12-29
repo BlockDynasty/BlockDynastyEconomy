@@ -24,10 +24,8 @@ import BlockDynasty.Economy.domain.entities.currency.Exceptions.CurrencyAlreadyE
 import BlockDynasty.Economy.domain.persistence.Exceptions.TransactionException;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
+import BlockDynasty.Economy.domain.services.courier.Message;
 
-import java.util.UUID;
-
-//TODO :CREATE CURRENCY, NOTA IMPORTANTE, VALIDAR QUE SI YA EXISTE UNA CURRENCY POR DEFAULT NO SE PUEDA CREAR, Y EN EL CASO DE QUERER SETEAR UNA POR DEFECTO DEBEMOS DESASER LA ANTERIOR DEFAULT
 public class CreateCurrencyUseCase {
     private final ICurrencyService currencyService;
     private final IRepository dataStore;
@@ -55,7 +53,10 @@ public class CreateCurrencyUseCase {
             currencyService.add(currency);//cache
             accountService.syncDbWithOnlineAccounts();
             if (updateForwarder != null){
-                updateForwarder.sendUpdateMessage("currency", currency.getUuid().toString());
+                updateForwarder.sendUpdateMessage(Message.builder()
+                        .setType(Message.Type.CURRENCY)
+                        .setTarget(currency.getUuid())
+                        .build());
             }
         }catch (TransactionException e){
             throw new TransactionException("Error creating currency");

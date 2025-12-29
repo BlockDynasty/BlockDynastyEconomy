@@ -19,6 +19,7 @@ package adapters;
 import DynastyEconomy.Console;
 import lib.abstractions.IConsole;
 import lib.abstractions.IPlayer;
+import lib.abstractions.IProxySubscriber;
 import lib.gui.components.IInventory;
 import lib.gui.components.IItemStack;
 import lib.gui.components.ITextInput;
@@ -84,6 +85,11 @@ public class PlatformAdapter implements lib.abstractions.PlatformAdapter {
     @Override
     public void sendPluginMessage(String channel, byte[] message) {
 //not implemented
+    }
+
+    @Override
+    public void registerMessageChannel(IProxySubscriber subscriber) {
+        //not implemented
     }
 
     @Override

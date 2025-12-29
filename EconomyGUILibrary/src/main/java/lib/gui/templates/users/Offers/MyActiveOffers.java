@@ -51,6 +51,7 @@ public class MyActiveOffers extends PaginatedPanel<Offer> {
         this.searchOfferUseCase = searchOfferUseCase;
         this.player = player;
 
+        //can be Player
         List<Offer> offers = searchOfferUseCase.getOffersSeller(player.getUniqueId());
         showItemsPage(offers);
     }

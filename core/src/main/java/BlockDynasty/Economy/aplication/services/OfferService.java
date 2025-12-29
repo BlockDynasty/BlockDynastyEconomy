@@ -19,12 +19,12 @@ package BlockDynasty.Economy.aplication.services;
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.events.EventRegistry;
 import BlockDynasty.Economy.domain.entities.account.Player;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.entities.offers.Offer;
 import BlockDynasty.Economy.domain.events.offersEvents.*;
 import BlockDynasty.Economy.domain.services.IOfferService;
 import BlockDynasty.Economy.domain.services.courier.Courier;
+import BlockDynasty.Economy.domain.services.courier.Message;
 
 import java.math.BigDecimal;
 
@@ -79,11 +79,19 @@ public class OfferService implements IOfferService {
         this.ofertasPendientes.remove(offer);
 
         if (broadcastNetwork) {
-            this.eventManager.emit(new OfferExpired(offer));//test
-            courier.sendUpdateMessage("event", new OfferExpired(offer).toJson(),
-                    offer.getComprador().getUuid().toString());
-            courier.sendUpdateMessage("event", new OfferExpired(offer).toJson(),
-                    offer.getVendedor().getUuid().toString());
+            this.eventManager.emit(new OfferExpired(offer));
+
+            courier.sendUpdateMessage(Message.builder()
+                    .setType(Message.Type.EVENT)
+                    .setData(new OfferExpired(offer).toJson())
+                    .setTarget(offer.getComprador().getUuid())
+                    .build());
+
+            courier.sendUpdateMessage(Message.builder()
+                    .setType(Message.Type.EVENT)
+                    .setData(new OfferExpired(offer).toJson())
+                    .setTarget(offer.getVendedor().getUuid())
+                    .build());
         }
     }
 

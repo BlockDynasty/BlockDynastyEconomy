@@ -16,8 +16,9 @@
 
 package lib.gui.templates.users;
 
-import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByUUIDUseCase;
+import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByPlayerUseCase;
 import BlockDynasty.Economy.domain.entities.account.Account;
+import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.result.Result;
 import lib.gui.GUIFactory;
 import lib.gui.components.IEntityGUI;
@@ -37,11 +38,11 @@ import java.util.Map;
 
 public class BankPanel extends AbstractPanel {
     private final IEntityGUI player;
-    private GetAccountByUUIDUseCase getAccount;
+    private GetAccountByPlayerUseCase getAccount;
     private ITextInput textInput;
     private static final Map<Integer, Boolean> buttonsEnabled = new HashMap<>();
 
-    public BankPanel(IEntityGUI player, GetAccountByUUIDUseCase getAccount, ITextInput textInput) {
+    public BankPanel(IEntityGUI player, GetAccountByPlayerUseCase getAccount, ITextInput textInput) {
         super(Message.process("BankPanel.title") +" ["+player.getName()+"]", 4, player);
         this.player = player;
         this.getAccount = getAccount;
@@ -52,7 +53,7 @@ public class BankPanel extends AbstractPanel {
     private void setupGUI() {
 
         if(isButtonEnabled(4)) {
-            Result<Account> account = getAccount.execute(player.getUniqueId());
+            Result<Account> account = getAccount.execute(new Player(player.getUniqueId(), player.getName()));
             boolean isBlocked = false;
             if (account.isSuccess()){
                 isBlocked = account.getValue().isBlocked();

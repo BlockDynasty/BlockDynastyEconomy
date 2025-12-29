@@ -16,7 +16,8 @@
 
 package lib.gui.templates.users;
 
-import BlockDynasty.Economy.aplication.useCase.account.balance.GetBalanceUseCase;
+import BlockDynasty.Economy.aplication.useCase.transaction.balance.GetBalanceUseCase;
+import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.balance.Money;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.Result;
@@ -35,30 +36,29 @@ import lib.messages.Message;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class AccountBalance extends PaginatedPanel<Money> {
     private final GetBalanceUseCase getBalanceUseCase;
-    private final UUID targetUUID;
+    private final Player targetPlayer;
 
     public AccountBalance(IEntityGUI player, GetBalanceUseCase getBalanceUseCase, IGUI parent) {
         super(Message.process("AccountBalance.title"), 3, player, parent, 7); // 7 currencies per page
         this.getBalanceUseCase = getBalanceUseCase;
-        this.targetUUID = player.getUniqueId();
+        this.targetPlayer = new Player(player.getUniqueId(), player.getName());
 
         loadBalances();
     }
 
-    public AccountBalance(IEntityGUI sender, UUID target, GetBalanceUseCase getBalanceUseCase, IGUI parent) {
+    public AccountBalance(IEntityGUI sender, Player target, GetBalanceUseCase getBalanceUseCase, IGUI parent) {
         super(Message.process("AccountBalance.title"), 3, sender, parent, 7);
         this.getBalanceUseCase = getBalanceUseCase;
-        this.targetUUID = target;
+        this.targetPlayer = target;
 
         loadBalances();
     }
 
     private void loadBalances() {
-        Result<List<Money>> result = getBalanceUseCase.getBalances(targetUUID);
+        Result<List<Money>> result = getBalanceUseCase.getBalances(targetPlayer);
         if (result.isSuccess() && result.getValue() != null) {
             showItemsPage(result.getValue());
 

@@ -17,16 +17,9 @@
 package BlockDynasty.BukkitImplementation.adapters.proxy;
 
 import BlockDynasty.BukkitImplementation.BlockDynastyEconomy;
-import BlockDynasty.BukkitImplementation.utils.Console;
-import platform.proxy.ProxyData;
+import MessageChannel.proxy.ProxyData;
 
 public class ChannelRegister {
-
-    public static void init(BlockDynastyEconomy plugin) {
-        plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, ProxyData.getChannelName());  //outgoing channel
-        plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin,ProxyData.getChannelName(), new ProxyReceiverImp());  //incoming channel
-        Console.log("Proxy Message channel has been initialized.");
-    }
 
     public static void unhook(BlockDynastyEconomy plugin) {
         plugin.getServer().getMessenger().unregisterIncomingPluginChannel(plugin, ProxyData.getChannelName());

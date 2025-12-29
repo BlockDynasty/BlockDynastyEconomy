@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package platform.proxy;
+package MessageChannel.proxy;
 
 public class ProxyData {
     public static String getChannelName() {

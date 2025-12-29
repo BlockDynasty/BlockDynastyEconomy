@@ -24,7 +24,7 @@ public class ConsoleAdapter implements IConsole {
     private static final Logger console= SpongePluginCommon.getLogger();
 
     public void debug(String message) {
-        console.debug(message);
+        console.info(message);
     }
 
     public void log(String message){

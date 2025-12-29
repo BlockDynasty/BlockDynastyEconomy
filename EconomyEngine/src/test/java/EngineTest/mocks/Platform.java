@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lib.abstractions.IConsole;
 import lib.abstractions.IPlayer;
+import lib.abstractions.IProxySubscriber;
 import lib.abstractions.PlatformAdapter;
 import lib.gui.components.recipes.RecipeItem;
 import lib.gui.components.IInventory;
@@ -63,6 +64,11 @@ public class Platform implements PlatformAdapter {
         }catch (IOException e){
             e.printStackTrace();
         }
+
+    }
+
+    @Override
+    public void registerMessageChannel(IProxySubscriber subscriber) {
 
     }
 

@@ -19,7 +19,6 @@ package lib.abstractions;
 import lib.gui.components.*;
 import lib.gui.components.recipes.RecipeInventory;
 import lib.gui.components.recipes.RecipeItem;
-import lib.util.materials.Materials;
 import lib.scheduler.IScheduler;
 
 import java.io.File;
@@ -36,6 +35,7 @@ public interface PlatformAdapter {
 
     void dispatchCommand(String command) throws Exception;
     void sendPluginMessage(String channel, byte[] message);
+    void registerMessageChannel(IProxySubscriber subscriber);
     IScheduler getScheduler();
     IConsole getConsole();
     File getDataFolder();

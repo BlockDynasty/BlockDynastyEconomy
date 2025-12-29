@@ -16,30 +16,32 @@
 
 package BlockDynasty.Economy.domain.persistence.entities;
 
+import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.persistence.transaction.ITransactions;
 import BlockDynasty.Economy.domain.entities.account.Account;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.result.Result;
 
 import java.util.List;
+import java.util.UUID;
 
-//todo: evaluar hacer solo operaciones CRUD
 public interface IRepository extends ITransactions {
 
     List<ICurrency> loadCurrencies();
     Result<ICurrency> loadCurrencyByName(String name);
     Result<ICurrency> loadCurrencyByUuid(String uuid);
-    Result<ICurrency> loadDefaultCurrency(); //carga la moneda por defecto, si no hay devuelve una lista vacia
-    void saveCurrency(ICurrency currency); //hace de update tambien
+    Result<ICurrency> loadDefaultCurrency();
+    void saveCurrency(ICurrency currency);
     void deleteCurrency(ICurrency currency);
 
-    List<Account> loadAccounts(); //una cuenta de un criterio
-    Result<Account> loadAccountByUuid(String uuid);
+    List<Account> loadAccounts();
+    Result<Account> loadAccountByUuid(UUID uuid);
     Result<Account> loadAccountByName(String name);
+    Result<Account> loadAccountByPlayer(Player player);
     void createAccount(Account account);
+    void saveAccount(Player player, Account account);
     void saveAccount(Account account);
-    Result<Void> deleteAccount(Account account);
+    Result<Void> deleteAccount(Player account);
 
     List<Account> getAccountsTopByCurrency(String currencyName, int limit, int offset);
 

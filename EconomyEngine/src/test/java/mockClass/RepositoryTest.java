@@ -17,7 +17,7 @@
 package mockClass;
 
 import BlockDynasty.Economy.domain.entities.account.Account;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 import BlockDynasty.Economy.domain.result.ErrorCode;
@@ -74,9 +74,9 @@ public class RepositoryTest implements IRepository {
     }
 
     @Override
-    public Result<Account> loadAccountByUuid(String uuid) {
+    public Result<Account> loadAccountByUuid(UUID uuid) {
         return accounts.stream()
-                .filter(account -> account.getUuid().toString().equals(uuid))
+                .filter(account -> account.getUuid().equals(uuid))
                 .findFirst()
                 .map(Result::success)
                 .orElseGet(() -> Result.failure("Account not found", ErrorCode.ACCOUNT_NOT_FOUND));
@@ -92,18 +92,28 @@ public class RepositoryTest implements IRepository {
     }
 
     @Override
+    public Result<Account> loadAccountByPlayer(Player player) {
+        return null;
+    }
+
+    @Override
     public void createAccount(Account account) {
         this.accounts.add(account);
     }
 
     @Override
-    public void saveAccount(Account account) {
+    public void saveAccount(Player player, Account account) {
         this.accounts.removeIf(a -> a.getUuid().equals(account.getUuid()));
         this.accounts.add(account);
     }
 
     @Override
-    public Result<Void> deleteAccount(Account account) {
+    public void saveAccount(Account account) {
+        saveAccount(account.getPlayer(),account);
+    }
+
+    @Override
+    public Result<Void> deleteAccount(Player account) {
         return null;
     }
 
@@ -120,6 +130,25 @@ public class RepositoryTest implements IRepository {
         // Simular una transferencia exitosa
         Account fromAccount = accounts.stream().filter(a -> a.getUuid().toString().equals(userFrom)).findFirst().orElse(null);
         Account toAccount = accounts.stream().filter(a -> a.getUuid().toString().equals(userTo)).findFirst().orElse(null);
+
+
+        if (fromAccount== null || toAccount == null) {
+            return Result.failure("Cuenta no encontrada", ErrorCode.ACCOUNT_NOT_FOUND);
+        }
+
+        Result<Void> result =fromAccount.subtract(currency, amount);
+        if (!result.isSuccess()) {
+            return Result.failure(result.getErrorMessage(), result.getErrorCode());
+        }
+        toAccount.add(currency, amount);
+        return Result.success(new TransferResult(fromAccount, toAccount));
+    }
+
+    @Override
+    public Result<TransferResult> transfer(Player fromPlayer, Player toPlayer, ICurrency currency, BigDecimal amount) {
+        // Simular una transferencia exitosa
+        Account fromAccount = accounts.stream().filter(a -> a.getId().equals(fromPlayer.getId())).findFirst().orElse(null);
+        Account toAccount = accounts.stream().filter(a -> a.getId().equals(toPlayer.getId())).findFirst().orElse(null);
 
 
         if (fromAccount== null || toAccount == null) {
@@ -153,6 +182,23 @@ public class RepositoryTest implements IRepository {
     }
 
     @Override
+    public Result<Account> withdraw(Player player, ICurrency currency, BigDecimal amount) {
+        Account account = accounts.stream()
+                .filter(a -> a.getId().equals(player.getId()))
+                .findFirst()
+                .orElse(null);
+        if (account == null) {
+            return Result.failure("Account not found", ErrorCode.ACCOUNT_NOT_FOUND);
+        }
+
+        Result<Void> result =account.subtract(currency, amount);
+        if (!result.isSuccess()) {
+            return Result.failure(result.getErrorMessage(), result.getErrorCode());
+        }
+        return Result.success(account);
+    }
+
+    @Override
     public Result<Account> deposit(String accountUuid, ICurrency currency, BigDecimal amount) {
         Account account = accounts.stream()
                 .filter(a -> a.getUuid().toString().equals(accountUuid))
@@ -170,9 +216,51 @@ public class RepositoryTest implements IRepository {
     }
 
     @Override
+    public Result<Account> deposit(Player player, ICurrency currency, BigDecimal amount) {
+        Account account = accounts.stream()
+                .filter(a -> a.getId().equals(player.getId()))
+                .findFirst()
+                .orElse(null);
+        if (account == null) {
+            return Result.failure("Account not found", ErrorCode.ACCOUNT_NOT_FOUND);
+        }
+
+        Result<Void> result = account.add(currency, amount);
+        if (!result.isSuccess()) {
+            return Result.failure(result.getErrorMessage(), result.getErrorCode());
+        }
+        return Result.success(account);
+    }
+
+    @Override
     public Result<Account> exchange(String fromUuid, ICurrency fromCurrency, BigDecimal amountFrom, ICurrency toCurrency, BigDecimal amountTo) {
         Account account = accounts.stream()
                 .filter(a -> a.getUuid().toString().equals(fromUuid))
+                .findFirst()
+                .orElse(null);
+        if (account == null) {
+            return Result.failure("Account not found", ErrorCode.ACCOUNT_NOT_FOUND);
+        }
+
+        Result<Void> resultSubtract = account.subtract(fromCurrency, amountFrom);
+        if (!resultSubtract.isSuccess()) {
+
+            return Result.failure(resultSubtract.getErrorMessage(), resultSubtract.getErrorCode());
+        }
+
+        Result<Void> resultAdd = account.add(toCurrency, amountTo);
+        if (!resultAdd.isSuccess()) {
+
+            return Result.failure(resultAdd.getErrorMessage(), resultAdd.getErrorCode());
+        }
+
+        return Result.success(account);
+    }
+
+    @Override
+    public Result<Account> exchange(Player player, ICurrency fromCurrency, BigDecimal amountFrom, ICurrency toCurrency, BigDecimal amountTo) {
+        Account account = accounts.stream()
+                .filter(a -> a.getId().equals(player.getId()))
                 .findFirst()
                 .orElse(null);
         if (account == null) {
@@ -237,9 +325,69 @@ public class RepositoryTest implements IRepository {
     }
 
     @Override
+    public Result<TransferResult> trade(Player fromPlayer, Player toPlayer, ICurrency fromCurrency, ICurrency toCurrency, BigDecimal amountFrom, BigDecimal amountTo) {
+        Account fromAccount = accounts.stream()
+                .filter(a -> a.getId().equals(fromPlayer.getId()))
+                .findFirst()
+                .orElse(null);
+        Account toAccount = accounts.stream()
+                .filter(a -> a.getId().equals(toPlayer.getId()))
+                .findFirst()
+                .orElse(null);
+
+
+        if (fromAccount == null) {
+            return Result.failure("From account not found", ErrorCode.ACCOUNT_NOT_FOUND);
+        }
+
+        if(toAccount == null){
+            return Result.failure("To account not found", ErrorCode.ACCOUNT_NOT_FOUND);
+        }
+
+        Result<Void> resultSubtractFrom = fromAccount.subtract(fromCurrency, amountFrom);
+        if (!resultSubtractFrom.isSuccess()) {
+
+            return Result.failure(resultSubtractFrom.getErrorMessage(), resultSubtractFrom.getErrorCode());
+        }
+        Result<Void> resultSubtractTo = toAccount.subtract(toCurrency, amountTo);
+        if (!resultSubtractTo.isSuccess()) {
+            return Result.failure(resultSubtractTo.getErrorMessage(), resultSubtractTo.getErrorCode());
+        }
+        Result<Void> resultAddFrom = fromAccount.add(toCurrency, amountTo);
+        if (!resultAddFrom.isSuccess()) {
+            return Result.failure(resultAddFrom.getErrorMessage(), resultAddFrom.getErrorCode());
+        }
+        Result<Void> resultAddTo = toAccount.add(fromCurrency, amountFrom);
+        if (!resultAddTo.isSuccess()) {
+            return Result.failure(resultAddTo.getErrorMessage(), resultAddTo.getErrorCode());
+        }
+
+
+        return Result.success(new TransferResult(fromAccount, toAccount));
+    }
+
+    @Override
     public Result<Account> setBalance(String accountUuid, ICurrency currency, BigDecimal amount) {
         Account account = accounts.stream()
                 .filter(a -> a.getUuid().toString().equals(accountUuid))
+                .findFirst()
+                .orElse(null);
+        if (account == null) {
+            return Result.failure("Account not found", ErrorCode.ACCOUNT_NOT_FOUND);
+        }
+        Result<Void> result = account.setMoney(currency, amount);
+
+        if (!result.isSuccess()) {
+            return Result.failure(result.getErrorMessage(), result.getErrorCode());
+        }
+
+        return Result.success(account);
+    }
+
+    @Override
+    public Result<Account> setBalance(Player player, ICurrency currency, BigDecimal amount) {
+        Account account = accounts.stream()
+                .filter(a -> a.getId().equals(player.getId()))
                 .findFirst()
                 .orElse(null);
         if (account == null) {

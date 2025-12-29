@@ -45,7 +45,7 @@ public class DepositPanel extends CurrencySelectorAndAmount {
 
     @Override
     public String execute(IEntityGUI sender, ICurrency currency, BigDecimal amount){
-        Result<Void> result = depositUseCase.execute(targetPlayer.getUuid(),currency.getSingular(), amount, Context.COMMAND);
+        Result<Void> result = depositUseCase.execute(targetPlayer,currency.getSingular(), amount, Context.COMMAND);
         if (result.isSuccess()) {
             sender.sendMessage(ChatColor.stringValueOf(Colors.GREEN)+"[Bank] "+ChatColor.stringValueOf(Colors.GRAY)+"Deposited "+ ChatColor.stringValueOf(currency.getColor()) + currency.format(amount) +ChatColor.stringValueOf(Colors.GRAY)+ " to " + targetPlayer.getNickname() + "'s account.");
             this.openParent();

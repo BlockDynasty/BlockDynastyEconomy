@@ -19,6 +19,7 @@ package BlockDynasty.Economy.aplication.useCase.account;
 import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByNameUseCase;
 import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByUUIDUseCase;
 import BlockDynasty.Economy.domain.entities.account.Account;
+import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.services.IAccountService;
@@ -26,10 +27,10 @@ import BlockDynasty.Economy.domain.services.IAccountService;
 import java.util.UUID;
 
 public class DeleteAccountUseCase {
-    IRepository repository;
-    IAccountService accountService;
-    GetAccountByUUIDUseCase getAccountByUUIDUseCase;
-    GetAccountByNameUseCase getAccountByNameUseCase;
+    private IRepository repository;
+    private IAccountService accountService;
+    private GetAccountByUUIDUseCase getAccountByUUIDUseCase;
+    private GetAccountByNameUseCase getAccountByNameUseCase;
 
     public DeleteAccountUseCase(IRepository repository, IAccountService accountService) {
         this.getAccountByNameUseCase = new GetAccountByNameUseCase(accountService);
@@ -38,13 +39,22 @@ public class DeleteAccountUseCase {
         this.accountService = accountService;
     }
 
+    public Result<Void> execute(Player account){
+        Result<Void> result =repository.deleteAccount(account);
+        accountService.removeAccountOnline(account.getUuid());
+        if (!result.isSuccess()) {
+            return Result.failure("Failed to delete account for player: " + account.getNickname(), result.getErrorCode());
+        }
+        return Result.success();
+    }
+
     public Result<Void> execute(String name){
         // Primero, obtenemos la cuenta del jugador por su nombre
         Result<Account> accountResult = getAccountByNameUseCase.execute(name);
         if (!accountResult.isSuccess()) {
             return Result.failure("Account not found for player: " + name, accountResult.getErrorCode());
         }
-        Result<Void> result =repository.deleteAccount(accountResult.getValue());
+        Result<Void> result =repository.deleteAccount(accountResult.getValue().getPlayer());
         accountService.removeAccountOnline(accountResult.getValue().getUuid());
         if (!result.isSuccess()) {
             return Result.failure("Failed to delete account for player: " + name, result.getErrorCode());
@@ -58,7 +68,7 @@ public class DeleteAccountUseCase {
         if (!accountResult.isSuccess()) {
             return Result.failure("Account not found for UUID: " + uuid, accountResult.getErrorCode());
         }
-        Result<Void> result = repository.deleteAccount(accountResult.getValue());
+        Result<Void> result = repository.deleteAccount(accountResult.getValue().getPlayer());
         accountService.removeAccountOnline(accountResult.getValue().getUuid());
         if (!result.isSuccess()) {
             return Result.failure("Failed to delete account for UUID: " + uuid, result.getErrorCode());

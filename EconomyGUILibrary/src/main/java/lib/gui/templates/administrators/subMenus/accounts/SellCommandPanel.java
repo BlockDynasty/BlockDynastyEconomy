@@ -46,7 +46,7 @@ public class SellCommandPanel extends CurrencySelectorAndAmount {
             return "Player " + targetPlayer.getNickname() + " is not online. Cannot execute command.";
         }
 
-        Result<Void> result = withdrawUseCase.execute(targetPlayer.getUuid(), currency.getSingular(), amount, Context.SYSTEM);
+        Result<Void> result = withdrawUseCase.execute(targetPlayer, currency.getSingular(), amount, Context.SYSTEM);
         if (!result.isSuccess()) {
             return "Failed to withdraw currency to player, reason: " + result.getErrorMessage();
         }

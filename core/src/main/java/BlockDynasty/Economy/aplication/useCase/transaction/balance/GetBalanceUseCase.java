@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package BlockDynasty.Economy.aplication.useCase.account.balance;
+package BlockDynasty.Economy.aplication.useCase.transaction.balance;
 
 import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByNameUseCase;
+import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByPlayerUseCase;
 import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByUUIDUseCase;
+import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.balance.Money;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
@@ -30,10 +32,12 @@ import java.util.UUID;
 public class GetBalanceUseCase {
     private final GetAccountByNameUseCase getAccountByNameUseCase;
     private final GetAccountByUUIDUseCase getAccountByUUIDUseCase;
+    private final GetAccountByPlayerUseCase getAccountByPlayerUseCase;
 
     public GetBalanceUseCase(IAccountService accountService){
         this.getAccountByNameUseCase = new GetAccountByNameUseCase(accountService);
         this.getAccountByUUIDUseCase = new GetAccountByUUIDUseCase(accountService);
+        this.getAccountByPlayerUseCase = new GetAccountByPlayerUseCase(accountService);
     }
 
     public Result<Money> execute(String accountName, String currencyName) {
@@ -68,6 +72,14 @@ public class GetBalanceUseCase {
         return performGetBalance(accountResult.getValue());
     }
 
+    public Result<Money> execute(Player player, String currencyName) {
+        Result<Account> accountResult = getAccountByPlayerUseCase.execute(player);
+        if(!accountResult.isSuccess()) {
+            return Result.failure( accountResult.getErrorMessage(),accountResult.getErrorCode());
+        }
+        return performGetBalance(accountResult.getValue(), currencyName);
+    }
+
     public Result<List<Money>> getBalances(String accountName) {
         Result<Account> accountResult = getAccountByNameUseCase.execute(accountName);
         if(!accountResult.isSuccess()) {
@@ -78,6 +90,14 @@ public class GetBalanceUseCase {
 
     public Result<List<Money>> getBalances(UUID accountUUID) {
         Result<Account> accountResult = getAccountByUUIDUseCase.execute(accountUUID);
+        if(!accountResult.isSuccess()) {
+            return Result.failure( accountResult.getErrorMessage(),accountResult.getErrorCode());
+        }
+        return performGetBalances(accountResult.getValue());
+    }
+
+    public Result<List<Money>> getBalances(Player player) {
+        Result<Account> accountResult = getAccountByPlayerUseCase.execute(player);
         if(!accountResult.isSuccess()) {
             return Result.failure( accountResult.getErrorMessage(),accountResult.getErrorCode());
         }

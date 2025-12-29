@@ -15,11 +15,7 @@ public class GetAccountByUUIDUseCase {
     }
 
     public Result<Account> execute(UUID uuid) {
-        Account account =  this.accountService.getAccount(uuid);
-        if (account != null) {
-            return Result.success(account);
-        }
-        return Result.failure("Account not found", ErrorCode.ACCOUNT_NOT_FOUND);
+        return this.accountService.getAccount(uuid);
         //podemos hacer un new Account(account); como programación defensiva, o elaborar un value Object para mostrar valores hacia el exterior
     }
 }

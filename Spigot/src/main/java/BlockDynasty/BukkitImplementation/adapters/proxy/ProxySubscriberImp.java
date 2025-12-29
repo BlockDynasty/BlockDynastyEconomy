@@ -15,9 +15,10 @@
  */
 package BlockDynasty.BukkitImplementation.adapters.proxy;
 
+import BlockDynasty.BukkitImplementation.utils.Console;
+import lib.abstractions.IProxySubscriber;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
-import platform.proxy.ProxyReceiver;
 
 
 /**
@@ -28,11 +29,16 @@ import platform.proxy.ProxyReceiver;
  * and currencies on all of the servers.
  */
 
-public class ProxyReceiverImp extends ProxyReceiver implements PluginMessageListener {
+public class ProxySubscriberImp implements PluginMessageListener {
+    private final IProxySubscriber proxySubscriber;
+
+    public ProxySubscriberImp(IProxySubscriber proxySubscriber) {
+        this.proxySubscriber = proxySubscriber;
+    }
 
     @Override
     public void onPluginMessageReceived(String channel, Player notInUse, byte[] message) {
-      super.onPluginMessageReceived(channel, message);
+        this.proxySubscriber.onPluginMessageReceived(channel, message);
     }
 }
 

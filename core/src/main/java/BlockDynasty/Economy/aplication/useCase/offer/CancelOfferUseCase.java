@@ -19,11 +19,13 @@ package BlockDynasty.Economy.aplication.useCase.offer;
 import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.offers.Offer;
+import BlockDynasty.Economy.domain.events.offersEvents.OfferAccepted;
 import BlockDynasty.Economy.domain.events.offersEvents.OfferCanceled;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.services.IOfferService;
 import BlockDynasty.Economy.domain.services.courier.Courier;
+import BlockDynasty.Economy.domain.services.courier.Message;
 
 public class CancelOfferUseCase {
     private final IOfferService offerService;
@@ -46,8 +48,18 @@ public class CancelOfferUseCase {
             return Result.failure("Offer not found for cancer offer", ErrorCode.OFFER_NOT_FOUND);
         }
         eventManager.emit(new OfferCanceled(offer));
-        courier.sendUpdateMessage("event", new OfferCanceled( offer).toJson(),offer.getVendedor().getUuid().toString());
-        courier.sendUpdateMessage("event", new OfferCanceled( offer).toJson(),offer.getComprador().getUuid().toString());
+
+        courier.sendUpdateMessage(Message.builder()
+                .setType(Message.Type.EVENT)
+                .setData(new OfferCanceled(offer).toJson())
+                .setTarget(offer.getVendedor().getUuid())
+                .build());
+
+        courier.sendUpdateMessage(Message.builder()
+                .setType(Message.Type.EVENT)
+                .setData(new OfferCanceled(offer).toJson())
+                .setTarget(offer.getComprador().getUuid())
+                .build());
         return Result.success();
     }
 }

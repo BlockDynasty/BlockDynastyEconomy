@@ -17,6 +17,7 @@
 package repository;
 
 import BlockDynasty.Economy.domain.entities.account.Account;
+import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.balance.Money;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.Exceptions.CurrencyNotFoundException;
@@ -69,6 +70,65 @@ public class TransactionRepository  implements ITransactions {
                                         "WHERE a.uuid = :uuid",
                                 AccountDb.class)
                         .setParameter("uuid", toUuid)
+                        .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+                        .uniqueResult();
+
+                if (fromDb == null || toDb == null) {
+                    tx.rollback();
+                    return Result.failure("Cuenta no encontrada", ErrorCode.ACCOUNT_NOT_FOUND);
+                }
+
+                Account from = AccountMapper.toDomain(fromDb);
+                Account to = AccountMapper.toDomain(toDb);
+
+                // Lógica de negocio de la cuenta
+                Result<Void> result = from.subtract(currency, amount);
+                if (!result.isSuccess()) {
+                    tx.rollback(); // Para liberar el bloqueo pesimista
+                    return Result.failure(result.getErrorMessage(), result.getErrorCode());
+                }
+                to.add(currency, amount);
+
+                // Guardar las cuentas actualizadas
+                updateBalancesInDb(from, fromDb, session);
+                updateBalancesInDb(to, toDb, session);
+
+                tx.commit();
+                return Result.success(new TransferResult(from, to));
+            } catch (NoResultException e) {
+                tx.rollback();
+                return Result.failure("Cuenta no encontrada", ErrorCode.ACCOUNT_NOT_FOUND);
+            } catch (Exception e) {
+                tx.rollback();
+                return Result.failure("Error en la transferencia: " + e.getMessage(), ErrorCode.UNKNOWN_ERROR);
+            }
+        }
+    }
+
+    @Override
+    public Result<TransferResult> transfer(Player playerFrom, Player playerTo, ICurrency currency, BigDecimal amount) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            try {
+                AccountDb fromDb = session.createQuery(
+                                "SELECT a FROM AccountDb a " +
+                                        "JOIN FETCH a.wallet w " +
+                                        "JOIN FETCH w.balances b " +
+                                        "JOIN FETCH b.currency c " +
+                                        "WHERE a.id = :id",
+                                AccountDb.class)
+                        .setParameter("id", playerFrom.getId())
+                        .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+                        .uniqueResult();
+
+                AccountDb toDb = session.createQuery(
+                                "SELECT a FROM AccountDb a " +
+                                        "JOIN FETCH a.wallet w " +
+                                        "JOIN FETCH w.balances b " +
+                                        "JOIN FETCH b.currency c " +
+                                        "WHERE a.id = :id",
+                                AccountDb.class)
+                        .setParameter("id", playerTo.getId())
                         .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                         .uniqueResult();
 
@@ -185,6 +245,50 @@ public class TransactionRepository  implements ITransactions {
     }
 
     @Override
+    public Result<Account> withdraw(Player player, ICurrency currency, BigDecimal amount) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            try {
+                AccountDb accountDb = session.createQuery(
+                                "SELECT a FROM AccountDb a " +
+                                        "JOIN FETCH a.wallet w " +
+                                        "JOIN FETCH w.balances b " +
+                                        "JOIN FETCH b.currency c " +
+                                        "WHERE a.id = :id",
+                                AccountDb.class)
+                        .setParameter("id", player.getId())
+                        .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+                        .uniqueResult();
+
+                if (accountDb == null) {
+                    tx.rollback();
+                    return Result.failure("Cuenta no encontrada", ErrorCode.ACCOUNT_NOT_FOUND);
+                }
+
+                Account account = AccountMapper.toDomain(accountDb);
+                Result<Void> result = account.subtract(currency, amount);
+
+                if (!result.isSuccess()) {
+                    tx.rollback();
+                    return Result.failure(result.getErrorMessage(), result.getErrorCode());
+                }
+
+                // Use the helper method for consistent balance updates
+                updateBalancesInDb(account, accountDb, session);
+
+                tx.commit();
+                return Result.success(account);
+            } catch (NoResultException e) {
+                tx.rollback();
+                return Result.failure("Cuenta no encontrada", ErrorCode.ACCOUNT_NOT_FOUND);
+            } catch (Exception e) {
+                tx.rollback();
+                return Result.failure("Error en el retiro: " + e.getMessage(), ErrorCode.UNKNOWN_ERROR);
+            }
+        }
+    }
+
+    @Override
     public Result<Account> deposit(String accountUuid, ICurrency currency, BigDecimal amount) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
@@ -228,6 +332,52 @@ public class TransactionRepository  implements ITransactions {
             }
         }
     }
+
+    @Override
+    public Result<Account> deposit(Player player, ICurrency currency, BigDecimal amount) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            try {
+                // Changed query to properly fetch account with its wallet and balances
+                AccountDb accountDb = session.createQuery(
+                                "SELECT a FROM AccountDb a " +
+                                        "JOIN FETCH a.wallet w " +
+                                        "JOIN FETCH w.balances b " +
+                                        "JOIN FETCH b.currency c " +
+                                        "WHERE a.id = :id",
+                                AccountDb.class)
+                        .setParameter("id", player.getId())
+                        .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+                        .uniqueResult();
+
+                if (accountDb == null) {
+                    tx.rollback();
+                    return Result.failure("Cuenta no encontrada", ErrorCode.ACCOUNT_NOT_FOUND);
+                }
+
+                Account account = AccountMapper.toDomain(accountDb);
+                Result<Void> result = account.add(currency, amount);
+
+                if (!result.isSuccess()) {
+                    tx.rollback();
+                    return Result.failure(result.getErrorMessage(), result.getErrorCode());
+                }
+
+                // Use the helper method for consistent balance updates
+                updateBalancesInDb(account, accountDb, session);
+
+                tx.commit();
+                return Result.success(account);
+            } catch (NoResultException e) {
+                tx.rollback();
+                return Result.failure("Cuenta no encontrada", ErrorCode.ACCOUNT_NOT_FOUND);
+            } catch (Exception e) {
+                tx.rollback();
+                return Result.failure("Error en el depósito: " + e.getMessage(), ErrorCode.DATA_BASE_ERROR);
+            }
+        }
+    }
+
     @Override
     public Result<Account> exchange(String playerUUID, ICurrency fromCurrency, BigDecimal amountFrom, ICurrency toCurrency, BigDecimal amountTo) {
         try (Session session = sessionFactory.openSession()) {
@@ -241,6 +391,56 @@ public class TransactionRepository  implements ITransactions {
                                         "WHERE a.uuid = :uuid",
                                 AccountDb.class)
                         .setParameter("uuid", playerUUID)
+                        .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+                        .uniqueResult();
+
+                if (playerDb == null) {
+                    tx.rollback();
+                    return Result.failure("Cuenta no encontrada", ErrorCode.ACCOUNT_NOT_FOUND);
+                }
+
+                Account player = AccountMapper.toDomain(playerDb);
+
+                Result<Void> resultSubtract = player.subtract(fromCurrency, amountFrom);
+                if (!resultSubtract.isSuccess()) {
+                    tx.rollback();
+                    return Result.failure(resultSubtract.getErrorMessage(), resultSubtract.getErrorCode());
+                }
+
+                Result<Void> resultAdd = player.add(toCurrency, amountTo);
+                if (!resultAdd.isSuccess()) {
+                    tx.rollback();
+                    return Result.failure(resultAdd.getErrorMessage(), resultAdd.getErrorCode());
+                }
+
+                // Use the helper method for consistent balance updates
+                updateBalancesInDb(player, playerDb, session);
+
+                tx.commit();
+                return Result.success(player);
+            } catch (NoResultException e) {
+                tx.rollback();
+                return Result.failure("Cuenta no encontrada", ErrorCode.ACCOUNT_NOT_FOUND);
+            } catch (Exception e) {
+                tx.rollback();
+                return Result.failure("Error en el intercambio: " + e.getMessage(), ErrorCode.DATA_BASE_ERROR);
+            }
+        }
+    }
+
+    @Override
+    public Result<Account> exchange(Player playerFrom, ICurrency fromCurrency, BigDecimal amountFrom, ICurrency toCurrency, BigDecimal amountTo) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            try {
+                AccountDb playerDb = session.createQuery(
+                                "SELECT a FROM AccountDb a " +
+                                        "JOIN FETCH a.wallet w " +
+                                        "JOIN FETCH w.balances b " +
+                                        "JOIN FETCH b.currency c " +
+                                        "WHERE a.id = :id",
+                                AccountDb.class)
+                        .setParameter("id", playerFrom.getId())
                         .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                         .uniqueResult();
 
@@ -353,6 +553,80 @@ public class TransactionRepository  implements ITransactions {
         }
     }
 
+    public Result<TransferResult> trade(Player playerFrom, Player playerTo, ICurrency fromCurrency, ICurrency toCurrency, BigDecimal amountFrom, BigDecimal amountTo) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            try {
+                AccountDb fromDb = session.createQuery(
+                                "SELECT a FROM AccountDb a " +
+                                        "JOIN FETCH a.wallet w " +
+                                        "JOIN FETCH w.balances b " +
+                                        "JOIN FETCH b.currency c " +
+                                        "WHERE a.id = :id",
+                                AccountDb.class)
+                        .setParameter("id", playerFrom.getId())
+                        .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+                        .uniqueResult();
+
+                AccountDb toDb = session.createQuery(
+                                "SELECT a FROM AccountDb a " +
+                                        "JOIN FETCH a.wallet w " +
+                                        "JOIN FETCH w.balances b " +
+                                        "JOIN FETCH b.currency c " +
+                                        "WHERE a.id = :id",
+                                AccountDb.class)
+                        .setParameter("id", playerTo.getId())
+                        .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+                        .uniqueResult();
+
+                if (fromDb == null || toDb == null) {
+                    tx.rollback();
+                    return Result.failure("Cuenta no encontrada", ErrorCode.ACCOUNT_NOT_FOUND);
+                }
+
+                Account from = AccountMapper.toDomain(fromDb);
+                Account to = AccountMapper.toDomain(toDb);
+
+                Result<Void> resultSubtractFrom = from.subtract(fromCurrency, amountFrom);
+                if (!resultSubtractFrom.isSuccess()) {
+                    tx.rollback();
+                    return Result.failure(resultSubtractFrom.getErrorMessage(), resultSubtractFrom.getErrorCode());
+                }
+
+                Result<Void> resultSubtractTo = to.subtract(toCurrency, amountTo);
+                if (!resultSubtractTo.isSuccess()) {
+                    tx.rollback();
+                    return Result.failure(resultSubtractTo.getErrorMessage(), resultSubtractTo.getErrorCode());
+                }
+
+                Result<Void> resultAddFrom = from.add(toCurrency, amountTo);
+                if (!resultAddFrom.isSuccess()) {
+                    tx.rollback();
+                    return Result.failure(resultAddFrom.getErrorMessage(), resultAddFrom.getErrorCode());
+                }
+
+                Result<Void> resultAddTo = to.add(fromCurrency, amountFrom);
+                if (!resultAddTo.isSuccess()) {
+                    tx.rollback();
+                    return Result.failure(resultAddTo.getErrorMessage(), resultAddTo.getErrorCode());
+                }
+
+                // Use the helper method for consistent balance updates
+                updateBalancesInDb(from, fromDb, session);
+                updateBalancesInDb(to, toDb, session);
+
+                tx.commit();
+                return Result.success(new TransferResult(from, to));
+            } catch (NoResultException e) {
+                tx.rollback();
+                return Result.failure("Cuenta no encontrada", ErrorCode.ACCOUNT_NOT_FOUND);
+            } catch (Exception e) {
+                tx.rollback();
+                return Result.failure("Error en el intercambio: " + e.getMessage(), ErrorCode.DATA_BASE_ERROR);
+            }
+        }
+    }
+
     @Override
     public Result<Account> setBalance(String accountUuid, ICurrency currency, BigDecimal amount) {
         try (Session session = sessionFactory.openSession()) {
@@ -367,6 +641,51 @@ public class TransactionRepository  implements ITransactions {
                                         "WHERE a.uuid = :uuid",
                                 AccountDb.class)
                         .setParameter("uuid", accountUuid)
+                        .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+                        .uniqueResult();
+
+                if (accountDb == null) {
+                    tx.rollback();
+                    return Result.failure("Cuenta no encontrada", ErrorCode.ACCOUNT_NOT_FOUND);
+                }
+
+                Account account = AccountMapper.toDomain(accountDb);
+                Result<Void> result = account.setMoney(currency, amount);
+
+                if (!result.isSuccess()) {
+                    tx.rollback();
+                    return Result.failure(result.getErrorMessage(), result.getErrorCode());
+                }
+
+                // Use the helper method for consistent balance updates
+                updateBalancesInDb(account, accountDb, session);
+
+                tx.commit();
+                return Result.success(account);
+            } catch (NoResultException e) {
+                tx.rollback();
+                return Result.failure("Cuenta no encontrada", ErrorCode.ACCOUNT_NOT_FOUND);
+            } catch (Exception e) {
+                tx.rollback();
+                return Result.failure("Error al establecer balance: " + e.getMessage(), ErrorCode.DATA_BASE_ERROR);
+            }
+        }
+    }
+
+    @Override
+    public Result<Account> setBalance(Player player, ICurrency currency, BigDecimal amount) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            try {
+                // Modified query to properly fetch the account with its wallet and balances
+                AccountDb accountDb = session.createQuery(
+                                "SELECT a FROM AccountDb a " +
+                                        "JOIN FETCH a.wallet w " +
+                                        "JOIN FETCH w.balances b " +
+                                        "JOIN FETCH b.currency c " +
+                                        "WHERE a.id = :id",
+                                AccountDb.class)
+                        .setParameter("id", player.getId())
                         .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                         .uniqueResult();
 

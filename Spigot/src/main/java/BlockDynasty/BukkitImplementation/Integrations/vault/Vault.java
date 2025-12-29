@@ -29,10 +29,10 @@ import java.util.List;
 
 public class Vault {
     private static final BlockDynastyEconomy plugin = BlockDynastyEconomy.getInstance();
-    private static IVaultHandler vaultHandler;
-    private static final List<IVaultHandler> vaultsInjected = new ArrayList<>();
+    private static List<IVaultHandler> vaultsInjected = new ArrayList<>();
 
     public static void init(IApi api) {
+        Vault.vaultsInjected = new ArrayList<>();
         if (!BlockDynastyEconomy.getConfiguration().getBoolean("vault")) {
             Console.log("Vault integration is disabled.");
             return;

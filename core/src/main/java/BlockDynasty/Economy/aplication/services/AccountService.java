@@ -16,6 +16,7 @@
 package BlockDynasty.Economy.aplication.services;
 
 import BlockDynasty.Economy.domain.entities.account.Account;
+import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.balance.Money;
 import BlockDynasty.Economy.domain.persistence.Exceptions.TransactionException;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
@@ -72,38 +73,70 @@ public class AccountService implements IAccountService {
     public List<Account> getAccountsOnline() {
         return new ArrayList<>(this.accountsOnlineUuid.values());
     }
-    public Account getAccountOffline(String name) {
-        return this.dataStore.loadAccountByName(name).getValue();
+    public Result<Account> getAccountOffline(String name) {
+        return this.dataStore.loadAccountByName(name);
     }
-    public Account getAccountOffline(UUID uuid) {
-        return this.dataStore.loadAccountByUuid(uuid.toString()).getValue();
+    public Result<Account> getAccountOffline(UUID uuid) {
+        return this.dataStore.loadAccountByUuid(uuid);
     }
+    public Result<Account> getAccountOffline(Player player) {
+        return this.dataStore.loadAccountByPlayer(player);
+    }
+
     public Account getAccountOnline(String name){
         return  accountsOnlineName.getOrDefault(name,null);
     }
     public Account getAccountOnline(UUID uuid){
         return accountsOnlineUuid.getOrDefault(uuid,null);
     }
+    public Account getAccountOnline(Player player){
+        Account accountByName = accountsOnlineName.getOrDefault(player.getNickname(),null);
+        if(accountByName != null && accountByName.getUuid().equals(player.getUuid())) {
+            return accountByName;
+        }
+        Account accountByUuid = accountsOnlineUuid.getOrDefault(player.getUuid(),null);
+        if(accountByUuid != null && accountByUuid.getNickname().equals(player.getNickname())) {
+            return accountByUuid;
+        }
+        return null;
+    }
 
-    public Account getAccount(String name) {
+    public Result<Account> getAccount(String name) {
         Account account = this.getAccountOnline(name);
         if(account == null){
-            account = this.getAccountOffline(name);
-            if (account != null){
+            Result<Account> Raccount = this.getAccountOffline(name);
+            if(Raccount.isSuccess()){
+                account = Raccount.getValue();
                 syncWalletWithSystemCurrencies(account);
             }
+            return Raccount;
         }
-        return account;
+        return Result.success(account);
     }
-    public Account getAccount(UUID uuid) {
+    public Result<Account> getAccount(UUID uuid) {
         Account account = this.getAccountOnline(uuid);
         if(account == null){
-            account = this.getAccountOffline(uuid);
-            if (account != null){
+            Result<Account> Raccount = this.getAccountOffline(uuid);
+            if(Raccount.isSuccess()){
+                account = Raccount.getValue();
                 syncWalletWithSystemCurrencies(account);
             }
+            return Raccount;
         }
-        return account;
+        return Result.success(account);
+    }
+
+    public Result<Account> getAccount(Player player) {
+        Account account = this.getAccountOnline(player);
+        if(account == null){
+            Result<Account> Raccount = this.getAccountOffline(player);
+            if(Raccount.isSuccess()){
+                account = Raccount.getValue();
+                syncWalletWithSystemCurrencies(account);
+            }
+            return Raccount;
+        }
+        return Result.success(account);
     }
 
     public void syncOnlineAccount(Account account){
@@ -124,7 +157,7 @@ public class AccountService implements IAccountService {
     public void syncOnlineAccount(UUID uuid){
         Account accountCache = this.getAccountOnline(uuid);
         if (accountCache != null){
-            Result<Account> result =  this.dataStore.loadAccountByUuid(uuid.toString());
+            Result<Account> result =  this.dataStore.loadAccountByUuid(uuid);
             if (result.isSuccess()){
                 syncWalletWithSystemCurrencies(result.getValue());
                 accountCache.setBalances(result.getValue().getBalances());
@@ -139,7 +172,7 @@ public class AccountService implements IAccountService {
         for (Account account : accounts) {
             syncWalletWithSystemCurrencies(account);
             try {
-                dataStore.saveAccount(account);
+                dataStore.saveAccount(account.getPlayer(),account);
             } catch (TransactionException e) {
                 throw new TransactionException("Error in transaction", e);
             }
@@ -185,22 +218,24 @@ public class AccountService implements IAccountService {
 
     public Result<Void> checkNameChange(Account account , String newName) {
         if (!account.getNickname().equalsIgnoreCase(newName)) {
+            Player player = new Player(account.getUuid(), account.getNickname());
             account.setNickname(newName);
             try {
-                this.dataStore.saveAccount(account);
+                this.dataStore.saveAccount(player,account);
             } catch (TransactionException e) {
-                return Result.failure( "Error saving account after name change", ErrorCode.DATA_BASE_ERROR);
+                return Result.failure(e.getMessage(), ErrorCode.DATA_BASE_ERROR);
             }
         }
         return Result.success(null);
     }
     public Result<Void> checkUuidChange(Account account, UUID newUuid) {
         if (!account.getUuid().equals(newUuid)) {
+            Player player = new Player(account.getUuid(), account.getNickname());
             account.setUuid(newUuid);
             try {
-                this.dataStore.saveAccount(account);
+                this.dataStore.saveAccount(player,account);
             } catch (TransactionException e) {
-                return Result.failure("Error saving account after UUID change", ErrorCode.DATA_BASE_ERROR);
+                return Result.failure(e.getMessage(), ErrorCode.DATA_BASE_ERROR);
             }
         }
         return Result.success(null);

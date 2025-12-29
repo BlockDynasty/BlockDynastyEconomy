@@ -19,17 +19,33 @@ package BlockDynasty.Economy.domain.entities.account;
 import java.util.UUID;
 
 public class Player {
+    private Long dbId;
     private UUID uuid;
     private String nickname;
+
+    public Player(Long dbId, UUID uuid, String nickname) {
+        this.dbId = dbId;
+        this.uuid = uuid;
+        this.nickname = nickname;
+    }
 
     public Player(UUID uuid, String nickname) {
         this.uuid = uuid;
         this.nickname = nickname;
     }
     public Player(Player player) {
-        this.uuid = player.uuid;
-        this.nickname = player.nickname;
+        this.dbId = player.getId();
+        this.uuid = player.getUuid();
+        this.nickname = player.getNickname();
     }
+    public Long getId(){
+        return dbId;
+    }
+
+    public Long setId(Long id){
+        return this.dbId = id;
+    }
+
     public UUID getUuid() {
         return uuid;
     }

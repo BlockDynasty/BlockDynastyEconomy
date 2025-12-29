@@ -49,6 +49,7 @@ public class CreateOfferSecondPanel extends CurrencySelectorAndAmount {
 
     @Override
     protected String  execute(IEntityGUI sender, ICurrency currency, java.math.BigDecimal amount){
+        //can be Player
         Result<Void> result= createOfferUseCase.execute(
                 sender.getUniqueId(),
                 target.getUuid(),

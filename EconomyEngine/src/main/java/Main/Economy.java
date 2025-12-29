@@ -22,6 +22,7 @@ import BlockDynasty.Economy.domain.services.courier.Courier;
 import BlockDynasty.Economy.domain.services.log.Log;
 import api.Api;
 import api.IApi;
+import lib.abstractions.IProxySubscriber;
 import lib.gui.GUISystem;
 import platform.files.Configuration;
 import platform.files.Languages;
@@ -34,11 +35,11 @@ import lib.util.colors.ChatColor;
 import platform.listeners.EventListener;
 import platform.listeners.IPlayerJoin;
 import platform.listeners.PlayerJoinListener;
-import platform.proxy.ProxyReceiver;
-import platform.proxy.ProxySender;
-import redis.Publisher;
-import redis.RedisData;
-import redis.Subscriber;
+import MessageChannel.proxy.ProxySubscriber;
+import MessageChannel.proxy.ProxyPublisher;
+import MessageChannel.redis.RedisPublisher;
+import MessageChannel.redis.RedisData;
+import MessageChannel.redis.RedisSubscriber;
 import repository.ConnectionHandler.Hibernate.*;
 import repository.Repository;
 import services.Message;
@@ -50,7 +51,7 @@ public class Economy {
     private PlayerJoinListener playerJoinListener;
     private IApi api;
     private PlaceHolder placeHolder;
-    private static Subscriber subscriber;
+    private static RedisSubscriber subscriber;
     private Configuration configuration;
     private Languages languages;
     private PlatformAdapter platformAdapter;
@@ -66,8 +67,8 @@ public class Economy {
 
         this.initDatabase(configuration);
 
-        this.core=new Core(repository,60,createCourierImpl(configuration,platformAdapter),new EconomyLogger( configuration,platformAdapter.getScheduler()));
-        this.createListener(configuration,platformAdapter);
+        this.core=new Core(repository,60,createPublisher(configuration,platformAdapter),new EconomyLogger( configuration,platformAdapter.getScheduler()));
+        this.createSubscriber(configuration,platformAdapter);
         this.api = new Api(core.getUseCaseFactory(),core.getServicesManager().getAccountService());
         this.placeHolder = new PlaceHolder(core.getUseCaseFactory());
         this.playerJoinListener = new PlayerJoinListener(core.getUseCaseFactory(),core.getServicesManager().getAccountService(),configuration.getBoolean("online"),platformAdapter.isOnlineMode());
@@ -105,21 +106,28 @@ public class Economy {
         }
     }
 
-    private Courier createCourierImpl(Configuration configuration, PlatformAdapter platformAdapter){
+    private Courier createPublisher(Configuration configuration, PlatformAdapter platformAdapter){
         if(configuration.getBoolean("redis.enabled")){
             Console.log("Redis Enabled");
-            return new Publisher( new RedisData(configuration),platformAdapter);
+            return new RedisPublisher( new RedisData(configuration),platformAdapter);
         }else{
             Console.log("Redis Disable - Using Proxy System");
-            return new ProxySender(platformAdapter);
+            return new ProxyPublisher(platformAdapter);
         }
     }
-    private void createListener(Configuration configuration, PlatformAdapter platformAdapter){
+    private void createSubscriber(Configuration configuration, PlatformAdapter platformAdapter){
         if(configuration.getBoolean("redis.enabled")){
-            subscriber = new Subscriber(new RedisData(configuration),platformAdapter,core.getServicesManager().getOfferService(),core.getServicesManager().getCurrencyService(),core.getServicesManager().getAccountService(),core.getServicesManager().getEventManager());
-            subscriber.startListening();
+            subscriber = new RedisSubscriber(new RedisData(configuration),platformAdapter,
+                    core.getServicesManager().getOfferService(),
+                    core.getServicesManager().getCurrencyService(),
+                    core.getServicesManager().getAccountService(),
+                    core.getServicesManager().getEventManager());
         }else{
-            ProxyReceiver.init(core.getServicesManager().getAccountService(),core.getServicesManager().getCurrencyService(),core.getServicesManager().getEventManager(), core.getServicesManager().getOfferService(),platformAdapter);
+            IProxySubscriber proxySubscriber = new ProxySubscriber(platformAdapter,
+                    core.getServicesManager().getOfferService(),
+                    core.getServicesManager().getCurrencyService(),
+                    core.getServicesManager().getAccountService(),
+                    core.getServicesManager().getEventManager());
         }
     }
 

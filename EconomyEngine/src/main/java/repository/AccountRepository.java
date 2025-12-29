@@ -19,6 +19,7 @@ package repository;
 import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.entities.account.Exceptions.AccountAlreadyExist;
 import BlockDynasty.Economy.domain.entities.account.Exceptions.AccountNotFoundException;
+import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.balance.Money;
 import BlockDynasty.Economy.domain.entities.currency.Exceptions.CurrencyNotFoundException;
 import BlockDynasty.Economy.domain.persistence.Exceptions.RepositoryException;
@@ -37,6 +38,7 @@ import repository.Models.WalletDb;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class AccountRepository implements IAccountRepository {
@@ -68,7 +70,7 @@ public class AccountRepository implements IAccountRepository {
     }
 
     @Override
-    public Account findByUuid(String uuid) {
+    public Account findByUuid(UUID uuid) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
@@ -79,13 +81,44 @@ public class AccountRepository implements IAccountRepository {
                                         "LEFT JOIN FETCH b.currency " +
                                         "WHERE a.uuid = :uuid",
                                 AccountDb.class)
-                        .setParameter("uuid", uuid)
+                        .setParameter("uuid", uuid.toString())
                         .getSingleResult();
                 tx.commit();
                 return AccountMapper.toDomain(accountDb);
             } catch (NoResultException e) {
                 tx.rollback();
                 throw new AccountNotFoundException("Account not found: " + uuid);
+            }catch (NonUniqueResultException e) {
+                tx.rollback();
+                throw e;
+            } catch (Exception e) {
+                tx.rollback();
+                throw new RepositoryException("Repository Account Error: " + e.getMessage(), e);
+            }
+        }
+    }
+
+    public Account findByPlayer(Player player){
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            try {
+                AccountDb accountDb = session.createQuery(
+                                "SELECT a FROM AccountDb a " +
+                                        "LEFT JOIN FETCH a.wallet w " +
+                                        "LEFT JOIN FETCH w.balances b " +
+                                        "LEFT JOIN FETCH b.currency " +
+                                        "WHERE a.id = :id",
+                                AccountDb.class)
+                        .setParameter("id", player.getId())
+                        .getSingleResult();
+                tx.commit();
+                return AccountMapper.toDomain(accountDb);
+            } catch (NoResultException e) {
+                tx.rollback();
+                throw new AccountNotFoundException("Account not found: " + player.getNickname());
+            }catch (NonUniqueResultException e) {
+                tx.rollback();
+                throw e;
             } catch (Exception e) {
                 tx.rollback();
                 throw new RepositoryException("Repository Account Error: " + e.getMessage(), e);
@@ -107,13 +140,16 @@ public class AccountRepository implements IAccountRepository {
                                 AccountDb.class)
                         .setParameter("name", nickname)
                         .getSingleResult();
+
                 tx.commit();
                 return AccountMapper.toDomain(accountDb);
             } catch (NoResultException e) {
                 tx.rollback();
                 throw new AccountNotFoundException(e.getMessage());
-            } catch (Exception e) {
+            }catch (NonUniqueResultException e) {
                 tx.rollback();
+                throw e;
+            } catch (Exception e) {
                 throw new RepositoryException("Repository Account error: "+e.getMessage(),e);
             }
         }
@@ -121,24 +157,28 @@ public class AccountRepository implements IAccountRepository {
 
     @Override
     public void save(Account account) {
+        save(account.getPlayer(), account);
+    }
+
+    @Override
+    public void save(Player account,Account newAccount) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
                 AccountDb accountDb = session.createQuery(
-                                "SELECT a FROM AccountDb a LEFT JOIN FETCH a.wallet w LEFT JOIN FETCH w.balances b LEFT JOIN FETCH b.currency WHERE a.uuid = :uuid OR a.nickname = :name",
+                                "SELECT a FROM AccountDb a LEFT JOIN FETCH a.wallet w LEFT JOIN FETCH w.balances b LEFT JOIN FETCH b.currency WHERE a.id = :id",
                                 AccountDb.class)
-                        .setParameter("uuid", account.getUuid().toString())
-                        .setParameter("name", account.getNickname())
+                        .setParameter("id", account.getId())
                         .getSingleResult();
 
                 // Update basic properties
-                accountDb.setNickname(account.getNickname());
-                accountDb.setUuid(account.getUuid().toString());
-                accountDb.setCanReceiveCurrency(account.canReceiveCurrency());
-                accountDb.setBlock(account.isBlocked());
+                accountDb.setNickname(newAccount.getNickname());
+                accountDb.setUuid(newAccount.getUuid().toString());
+                accountDb.setCanReceiveCurrency(newAccount.canReceiveCurrency());
+                accountDb.setBlock(newAccount.isBlocked());
 
                 // Use the helper method from TransactionRepository for balance updates
-                updateBalancesInWallet(account, accountDb.getWallet(), session);
+                updateBalancesInWallet(newAccount, accountDb.getWallet(), session);
 
                 // Hibernate will automatically detect and persist changes
                 tx.commit();
@@ -188,15 +228,14 @@ public class AccountRepository implements IAccountRepository {
     }
 
     @Override
-    public void delete(Account account) {
+    public void delete(Player account) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
                 AccountDb accountDb = session.createQuery(
-                                "SELECT a FROM AccountDb a LEFT JOIN FETCH a.wallet WHERE a.uuid = :uuid OR a.nickname=:name",
+                                "SELECT a FROM AccountDb a LEFT JOIN FETCH a.wallet WHERE a.id = :id",
                                 AccountDb.class)
-                        .setParameter("uuid", account.getUuid().toString())
-                        .setParameter("name", account.getNickname())
+                        .setParameter("id", account.getId())
                         .getSingleResult();
 
                 session.remove(accountDb);
@@ -209,10 +248,13 @@ public class AccountRepository implements IAccountRepository {
             }
         }
     }
-
     @Override
     public void update(Account account) {
-        save(account);
+        save(account.getPlayer(), account);
+    }
+    @Override
+    public void update(Player account, Account newStateAccount) {
+        save(account,newStateAccount);
     }
 
     @Override
@@ -220,8 +262,9 @@ public class AccountRepository implements IAccountRepository {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
-                Long count = session.createQuery("SELECT COUNT(a) FROM AccountDb a WHERE a.uuid = :uuid", Long.class)
+                Long count = session.createQuery("SELECT COUNT(a) FROM AccountDb a WHERE a.uuid = :uuid AND a.nickname = :name", Long.class)
                         .setParameter("uuid", account.getUuid().toString())
+                        .setParameter("name", account.getNickname())
                         .getSingleResult();
 
                 if (count > 0) {
@@ -262,6 +305,7 @@ public class AccountRepository implements IAccountRepository {
                 // Save the account after the wallet has been persisted
                 session.persist(accountDb);
                 tx.commit();
+                account.setId(accountDb.getId());
             } catch (Exception e) {
                 tx.rollback();
                 throw new RepositoryException("Repository Accounts Error: " + e.getMessage(), e);

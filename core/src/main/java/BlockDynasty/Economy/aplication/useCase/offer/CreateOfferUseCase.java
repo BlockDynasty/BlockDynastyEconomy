@@ -20,6 +20,7 @@ import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByUUIDUseCase;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.entities.offers.Offer;
+import BlockDynasty.Economy.domain.events.offersEvents.OfferCanceled;
 import BlockDynasty.Economy.domain.events.offersEvents.OfferCreated;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 import BlockDynasty.Economy.domain.result.ErrorCode;
@@ -31,6 +32,7 @@ import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
 import BlockDynasty.Economy.domain.services.IOfferService;
 import BlockDynasty.Economy.domain.services.courier.Courier;
+import BlockDynasty.Economy.domain.services.courier.Message;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -112,7 +114,12 @@ public class CreateOfferUseCase {
 
         Offer offer =offerService.createOffer(accountSenderResult.getValue().getPlayer(), accountReciberResult.getValue().getPlayer(), amountCurrencyValue, amountCurrencyOffer, currencyValueResult.getValue(), currencyOfferResult.getValue());
         eventManager.emit(new OfferCreated(offer));
-        courier.sendUpdateMessage("event",new OfferCreated(offer).toJson(),playerReciber.toString());
+
+        courier.sendUpdateMessage(Message.builder()
+                .setType(Message.Type.EVENT)
+                .setData(new OfferCreated(offer).toJson())
+                .setTarget(playerReciber)
+                .build());
         return Result.success();
     }
 }

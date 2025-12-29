@@ -19,7 +19,7 @@ package repository;
 import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.entities.account.Exceptions.AccountAlreadyExist;
 import BlockDynasty.Economy.domain.entities.account.Exceptions.AccountNotFoundException;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.currency.Exceptions.CurrencyNotFoundException;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.persistence.Exceptions.RepositoryException;
@@ -30,25 +30,26 @@ import BlockDynasty.Economy.domain.persistence.transaction.ITransactions;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.result.TransferResult;
+import org.hibernate.NonUniqueResultException;
 import org.hibernate.SessionFactory;
 import repository.ConnectionHandler.Hibernate.Connection;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
-public class Repository implements IRepository {
+public class Repository extends TransactionRepository implements IRepository {
     private Connection connection;
     private final SessionFactory sessionFactory;
     private IAccountRepository accountRepository;
     private ICurrencyRepository currencyRepository;
-    private ITransactions transactionsRepository;
 
     public Repository(Connection connection) {
+        super(connection.getSession());
         this.connection = connection;
         this.sessionFactory = connection.getSession();
         this.accountRepository = new AccountRepository(sessionFactory);
         this.currencyRepository = new CurrencyRepository(sessionFactory);
-        this.transactionsRepository = new TransactionRepository(sessionFactory);
     }
 
     @Override
@@ -118,13 +119,15 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public Result<Account> loadAccountByUuid(String uuid) {
+    public Result<Account> loadAccountByUuid(UUID uuid) {
         try{
             Account account =accountRepository.findByUuid(uuid);
             return Result.success(account);
         }catch (AccountNotFoundException e) {
             return Result.failure("Account with UUID " + uuid + " not found.",ErrorCode.ACCOUNT_NOT_FOUND);
-        } catch (Exception e) {
+        }catch (NonUniqueResultException e) {
+            return Result.failure("Multiple accounts found with UUID " + uuid + ".",ErrorCode.ACCOUNT_DUPLICATED);
+        } catch (RepositoryException e) {
             return Result.failure("Error loading account: " + e.getMessage(),ErrorCode.DATA_BASE_ERROR);
         }
     }
@@ -136,7 +139,23 @@ public class Repository implements IRepository {
             return Result.success(account);
         }catch (AccountNotFoundException e) {
             return Result.failure("Account with name " + name + " not found.", ErrorCode.ACCOUNT_NOT_FOUND);
-        } catch (Exception e) {
+        }catch (NonUniqueResultException e) {
+            return Result.failure("Multiple accounts found with name " + name + ".", ErrorCode.ACCOUNT_DUPLICATED);
+        }catch (RepositoryException e) {
+            return Result.failure("Error loading account: " + e.getMessage(), ErrorCode.DATA_BASE_ERROR);
+        }
+    }
+
+    @Override
+    public Result<Account> loadAccountByPlayer(Player player) {
+        try{
+            Account account = accountRepository.findByPlayer(player);
+            return Result.success(account);
+        }catch (AccountNotFoundException e) {
+            return Result.failure("Account for player " + player.getNickname() + " not found.", ErrorCode.ACCOUNT_NOT_FOUND);
+        }catch (NonUniqueResultException e) {
+            return Result.failure("Multiple accounts found for player " + player.getNickname() + ".", ErrorCode.ACCOUNT_DUPLICATED);
+        }catch (RepositoryException e) {
             return Result.failure("Error loading account: " + e.getMessage(), ErrorCode.DATA_BASE_ERROR);
         }
     }
@@ -165,7 +184,18 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public Result<Void> deleteAccount(Account account) {
+    public void saveAccount(Player player, Account account) {
+        try {
+            accountRepository.save(player,account);
+        }catch (AccountNotFoundException e) {
+            accountRepository.create(account);
+        }catch (Exception e) {
+            throw new RepositoryException( "Error saving account: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public Result<Void> deleteAccount(Player account) {
         try {
             accountRepository.delete(account);
             return Result.success(null);
@@ -221,35 +251,5 @@ public class Repository implements IRepository {
                 throw new RepositoryException("Error clearing database: " + e.getMessage(), e);
             }
         }
-    }
-
-    @Override
-    public Result<TransferResult> transfer(String fromUuid, String toUuid, ICurrency currency, BigDecimal amount) {
-        return transactionsRepository.transfer(fromUuid, toUuid, currency, amount);
-    }
-
-    @Override
-    public Result<Account> withdraw(String accountUuid, ICurrency currency, BigDecimal amount) {
-        return transactionsRepository.withdraw( accountUuid, currency, amount);
-    }
-
-    @Override
-    public Result<Account> deposit(String accountUuid, ICurrency currency, BigDecimal amount) {
-        return transactionsRepository.deposit( accountUuid, currency, amount);
-    }
-
-    @Override
-    public Result<Account> exchange(String fromUuid, ICurrency fromCurrency, BigDecimal amountFrom, ICurrency toCurrency, BigDecimal amountTo) {
-        return transactionsRepository.exchange(fromUuid, fromCurrency, amountFrom, toCurrency, amountTo);
-    }
-
-    @Override
-    public Result<TransferResult> trade(String fromUuid, String toUuid, ICurrency fromCurrency, ICurrency toCurrency, BigDecimal amountFrom, BigDecimal amountTo) {
-        return transactionsRepository.trade(fromUuid, toUuid, fromCurrency, toCurrency, amountFrom, amountTo);
-    }
-
-    @Override
-    public Result<Account> setBalance(String accountUuid, ICurrency currency, BigDecimal amount) {
-        return transactionsRepository.setBalance(accountUuid, currency, amount);
     }
 }

@@ -25,6 +25,7 @@ import BlockDynasty.Economy.domain.events.transactionsEvents.SetEvent;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
 import BlockDynasty.Economy.domain.services.courier.Courier;
+import BlockDynasty.Economy.domain.services.courier.Message;
 import BlockDynasty.Economy.domain.services.log.Log;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
@@ -61,7 +62,7 @@ public class SetBalanceUseCase extends SingleAccountSingleCurrencyOp implements 
             return Result.failure("Decimal not supported", ErrorCode.DECIMAL_NOT_SUPPORTED);
         }
 
-        Result<Account> result =  this.dataStore.setBalance(account.getUuid().toString(), currency, amount);
+        Result<Account> result =  this.dataStore.setBalance(account.getPlayer(), currency, amount);
         if (!result.isSuccess()) {
             this.logger.log("[BALANCE SET failed] Account: " + account.getNickname() + " were set to: " + currency.format(amount) + " Error: " + result.getErrorMessage() + " Code: " + result.getErrorCode());
             return Result.failure(result.getErrorMessage(), result.getErrorCode());
@@ -69,7 +70,12 @@ public class SetBalanceUseCase extends SingleAccountSingleCurrencyOp implements 
 
         this.accountService.syncOnlineAccount(result.getValue());
         //this.updateForwarder.sendUpdateMessage("account", account.getUuid().toString());
-        this.updateForwarder.sendUpdateMessage("event",new SetEvent(account.getPlayer(), currency, amount,context).toJson(), account.getUuid().toString());
+
+        this.updateForwarder.sendUpdateMessage( Message.builder()
+                .setType(Message.Type.EVENT)
+                .setData(new SetEvent(account.getPlayer(), currency, amount,context).toJson())
+                .setTarget(account.getUuid())
+                .build());
         this.logger.log("[BALANCE SET] Account: " + account.getNickname() + " were set to: " + currency.format(amount));
         this.eventManager.emit( new SetEvent(account.getPlayer(), currency, amount,context));
 

@@ -24,12 +24,12 @@ import BlockDynasty.Economy.domain.events.transactionsEvents.TradeEvent;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
 import BlockDynasty.Economy.domain.services.courier.Courier;
+import BlockDynasty.Economy.domain.services.courier.Message;
 import BlockDynasty.Economy.domain.services.log.Log;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.result.TransferResult;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 
 import java.math.BigDecimal;
@@ -87,7 +87,7 @@ public class TradeCurrenciesUseCase extends MultiAccountMultiCurrencyOp implemen
             return Result.failure("Decimal not supported", ErrorCode.DECIMAL_NOT_SUPPORTED);
         }
 
-        Result<TransferResult> result = this.dataStore.trade( accountFrom.getUuid().toString(), accountTo.getUuid().toString(), currencyFrom, currencyTo, amountFrom, amountTo);
+        Result<TransferResult> result = this.dataStore.trade( accountFrom.getPlayer(), accountTo.getPlayer(), currencyFrom, currencyTo, amountFrom, amountTo);
         if(!result.isSuccess()){
             this.logger.log("[TRADE failed] Account: " + accountFrom.getNickname() + " traded " + currencyFrom.format(amountFrom) + " to " + accountTo.getNickname() + " for " + currencyTo.format(amountTo) + " - Error: " + result.getErrorMessage() + " - Code: " + result.getErrorCode());
             return Result.failure(result.getErrorMessage(), result.getErrorCode());
@@ -98,8 +98,18 @@ public class TradeCurrenciesUseCase extends MultiAccountMultiCurrencyOp implemen
 
         this.logger.log("[TRADE] Account: " + accountFrom.getNickname() + " traded " + currencyFrom.format(amountFrom) + " to " + accountTo.getNickname() + " for " + currencyTo.format(amountTo));
         this.eventManager.emit(new TradeEvent(accountFrom.getPlayer(),accountTo.getPlayer(), currencyFrom, currencyTo, amountFrom, amountTo));
-        this.updateForwarder.sendUpdateMessage("event", new TradeEvent(accountFrom.getPlayer(),accountTo.getPlayer(), currencyFrom, currencyTo, amountFrom, amountTo).toJson(), accountTo.getUuid().toString());
-        this.updateForwarder.sendUpdateMessage("event", new TradeEvent(accountFrom.getPlayer(),accountTo.getPlayer(), currencyFrom, currencyTo, amountFrom, amountTo).toJson(), accountFrom.getUuid().toString());
+
+        this.updateForwarder.sendUpdateMessage(Message.builder()
+                .setType(Message.Type.EVENT)
+                .setData(new TradeEvent(accountFrom.getPlayer(),accountTo.getPlayer(), currencyFrom, currencyTo, amountFrom, amountTo).toJson())
+                .setTarget(accountTo.getUuid())
+                .build());
+
+        this.updateForwarder.sendUpdateMessage( Message.builder()
+                .setType(Message.Type.EVENT)
+                .setData(new TradeEvent(accountFrom.getPlayer(),accountTo.getPlayer(), currencyFrom, currencyTo, amountFrom, amountTo).toJson())
+                .setTarget( accountFrom.getUuid())
+                .build());
 
         return Result.success();
     }

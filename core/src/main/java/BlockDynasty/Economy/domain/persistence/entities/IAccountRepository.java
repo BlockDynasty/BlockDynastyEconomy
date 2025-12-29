@@ -17,15 +17,20 @@
 package BlockDynasty.Economy.domain.persistence.entities;
 
 import BlockDynasty.Economy.domain.entities.account.Account;
+import BlockDynasty.Economy.domain.entities.account.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface IAccountRepository {
     List<Account> findAll();
-    Account findByUuid(String uuid);
+    Account findByUuid(UUID uuid);
     Account findByNickname(String nickname);
+    Account findByPlayer(Player player);
+    void save(Player account, Account newStateAccount);
     void save(Account account);
-    void delete(Account account);
+    void delete(Player account);
+    void update(Player account,Account newStateAccount);
     void update(Account account);
     void create(Account account);
     List<Account> getAccountsTopByCurrency(String currencyName, int limit, int offset);

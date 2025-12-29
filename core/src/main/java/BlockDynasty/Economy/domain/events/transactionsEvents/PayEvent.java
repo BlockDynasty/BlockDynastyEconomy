@@ -24,7 +24,7 @@ import BlockDynasty.Economy.domain.events.Event;
 import java.math.BigDecimal;
 
 public class PayEvent  extends Event {
-    private final ICurrency currency;
+    private final Currency currency;
     private final Player payer;
     private final Player received;
     private final BigDecimal amount;

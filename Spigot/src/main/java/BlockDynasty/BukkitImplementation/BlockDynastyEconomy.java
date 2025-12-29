@@ -118,7 +118,6 @@ public class BlockDynastyEconomy extends JavaPlugin {
         Vault.init(economy.getApiWithLog(economy.getVaultLogger()));
         PlaceHolder.register(economy.getPlaceHolder());
         TreasuryHook.register();
-        ChannelRegister.init(this);
     }
 
     public static BlockDynastyEconomy getInstance() {

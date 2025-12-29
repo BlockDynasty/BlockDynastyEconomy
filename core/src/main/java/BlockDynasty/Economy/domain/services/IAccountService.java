@@ -17,6 +17,7 @@
 package BlockDynasty.Economy.domain.services;
 
 import BlockDynasty.Economy.domain.entities.account.Account;
+import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.result.Result;
 
 import java.util.*;
@@ -27,8 +28,9 @@ public interface IAccountService {
     void addAccountToOnline(Account account);
     List<Account> getAccountsOnline();
     List<Account> getAccountsOffline();
-    Account getAccount(String name);
-    Account getAccount(UUID uuid);
+    Result<Account> getAccount(String name);
+    Result<Account> getAccount(UUID uuid);
+    Result<Account> getAccount(Player player);
     Account getAccountOnline(String name);
     Account getAccountOnline(UUID uuid);
 

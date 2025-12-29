@@ -21,7 +21,6 @@ import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.entities.wallet.Wallet;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -46,8 +45,8 @@ public class Account implements IAccount {
         this.blocked = blocked;
     }
 
-    public Account(UUID uuid, String nickname, Wallet wallet, boolean canReceiveCurrency, boolean blocked) {
-        this.player = new Player(uuid, nickname);
+    public Account(Long id,UUID uuid, String nickname, Wallet wallet, boolean canReceiveCurrency, boolean blocked) {
+        this.player = new Player(id,uuid, nickname);
         this.wallet = wallet;
         this.canReceiveCurrency = canReceiveCurrency;
         this.blocked = blocked;
@@ -149,6 +148,9 @@ public class Account implements IAccount {
         wallet.createBalance(currency, amount);
     }
 
+    public void setId(Long id) {
+        this.player.setId(id);
+    }
     public void setUuid(UUID uuid) {
         this.player.setUuid(uuid);
     }
@@ -161,6 +163,9 @@ public class Account implements IAccount {
     }
     public UUID getUuid() {
         return player.getUuid();
+    }
+    public Long getId() {
+        return player.getId();
     }
 
     public void setCanReceiveCurrency(boolean canReceiveCurrency) {

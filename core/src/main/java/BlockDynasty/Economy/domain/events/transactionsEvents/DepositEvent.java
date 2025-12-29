@@ -26,7 +26,7 @@ import java.math.BigDecimal;
 
 public class DepositEvent extends SerializableEvent {
     private final Context context;
-    private final ICurrency currency;
+    private final Currency currency;
     private final Player player;
     private final BigDecimal amount;
 

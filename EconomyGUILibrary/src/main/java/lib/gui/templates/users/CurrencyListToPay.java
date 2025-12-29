@@ -18,6 +18,7 @@ package lib.gui.templates.users;
 
 import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.aplication.useCase.transaction.PayUseCase;
+import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.Result;
 import lib.gui.components.IGUI;
@@ -33,7 +34,6 @@ import lib.util.colors.Colors;
 import lib.messages.Message;
 
 import java.math.BigDecimal;
-import java.nio.Buffer;
 import java.util.Map;
 
 public class CurrencyListToPay extends CurrencySelectorAndAmount {
@@ -49,7 +49,7 @@ public class CurrencyListToPay extends CurrencySelectorAndAmount {
 
     @Override
     public String execute(IEntityGUI sender, ICurrency currency, BigDecimal amount){
-        Result<Void> result = payUseCase.execute(sender.getUniqueId(), targetPlayer.getUuid(), currency.getSingular(), amount);
+        Result<Void> result = payUseCase.execute(new Player(sender.getUniqueId(),sender.getName()), targetPlayer, currency.getSingular(), amount);
         if (!result.isSuccess()) {
             return result.getErrorMessage();
         }else{

@@ -27,8 +27,8 @@ import java.math.BigDecimal;
 public class TradeEvent extends SerializableEvent {
     private final Player fromPlayer;
     private final Player toPlayer;
-    private final ICurrency currencyFrom;
-    private final ICurrency currencyTo;
+    private final Currency currencyFrom;
+    private final Currency currencyTo;
     private final BigDecimal amountFrom;
     private final BigDecimal amountTo;
 

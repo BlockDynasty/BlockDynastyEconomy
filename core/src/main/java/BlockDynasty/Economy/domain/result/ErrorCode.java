@@ -18,6 +18,7 @@ package BlockDynasty.Economy.domain.result;
 
 public enum ErrorCode {
     ACCOUNT_NOT_FOUND,
+    ACCOUNT_DUPLICATED,
     ACCOUNT_BLOCKED,
     ACCOUNT_CAN_NOT_RECEIVE,
     ACCOUNT_ALREADY_EXISTS,

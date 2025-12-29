@@ -21,15 +21,16 @@ import BlockDynasty.Economy.aplication.useCase.transaction.genericOperations.Sin
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.IDepositUseCase;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.events.Context;
+import BlockDynasty.Economy.domain.events.offersEvents.OfferCreated;
 import BlockDynasty.Economy.domain.events.transactionsEvents.DepositEvent;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
 import BlockDynasty.Economy.domain.services.courier.Courier;
+import BlockDynasty.Economy.domain.services.courier.Message;
 import BlockDynasty.Economy.domain.services.log.Log;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.entities.account.Account;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 
 import java.math.BigDecimal;
@@ -69,14 +70,19 @@ public class DepositUseCase extends SingleAccountSingleCurrencyOp implements IDe
             return Result.failure("Decimal not supported", ErrorCode.DECIMAL_NOT_SUPPORTED);
         }
 
-        Result<Account> result = this.dataStore.deposit(account.getUuid().toString(), currency, amount);
+        Result<Account> result = this.dataStore.deposit(account.getPlayer(), currency, amount);
         if(!result.isSuccess()){
             this.logger.log("[DEPOSIT failed] Account: " + account.getNickname() + " recibió un deposito de " + currency.format(amount) + " de " + currency.getSingular() + " pero falló: " + result.getErrorMessage() + " (" + result.getErrorCode() + ")");
             return Result.failure(result.getErrorMessage(), result.getErrorCode());
         }
 
         this.accountService.syncOnlineAccount(result.getValue());
-        this.updateForwarder.sendUpdateMessage("event", new DepositEvent(account.getPlayer(), currency, amount,context).toJson(), account.getPlayer().getUuid().toString()); //enviar el depositEvent en formato string o json
+
+        this.updateForwarder.sendUpdateMessage( Message.builder()
+                .setType(Message.Type.EVENT)
+                .setData(new DepositEvent(account.getPlayer(), currency, amount,context).toJson())
+                .setTarget(account.getPlayer().getUuid())
+                .build());
         this.logger.log("[DEPOSIT] Account: " + account.getNickname() + " has received a deposit of " + currency.format(amount) + " " + currency.getSingular());
         this.eventManager.emit(new DepositEvent(account.getPlayer(), currency, amount,context));
 

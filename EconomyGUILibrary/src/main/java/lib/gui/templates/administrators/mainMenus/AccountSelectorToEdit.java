@@ -24,6 +24,7 @@ import BlockDynasty.Economy.domain.result.Result;
 import lib.gui.GUIFactory;
 import lib.gui.components.IGUI;
 import lib.gui.components.IEntityGUI;
+import lib.gui.components.IItemStack;
 import lib.gui.components.ITextInput;
 import lib.gui.components.factory.Item;
 import lib.gui.components.generics.Button;
@@ -54,6 +55,16 @@ public class AccountSelectorToEdit extends AccountsList {
 
             showPlayers(players);
         }else {showPlayers(new ArrayList<>());}
+    }
+
+    @Override
+    protected IItemStack createItemFor(Player player) {
+        RecipeItem recipe = RecipeItem.builder()
+                .setMaterial(Materials.PLAYER_HEAD)
+                .setName(player.getNickname())
+                .setLore("databaseId: " + player.getId(), "uuid: " + player.getUuid().toString())
+                .build();
+        return Item.of(recipe);
     }
 
     @Override

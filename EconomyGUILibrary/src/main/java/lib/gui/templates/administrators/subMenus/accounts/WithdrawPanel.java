@@ -45,7 +45,7 @@ public class WithdrawPanel extends CurrencySelectorAndAmount {
 
     @Override
     public String execute(IEntityGUI sender, ICurrency currency, BigDecimal amount) {
-        Result<Void> result = withdrawUseCase.execute(targetPlayer.getUuid(), currency.getSingular(), amount, Context.COMMAND);
+        Result<Void> result = withdrawUseCase.execute(targetPlayer, currency.getSingular(), amount, Context.COMMAND);
         if (result.isSuccess()) {
             sender.sendMessage(ChatColor.stringValueOf(Colors.GREEN)+"[Bank] "+ChatColor.stringValueOf(Colors.GRAY)+"Success withdraw " + ChatColor.stringValueOf(currency.getColor()) + currency.format(amount) + ChatColor.stringValueOf(Colors.GRAY)+" from " + targetPlayer.getNickname() + "'s account.");
             this.openParent();

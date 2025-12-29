@@ -53,6 +53,7 @@ public class ReceivedOffers extends PaginatedPanel<Offer> {
         this.searchOfferUseCase = searchOfferUseCase;
         this.sender = sender;
 
+        //can be Player
         List<Offer> offers = searchOfferUseCase.getOffersBuyer(sender.getUniqueId());
         showItemsPage(offers);
     }
@@ -87,6 +88,7 @@ public class ReceivedOffers extends PaginatedPanel<Offer> {
 
     @Override
     protected void functionLeftItemClick(Offer offer) {
+        //can be player
         Result<Void> result =acceptOfferUseCase.execute(offer.getComprador().getUuid(),offer.getVendedor().getUuid());
         if (result.isSuccess()) {
             sender.sendMessage("Offer accepted successfully!");

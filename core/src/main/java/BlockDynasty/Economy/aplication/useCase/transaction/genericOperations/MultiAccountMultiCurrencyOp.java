@@ -2,6 +2,7 @@ package BlockDynasty.Economy.aplication.useCase.transaction.genericOperations;
 
 
 import BlockDynasty.Economy.domain.entities.account.Account;
+import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
@@ -23,6 +24,10 @@ public abstract class MultiAccountMultiCurrencyOp extends Operation {
     public Result<Void> execute(String userFrom, String userTo, String currencyFromS, String currencyToS, BigDecimal amountFrom, BigDecimal amountTo){
         return this.execute(this.getAccountByNameUseCase.execute(userFrom), this.getAccountByNameUseCase.execute(userTo), currencyFromS, currencyToS, amountFrom, amountTo);
     };
+
+    public Result<Void> execute(Player userFrom, Player userTo, String currencyFromS, String currencyToS, BigDecimal amountFrom, BigDecimal amountTo){
+        return this.execute(this.getAccountByPlayerUseCase.execute(userFrom), this.getAccountByPlayerUseCase.execute(userTo), currencyFromS, currencyToS, amountFrom, amountTo);
+    }
 
     private Result<Void> execute(Result<Account> accountFromResult,Result<Account> accountToResult,  String currencyFromS, String currencyToS, BigDecimal amountFrom, BigDecimal amountTo){
         if (!accountFromResult.isSuccess()) {

@@ -16,10 +16,9 @@
 
 package api;
 
-import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.useCase.UseCaseFactory;
 import BlockDynasty.Economy.aplication.useCase.account.*;
-import BlockDynasty.Economy.aplication.useCase.account.balance.GetBalanceUseCase;
+import BlockDynasty.Economy.aplication.useCase.transaction.balance.GetBalanceUseCase;
 import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByNameUseCase;
 import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByUUIDUseCase;
 import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetTopAccountsUseCase;

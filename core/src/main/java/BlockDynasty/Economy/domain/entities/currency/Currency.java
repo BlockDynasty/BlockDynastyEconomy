@@ -298,7 +298,7 @@ public class Currency implements ICurrency{
             this.interchangeableWith = new ArrayList<>(currency.getInterchangeableCurrencies());
             return this;
         }
-        public ICurrency build() {
+        public Currency build() {
             Currency currency = new Currency();
             currency.uuid = this.uuid;
             currency.singular = this.singular;

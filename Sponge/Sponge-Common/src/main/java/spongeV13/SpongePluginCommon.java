@@ -19,7 +19,6 @@ package spongeV13;
 import spongeV13.adapters.commands.CommandRegister;
 import spongeV13.adapters.platformAdapter.SpongeAdapter;
 import spongeV13.adapters.listeners.PlayerJoinListener;
-import spongeV13.adapters.proxy.ProxyReceiverImp;
 import spongeV13.adapters.integrations.spongeEconomyApi.EconomyServiceAdapter;
 import spongeV13.utils.Console;
 import Main.Economy;
@@ -36,7 +35,7 @@ import org.spongepowered.api.event.lifecycle.*;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
 import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.plugin.PluginContainer;
-import platform.proxy.ProxyData;
+import MessageChannel.proxy.ProxyData;
 import spongeV13.utils.TestEconomyCommand;
 
 import java.lang.invoke.MethodHandles;
@@ -79,9 +78,7 @@ public class SpongePluginCommon {
     }
 
     public void onRegisterChannel(final RegisterChannelEvent event) { //segundo
-        Console.log("Registering RegisterChannelEvent...");
         channel = event.register(ResourceKey.resolve(ProxyData.getChannelName()),RawDataChannel.class);
-        ProxyReceiverImp.register().addHandler(channel);
     }
 
     public void registerEconomyService(ProvideServiceEvent.EngineScoped<EconomyService> event) {

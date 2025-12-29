@@ -25,8 +25,8 @@ import java.math.BigDecimal;
 
 public class ExchangeEvent extends Event {
     private final Player player;
-    private final ICurrency fromCurrency;
-    private final ICurrency toCurrency;
+    private final Currency fromCurrency;
+    private final Currency toCurrency;
     private final BigDecimal amount;
     private final double exchangeRate;
     private final BigDecimal exchangedAmount;

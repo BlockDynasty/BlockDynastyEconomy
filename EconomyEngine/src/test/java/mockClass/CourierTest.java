@@ -17,16 +17,18 @@
 package mockClass;
 
 import BlockDynasty.Economy.domain.services.courier.Courier;
+import BlockDynasty.Economy.domain.services.courier.Message;
 
 public class CourierTest implements Courier {
 
-    public void sendUpdateMessage(String type, String name) {
-        System.out.println("[BUNGEE CHANNEL SEND] " + type + " " + name);
-    }
-
     @Override
-    public void sendUpdateMessage(String type, String data, String target) {
-        System.out.println("[BUNGEE CHANNEL SEND] " + type + " " + data+ " target: " + target);
+    public void sendUpdateMessage(Message message) {
+
+        if(!message.isSameOrigin()){
+            System.out.println("Message from channel is from same instance origin server, skipping...");
+        }else {
+            System.out.println("[BUNGEE CHANNEL SEND] " +message.toJsonString());
+        }
     }
 
 

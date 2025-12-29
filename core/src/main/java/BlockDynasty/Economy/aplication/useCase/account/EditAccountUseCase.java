@@ -22,6 +22,7 @@ import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.courier.Courier;
+import BlockDynasty.Economy.domain.services.courier.Message;
 
 import java.util.UUID;
 
@@ -41,8 +42,7 @@ public class EditAccountUseCase {
 
         if (result.isSuccess()) {
             result.getValue().setCanReceiveCurrency(false);
-            dataStore.saveAccount(result.getValue());
-            courier.sendUpdateMessage("account", uuid.toString());
+            update(result.getValue());
         } else {
             return Result.failure("Account not found", result.getErrorCode());
         }
@@ -55,8 +55,7 @@ public class EditAccountUseCase {
 
         if (result.isSuccess()) {
             result.getValue().setCanReceiveCurrency(true);
-            dataStore.saveAccount(result.getValue());
-            courier.sendUpdateMessage("account", uuid.toString());
+            update(result.getValue());
         } else {
             return Result.failure("Account not found", result.getErrorCode());
         }
@@ -69,8 +68,7 @@ public class EditAccountUseCase {
 
         if (result.isSuccess()) {
             result.getValue().block();
-            dataStore.saveAccount(result.getValue());
-            courier.sendUpdateMessage("account", uuid.toString());
+            update(result.getValue());
         } else {
             return Result.failure("Account not found", result.getErrorCode());
         }
@@ -83,12 +81,19 @@ public class EditAccountUseCase {
 
         if (result.isSuccess()) {
             result.getValue().unblock();
-            dataStore.saveAccount(result.getValue());
-            courier.sendUpdateMessage("account", uuid.toString());
+            update(result.getValue());
         } else {
             return Result.failure("Account not found", result.getErrorCode());
         }
 
         return Result.success();
+    }
+
+    private void update(Account account) {
+        dataStore.saveAccount(account);
+        courier.sendUpdateMessage(Message.builder()
+                .setType(Message.Type.ACCOUNT)
+                .setTarget(account.getUuid())
+                .build());
     }
 }

@@ -16,9 +16,8 @@
 
 package lib.commands.templates.users;
 
-import BlockDynasty.Economy.aplication.useCase.account.balance.GetBalanceUseCase;
+import BlockDynasty.Economy.aplication.useCase.transaction.balance.GetBalanceUseCase;
 import BlockDynasty.Economy.domain.entities.balance.Money;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.Result;
 import lib.commands.abstractions.IEntityCommands;

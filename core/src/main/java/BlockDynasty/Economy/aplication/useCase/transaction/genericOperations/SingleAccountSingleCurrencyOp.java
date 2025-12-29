@@ -1,10 +1,7 @@
 package BlockDynasty.Economy.aplication.useCase.transaction.genericOperations;
 
-import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByNameUseCase;
-import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByUUIDUseCase;
-import BlockDynasty.Economy.aplication.useCase.currency.SearchCurrencyUseCase;
 import BlockDynasty.Economy.domain.entities.account.Account;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
+import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.events.Context;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
@@ -28,6 +25,10 @@ public abstract class SingleAccountSingleCurrencyOp extends Operation{
         return this.execute(this.getAccountByUUIDUseCase.execute(name), null, amount,Context.OTHER);
     }
 
+    public Result<Void> execute(Player player, BigDecimal amount) {
+        return this.execute(this.getAccountByPlayerUseCase.execute(player), null, amount,Context.OTHER);
+    }
+
     public Result<Void> execute(UUID targetUUID, String currencyName, BigDecimal amount){
         return this.execute(targetUUID, currencyName, amount, Context.OTHER);
     };
@@ -36,12 +37,20 @@ public abstract class SingleAccountSingleCurrencyOp extends Operation{
         return  this.execute(targetName, currencyName, amount, Context.OTHER);
     };
 
+    public Result<Void> execute(Player targetPlayer, String currencyName, BigDecimal amount){
+        return this.execute(this.getAccountByPlayerUseCase.execute(targetPlayer), currencyName, amount,Context.OTHER);
+    }
+
     public Result<Void> execute(UUID targetUUID, String currencyName, BigDecimal amount, Context context) {
         return this.execute(this.getAccountByUUIDUseCase.execute(targetUUID), currencyName, amount,context);
     }
 
     public Result<Void> execute(String targetName, String currencyName, BigDecimal amount,Context context) {
         return this.execute(this.getAccountByNameUseCase.execute(targetName), currencyName, amount,context);
+    }
+
+    public  Result<Void> execute(Player targetPlayer, String currencyName, BigDecimal amount, Context context) {
+        return this.execute(this.getAccountByPlayerUseCase.execute(targetPlayer), currencyName, amount,context);
     }
 
     private Result<Void> execute(Result<Account> accountResult, String currencyName, BigDecimal amount, Context context) {

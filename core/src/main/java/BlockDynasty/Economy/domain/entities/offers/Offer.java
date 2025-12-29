@@ -28,17 +28,17 @@ public class Offer implements IOffer {
     private Player vendedor;
     private Player comprador;
     private BigDecimal cantidad;  //puede ser de tipo balance, compuesto por currency y cantidad.
-    private ICurrency tipoCantidad;
+    private Currency tipoCantidad;
     private BigDecimal monto;
-    private ICurrency tipoMonto;
+    private Currency tipoMonto;
 
     public Offer(Player vendedor, Player comprador, BigDecimal cantidad, BigDecimal monto, ICurrency tipoCantidad, ICurrency tipoMonto) {
         this.vendedor = vendedor;
         this.comprador = comprador;
         this.cantidad = cantidad;
-        this.tipoCantidad = tipoCantidad;
+        this.tipoCantidad = Currency.builder().copy(tipoCantidad).build();;
         this.monto = monto;
-        this.tipoMonto = tipoMonto;
+        this.tipoMonto = Currency.builder().copy(tipoMonto).build();;
     }
 
     public Player getVendedor() {

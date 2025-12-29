@@ -45,7 +45,7 @@ public class SetBalancePanel extends CurrencySelectorAndAmount {
 
     @Override
     public String execute(IEntityGUI sender, ICurrency currency, BigDecimal amount) {
-        Result<Void> result = setBalanceUseCase.execute(targetPlayer.getUuid(), currency.getSingular(), amount, Context.COMMAND);
+        Result<Void> result = setBalanceUseCase.execute(targetPlayer, currency.getSingular(), amount, Context.COMMAND);
         if (result.isSuccess()) {
             sender.sendMessage(ChatColor.stringValueOf(Colors.GREEN)+"[Bank] "+ChatColor.stringValueOf(Colors.GRAY)+" Set success");
             this.openParent();

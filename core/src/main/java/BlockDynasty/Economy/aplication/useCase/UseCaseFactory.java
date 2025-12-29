@@ -2,11 +2,11 @@ package BlockDynasty.Economy.aplication.useCase;
 
 import BlockDynasty.Economy.aplication.services.ServicesManager;
 import BlockDynasty.Economy.aplication.useCase.account.*;
-import BlockDynasty.Economy.aplication.useCase.account.balance.*;
 import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.*;
 import BlockDynasty.Economy.aplication.useCase.currency.*;
 import BlockDynasty.Economy.aplication.useCase.offer.*;
 import BlockDynasty.Economy.aplication.useCase.transaction.*;
+import BlockDynasty.Economy.aplication.useCase.transaction.balance.GetBalanceUseCase;
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.*;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 import BlockDynasty.Economy.domain.services.courier.Courier;
@@ -47,6 +47,11 @@ public class UseCaseFactory {
     public GetAccountByUUIDUseCase searchAccountByUUID(){
         return new GetAccountByUUIDUseCase(servicesManager.getAccountService());
     }
+
+    public GetAccountByPlayerUseCase searchAccountByPlayer(){
+        return new GetAccountByPlayerUseCase(servicesManager.getAccountService());
+    }
+
     public GetOfflineAccountsUseCase searchOfflineAccounts(){
         return new GetOfflineAccountsUseCase(servicesManager.getAccountService());
     }

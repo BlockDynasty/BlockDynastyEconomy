@@ -1,0 +1,9 @@
+{
+  "id": "blockdynastyeconomy",
+  "name": "BlockDynastyEconomy",
+  "version": "1.0",
+  "description": "BlockDynasty Economy Plugin for Velocity",
+  "authors": ["federkone"],
+  "main": "com.blockdynasty.velocity.Velocity",
+  "dependencies": []
+}

@@ -18,12 +18,12 @@ package BlockDynasty.Economy.aplication.useCase.currency;
 
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.services.courier.Courier;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.Exceptions.CurrencyNotFoundException;
 import BlockDynasty.Economy.domain.entities.currency.Exceptions.DecimalNotSupportedException;
 import BlockDynasty.Economy.domain.persistence.Exceptions.TransactionException;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
+import BlockDynasty.Economy.domain.services.courier.Message;
 
 import java.math.BigDecimal;
 
@@ -47,13 +47,7 @@ public class EditCurrencyUseCase {
             throw new DecimalNotSupportedException("Currency does not support decimals");
         }
         currency.setDefaultBalance(BigDecimal.valueOf(startBal));
-        try {
-            dataStore.saveCurrency(currency);
-            //actualizar cache no hace falta por que ya traje la referencia de la moneda de currencymanager
-            updateForwarder.sendUpdateMessage("currency", currency.getUuid().toString());
-        }catch (TransactionException e){
-            throw new TransactionException("Error creating currency");
-        }
+        saveChanges(currency);
     }
 
     public void setCurrencyRate(String currencyName, double rate){
@@ -65,12 +59,7 @@ public class EditCurrencyUseCase {
             throw new CurrencyNotFoundException("Currency not found");
         }
         currency.setExchangeRate(rate);
-        try {
-            dataStore.saveCurrency(currency);
-            updateForwarder.sendUpdateMessage("currency", currency.getUuid().toString());
-        }catch (TransactionException e){
-            throw new TransactionException("Error creating currency");
-        }
+        saveChanges(currency);
     }
 
     public void addInterchangeableCurrency(String currencyName, String currencyToAddName){
@@ -83,12 +72,7 @@ public class EditCurrencyUseCase {
             throw new CurrencyNotFoundException("Currency not found");
         }
         currency.addInterchangeableCurrency(currencyToAdd);
-        try {
-            dataStore.saveCurrency(currency);
-            updateForwarder.sendUpdateMessage("currency", currency.getUuid().toString());
-        }catch (TransactionException e){
-            throw new TransactionException("Error creating currency");
-        }
+        saveChanges(currency);
     }
 
     public void removeInterchangeableCurrency(String currencyName, String currencyToRemoveName){
@@ -98,12 +82,7 @@ public class EditCurrencyUseCase {
             throw new CurrencyNotFoundException("Currency not found");
         }
         currency.removeInterchangeableCurrency(currencyToRemove);
-        try {
-            dataStore.saveCurrency(currency);
-            updateForwarder.sendUpdateMessage("currency", currency.getUuid().toString());
-        }catch (TransactionException e){
-            throw new TransactionException("Error creating currency");
-        }
+        saveChanges(currency);
     }
 
     public void editColor(String nameCurrency, String colorString){
@@ -113,13 +92,7 @@ public class EditCurrencyUseCase {
         }
 
         currency.setColor(colorString);
-        try {
-            dataStore.saveCurrency(currency);
-            //actualizar cache no hace falta por que ya traje la referencia de la moneda de currencymanager
-            updateForwarder.sendUpdateMessage("currency", currency.getUuid().toString());
-        }catch (TransactionException e){
-            throw new TransactionException("Error creating currency");
-        }
+        saveChanges(currency);
     }
 
     public void editSymbol(String nameCurrency,String symbol){
@@ -128,13 +101,7 @@ public class EditCurrencyUseCase {
             throw new CurrencyNotFoundException("Currency not found");
         }
         currency.setSymbol(symbol);
-        try {
-            dataStore.saveCurrency(currency);
-            //actualizar cache no hace falta por que ya traje la referencia de la moneda de currencymanager
-            updateForwarder.sendUpdateMessage("currency", currency.getUuid().toString());
-        }catch (TransactionException e){
-            throw new TransactionException("Error creating currency");
-        }
+        saveChanges(currency);
     }
 
     public void editTexture(String nameCurrency,String texture){
@@ -143,13 +110,7 @@ public class EditCurrencyUseCase {
             throw new CurrencyNotFoundException("Currency not found");
         }
         currency.setTexture(texture);
-        try {
-            dataStore.saveCurrency(currency);
-            //actualizar cache no hace falta por que ya traje la referencia de la moneda de currencymanager
-            updateForwarder.sendUpdateMessage("currency", currency.getUuid().toString());
-        }catch (TransactionException e){
-            throw new TransactionException("Error creating currency");
-        }
+        saveChanges(currency);
     }
 
     public void setDefaultCurrency(String currencyName){
@@ -160,22 +121,12 @@ public class EditCurrencyUseCase {
         currencyService.getCurrencies().forEach(c -> {
             if (c.isDefaultCurrency()){
                 c.setDefaultCurrency(false);
-                try {
-                    dataStore.saveCurrency(c);
-                    updateForwarder.sendUpdateMessage("currency", c.getUuid().toString());
-                }catch (TransactionException e){
-                    throw new TransactionException("Error save in setDefaultCurrency");
-                }
+                saveChanges(c);
             }
         });
         currency.setDefaultCurrency(true);
         currencyService.updateDefaultCurrency();
-        try {
-            dataStore.saveCurrency(currency);
-            updateForwarder.sendUpdateMessage("currency", currency.getUuid().toString());
-        }catch (TransactionException e){
-            throw new TransactionException("Error saving currency");
-        }
+        saveChanges(currency);
     }
 
     public void setSingularName(String actualName, String newName){
@@ -185,12 +136,7 @@ public class EditCurrencyUseCase {
             throw new CurrencyNotFoundException("Currency not found");
         }
         currency.setSingular(newName);
-        try {
-            dataStore.saveCurrency(currency);
-            updateForwarder.sendUpdateMessage("currency", currency.getUuid().toString());
-        }catch (TransactionException e){
-            throw new TransactionException("Error saving currency");
-        }
+        saveChanges(currency);
     }
 
     public void setPluralName(String actualName, String newName){
@@ -199,12 +145,7 @@ public class EditCurrencyUseCase {
             throw new CurrencyNotFoundException("Currency not found");
         }
         currency.setPlural(newName);
-        try {
-            dataStore.saveCurrency(currency);
-            updateForwarder.sendUpdateMessage("currency", currency.getUuid().toString());
-        }catch (TransactionException e){
-            throw new TransactionException("Error saving currency");
-        }
+        saveChanges(currency);
     }
 
     public void togglePayable(String currencyName){
@@ -213,12 +154,7 @@ public class EditCurrencyUseCase {
             throw new CurrencyNotFoundException("Currency not found");
         }
         currency.setTransferable(!currency.isTransferable());
-        try {
-            dataStore.saveCurrency(currency);
-            updateForwarder.sendUpdateMessage("currency", currency.getUuid().toString());
-        }catch (TransactionException e){
-            throw new TransactionException("Error creating currency");
-        }
+        saveChanges(currency);
     }
 
     public void toggleDecimals(String currencyName){
@@ -227,11 +163,18 @@ public class EditCurrencyUseCase {
             throw new CurrencyNotFoundException("Currency not found");
         }
         currency.setDecimalSupported(!currency.isDecimalSupported());
+        saveChanges(currency);
+    }
+
+    private void saveChanges(ICurrency currency){
         try {
             dataStore.saveCurrency(currency);
-            updateForwarder.sendUpdateMessage("currency", currency.getUuid().toString());
+            updateForwarder.sendUpdateMessage(Message.builder()
+                    .setType(Message.Type.CURRENCY)
+                    .setTarget(currency.getUuid())
+                    .build());
         }catch (TransactionException e){
-            throw new TransactionException("Error creating currency");
+            throw new TransactionException("Error saving currency");
         }
     }
 }

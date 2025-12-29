@@ -46,6 +46,6 @@ public class AccountMapper {
             return null;
         }
         Wallet wallet = WalletMapper.toDomain(entity.getWallet());
-        return new Account(UUID.fromString(entity.getUuid()), entity.getNickname(), wallet, entity.isCanReceiveCurrency(),entity.isBlocked());
+        return new Account(entity.getId(),UUID.fromString(entity.getUuid()), entity.getNickname(), wallet, entity.isCanReceiveCurrency(),entity.isBlocked());
     }
 }

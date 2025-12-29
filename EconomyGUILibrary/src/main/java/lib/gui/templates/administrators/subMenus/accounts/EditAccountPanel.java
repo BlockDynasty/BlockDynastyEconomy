@@ -18,7 +18,8 @@ package lib.gui.templates.administrators.subMenus.accounts;
 
 import BlockDynasty.Economy.aplication.useCase.account.DeleteAccountUseCase;
 import BlockDynasty.Economy.aplication.useCase.account.EditAccountUseCase;
-import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByUUIDUseCase;
+import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByPlayerUseCase;
+import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.result.Result;
 import lib.abstractions.PlatformAdapter;
@@ -38,21 +39,21 @@ import lib.util.colors.Colors;
 public class EditAccountPanel extends AbstractPanel {
     private final DeleteAccountUseCase deleteAccountUseCase;
     private final EditAccountUseCase editAccountUseCase;
-    private final GetAccountByUUIDUseCase getAccountByUUIDUseCase;
+    private final GetAccountByPlayerUseCase getAccountByPlayerUseCase;
     private final PlatformAdapter platformAdapter;
     private final ITextInput textInput;
 
     public EditAccountPanel(
             DeleteAccountUseCase deleteAccountUseCase,
             EditAccountUseCase editAccountUseCase,
-            GetAccountByUUIDUseCase getAccountByUUIDUseCase,
+            GetAccountByPlayerUseCase getAccountByPlayerUseCase,
             PlatformAdapter platformAdapter,
             IEntityGUI sender, Player target, IGUI parent, ITextInput textInput) {
         super("Edit Account: "+target.getNickname(), 5,sender,parent);
         this.platformAdapter = platformAdapter;
         this.deleteAccountUseCase = deleteAccountUseCase;
         this.editAccountUseCase = editAccountUseCase;
-        this.getAccountByUUIDUseCase = getAccountByUUIDUseCase;
+        this.getAccountByPlayerUseCase = getAccountByPlayerUseCase;
         this.textInput = textInput;
 
         buttons(sender,target);
@@ -62,25 +63,25 @@ public class EditAccountPanel extends AbstractPanel {
         setButton(15, Button.builder()
                 .setItemStack(Item.of(RecipeItem.builder()
                         .setMaterial(Materials.REDSTONE)
-                        .setName(ChatColor.stringValueOf(Colors.RED)+"Delete account")
+                        .setName(ChatColor.stringValueOf(Colors.RED) + "Delete account")
                         .setLore("The player's account is deleted,before a confirmation")
                         .build()))
-                .setLeftClickAction( f -> {
-                    textInput.open(this,sender, "Delete: "+target.getNickname(), "Confirm yes/no", s ->{
-                        if(s.equals("yes")){
-                            Result<Void> result = deleteAccountUseCase.execute(target.getNickname());
-                            if(result.isSuccess()){
-                                sender.sendMessage("The player has been eliminated "+ target.getNickname());
+                .setLeftClickAction(f -> {
+                    textInput.open(this, sender, "Delete: " + target.getNickname(), "Confirm yes/no", s -> {
+                        if (s.equals("yes")) {
+                            Result<Void> result = deleteAccountUseCase.execute(target);
+                            if (result.isSuccess()) {
+                                sender.sendMessage("The player has been eliminated " + target.getNickname());
                                 IEntityCommands p = platformAdapter.getPlayer(target.getNickname());
-                                if(p != null){
+                                if (p != null) {
                                     p.kickPlayer("Your economy account has been deleted.");
                                 }
                                 return null;
-                            }else{
-                                sender.sendMessage(result.getErrorMessage()+" "+ result.getErrorCode());
+                            } else {
+                                sender.sendMessage(result.getErrorMessage() + " " + result.getErrorCode());
                                 return null;
                             }
-                        }else {
+                        } else {
                             this.open();
                             return null;
                         }
@@ -88,99 +89,113 @@ public class EditAccountPanel extends AbstractPanel {
                 })
                 .build());
 
-        setButton(22,Button.builder()
+        setButton(22, Button.builder()
                 .setItemStack(Item.of(RecipeItem.builder()
-                                .setMaterial(Materials.PAPER)
-                                .setName(ChatColor.stringValueOf(Colors.AQUA)+"Sell Command")
-                                .setLore("Sell a command to a player","Example: give <playername> <itemname> [amount]",
-                                        ChatColor.stringValueOf(Colors.RED)+"IMPORTANT: Enter the full command",ChatColor.stringValueOf(Colors.RED)+"including any necessary parameters, such as player name.")
-                                .build()))
-                .setLeftClickAction( f -> {GUIFactory.sellCommandPanel(sender , target, this).open();})
+                        .setMaterial(Materials.PAPER)
+                        .setName(ChatColor.stringValueOf(Colors.AQUA) + "Sell Command")
+                        .setLore("Sell a command to a player", "Example: give <playername> <itemname> [amount]",
+                                ChatColor.stringValueOf(Colors.RED) + "IMPORTANT: Enter the full command", ChatColor.stringValueOf(Colors.RED) + "including any necessary parameters, such as player name.")
+                        .build()))
+                .setLeftClickAction(f -> {
+                    GUIFactory.sellCommandPanel(sender, target, this).open();
+                })
                 .build());
 
-        setButton(40,Button.builder()
+        setButton(40, Button.builder()
                 .setItemStack(Item.of(RecipeItem.builder()
                         .setMaterial(Materials.BARRIER)
-                        .setName(ChatColor.stringValueOf(Colors.RED)+"Back")
+                        .setName(ChatColor.stringValueOf(Colors.RED) + "Back")
                         .setLore("Click to go back")
                         .build()
                 ))
-                .setLeftClickAction(f -> {GUIFactory.accountSelectorToEdit(sender,this.getParent().getParent()).open();})
+                .setLeftClickAction(f -> {
+                    GUIFactory.accountSelectorToEdit(sender, this.getParent().getParent()).open();
+                })
                 .build());
 
-        setButton(29,Button.builder()
+        setButton(29, Button.builder()
                 .setItemStack(Item.of(RecipeItem.builder()
                         .setMaterial(Materials.PAPER)
-                        .setName(ChatColor.stringValueOf(Colors.AQUA)+"Deposit Currency")
+                        .setName(ChatColor.stringValueOf(Colors.AQUA) + "Deposit Currency")
                         .setLore("Deposit currency into the player's account")
                         .build()))
-                .setLeftClickAction(f -> {GUIFactory.depositPanel(sender , target, this).open();})
+                .setLeftClickAction(f -> {
+                    GUIFactory.depositPanel(sender, target, this).open();
+                })
                 .build());
 
-        setButton(31,Button.builder()
+        setButton(31, Button.builder()
                 .setItemStack(Item.of(RecipeItem.builder()
                         .setMaterial(Materials.PAPER)
-                        .setName(ChatColor.stringValueOf(Colors.AQUA)+"Set balance currency")
+                        .setName(ChatColor.stringValueOf(Colors.AQUA) + "Set balance currency")
                         .setLore("Set the balance of a currency in the player's account")
                         .build()))
-                .setLeftClickAction( f -> {GUIFactory.setPanel(sender , target, this).open();})
+                .setLeftClickAction(f -> {
+                    GUIFactory.setPanel(sender, target, this).open();
+                })
                 .build());
 
-        setButton(33,Button.builder()
+        setButton(33, Button.builder()
                 .setItemStack(Item.of(RecipeItem.builder()
                         .setMaterial(Materials.PAPER)
-                        .setName(ChatColor.stringValueOf(Colors.AQUA)+"Withdraw Currency")
+                        .setName(ChatColor.stringValueOf(Colors.AQUA) + "Withdraw Currency")
                         .setLore("Withdraw currency from the player's account")
                         .build()))
-                .setLeftClickAction(f -> {GUIFactory.withdrawPanel(sender , target, this).open();})
+                .setLeftClickAction(f -> {
+                    GUIFactory.withdrawPanel(sender, target, this).open();
+                })
                 .build());
 
-        setButton(11,Button.builder()
+        setButton(11, Button.builder()
                 .setItemStack(Item.of(RecipeItem.builder()
                         .setMaterial(Materials.BOOK)
-                        .setName(ChatColor.stringValueOf(Colors.YELLOW)+"See Balance")
+                        .setName(ChatColor.stringValueOf(Colors.YELLOW) + "See Balance")
                         .setLore("See the balance of the player's account")
                         .build()))
-                .setLeftClickAction(f -> {GUIFactory.balancePanel( sender, target.getUuid(), this).open();})
+                .setLeftClickAction(f -> {
+                    GUIFactory.balancePanel(sender, target, this).open();
+                })
                 .build());
 
-        boolean isBlocked = getAccountByUUIDUseCase.execute(target.getUuid()).getValue().isBlocked();
-        if (isBlocked) {
-            setButton(13, Button.builder()
-                    .setItemStack(Item.of(RecipeItem.builder()
-                            .setMaterial(Materials.RED_CONCRETE)
-                            .setName(ChatColor.stringValueOf(Colors.RED)+"Account is blocked")
-                            .setLore("Click to unblock transactions","This affects:","Withdraw","Deposit","Transfer", "Pay","Trade","Exchange","All economy op")
-                            .build()))
-                    .setLeftClickAction(  f -> {
-                        Result<Void>result= editAccountUseCase.unblockAccount(target.getUuid());
-                        if (result.isSuccess()){
-                            GUIFactory.editAccountPanel( sender, target, this.getParent()).open();
-                        }
-                        else {
-                            sender.sendMessage(result.getErrorMessage()+" "+ result.getErrorCode());
-                        }
-                    })
-                    .build());
-        } else {
-            setButton(13, Button.builder()
-                    .setItemStack(Item.of(RecipeItem.builder()
-                                    .setMaterial(Materials.LIME_CONCRETE)
-                                    .setName(ChatColor.stringValueOf(Colors.GREEN)+"Account is enabled")
-                                    .setLore("Click to block transactions Account","This affects:","Withdraw","Deposit","Transfer", "Pay","Trade","Exchange","All economy op")
-                                    .build()))
-                    .setLeftClickAction(f -> {
-                        Result<Void>result= editAccountUseCase.blockAccount(target.getUuid());
-                        if (result.isSuccess()){
-                            GUIFactory.editAccountPanel( sender, target, this.getParent()).open();
-                        }
-                        else {
-                            sender.sendMessage(result.getErrorMessage()+" "+ result.getErrorCode());
-                        }
-                    })
-                    .build());
+        Result<Account> accRes = getAccountByPlayerUseCase.execute(target);
+        if (accRes.isSuccess()) {
+            boolean isBlocked = accRes.getValue().isBlocked();
+            if (isBlocked) {
+                setButton(13, Button.builder()
+                        .setItemStack(Item.of(RecipeItem.builder()
+                                .setMaterial(Materials.RED_CONCRETE)
+                                .setName(ChatColor.stringValueOf(Colors.RED)+"Account is blocked")
+                                .setLore("Click to unblock transactions","This affects:","Withdraw","Deposit","Transfer", "Pay","Trade","Exchange","All economy op")
+                                .build()))
+                        .setLeftClickAction(  f -> {
+                            Result<Void>result= editAccountUseCase.unblockAccount(target.getUuid());
+                            if (result.isSuccess()){
+                                GUIFactory.editAccountPanel( sender, target, this.getParent()).open();
+                            }
+                            else {
+                                sender.sendMessage(result.getErrorMessage()+" "+ result.getErrorCode());
+                            }
+                        })
+                        .build());
+            } else {
+                setButton(13, Button.builder()
+                        .setItemStack(Item.of(RecipeItem.builder()
+                                .setMaterial(Materials.LIME_CONCRETE)
+                                .setName(ChatColor.stringValueOf(Colors.GREEN)+"Account is enabled")
+                                .setLore("Click to block transactions Account","This affects:","Withdraw","Deposit","Transfer", "Pay","Trade","Exchange","All economy op")
+                                .build()))
+                        .setLeftClickAction(f -> {
+                            Result<Void>result= editAccountUseCase.blockAccount(target.getUuid());
+                            if (result.isSuccess()){
+                                GUIFactory.editAccountPanel( sender, target, this.getParent()).open();
+                            }
+                            else {
+                                sender.sendMessage(result.getErrorMessage()+" "+ result.getErrorCode());
+                            }
+                        })
+                        .build());
+            }
+
         }
-
-
     }
 }

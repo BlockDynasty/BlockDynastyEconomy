@@ -54,9 +54,9 @@ public class GUIFactory {
         return new AccountSelectorToEdit(sender,useCaseFactory.searchAccountByName(),useCaseFactory.searchOfflineAccounts(),parent,textInput);
     }
     public static IGUI editAccountPanel(IEntityGUI sender,Player target,IGUI parent) {
-        return new EditAccountPanel(useCaseFactory.deleteAccount(),useCaseFactory.editAccount(),useCaseFactory.searchAccountByUUID(),platformAdapter,sender, target, parent,textInput);
+        return new EditAccountPanel(useCaseFactory.deleteAccount(),useCaseFactory.editAccount(),useCaseFactory.searchAccountByPlayer(),platformAdapter,sender, target, parent,textInput);
     }
-    public static IGUI balancePanel(IEntityGUI sender,UUID target,IGUI parent) {
+    public static IGUI balancePanel(IEntityGUI sender,Player target,IGUI parent) {
         return new AccountBalance(sender, target, useCaseFactory.getBalance(), parent);
     }
     public static IGUI depositPanel(IEntityGUI sender,Player target,IGUI parent){
@@ -90,7 +90,7 @@ public class GUIFactory {
         return new ColorSelectionPanel( sender,currency,useCaseFactory.editCurrency(), parent,textInput);
     }
     public static IGUI bankPanel(IEntityGUI sender) {
-        return new BankPanel(sender, useCaseFactory.searchAccountByUUID(),textInput);
+        return new BankPanel(sender, useCaseFactory.searchAccountByPlayer(),textInput);
     }
     public static IGUI createOfferFirstPanel(IEntityGUI sender,Player target,IGUI parent ){
         return new CreateOfferFirstPanel(sender,target,useCaseFactory.searchCurrency(),useCaseFactory.createOffer(), parent, textInput);

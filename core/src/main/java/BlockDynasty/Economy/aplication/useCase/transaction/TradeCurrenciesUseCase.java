@@ -25,6 +25,7 @@ import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
 import BlockDynasty.Economy.domain.services.courier.Courier;
 import BlockDynasty.Economy.domain.services.courier.Message;
+import BlockDynasty.Economy.domain.services.courier.PlayerTargetMessage;
 import BlockDynasty.Economy.domain.services.log.Log;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
@@ -99,16 +100,18 @@ public class TradeCurrenciesUseCase extends MultiAccountMultiCurrencyOp implemen
         this.logger.log("[TRADE] Account: " + accountFrom.getNickname() + " traded " + currencyFrom.format(amountFrom) + " to " + accountTo.getNickname() + " for " + currencyTo.format(amountTo));
         this.eventManager.emit(new TradeEvent(accountFrom.getPlayer(),accountTo.getPlayer(), currencyFrom, currencyTo, amountFrom, amountTo));
 
-        this.updateForwarder.sendUpdateMessage(Message.builder()
+        this.updateForwarder.sendUpdateMessage(PlayerTargetMessage.builder()
                 .setType(Message.Type.EVENT)
                 .setData(new TradeEvent(accountFrom.getPlayer(),accountTo.getPlayer(), currencyFrom, currencyTo, amountFrom, amountTo).toJson())
                 .setTarget(accountTo.getUuid())
+                .setTargetPlayer(accountTo.getPlayer())
                 .build());
 
-        this.updateForwarder.sendUpdateMessage( Message.builder()
+        this.updateForwarder.sendUpdateMessage( PlayerTargetMessage.builder()
                 .setType(Message.Type.EVENT)
                 .setData(new TradeEvent(accountFrom.getPlayer(),accountTo.getPlayer(), currencyFrom, currencyTo, amountFrom, amountTo).toJson())
                 .setTarget( accountFrom.getUuid())
+                .setTargetPlayer(accountFrom.getPlayer())
                 .build());
 
         return Result.success();

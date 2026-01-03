@@ -43,7 +43,7 @@ public class EventManager {
         if (eventHandlers != null) {
             for (EventHandler<?> handler : new ArrayList<>(eventHandlers)) {
                 ((EventHandler<T>) handler).handle(event);
-                if (event.isCancelled()) break; // Opcional: cortar propagación
+                if (event.isCancelled()) break; //cortar propagación
             }
         }
     }

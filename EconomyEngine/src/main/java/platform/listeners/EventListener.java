@@ -53,10 +53,21 @@ public class EventListener {
             if (player != null){
                 player.sendMessage(Message.process(Map.of("currency",ChatColor.stringValueOf(currency.getColor())+format, "playerName",receiverName),"pay1"));
                 player.playNotificationSound();
+
+                Runnable task=()->{
+                    GUISystem.refresh(player.getUniqueId());
+                };
+                platformAdapter.getScheduler().run(ContextualTask.build(task , player));
             }
+
             if (target != null){
                 target.sendMessage(Message.process(Map.of("currency",ChatColor.stringValueOf(currency.getColor())+format,"playerName",senderName),"pay2"));
                 target.playNotificationSound();
+
+                Runnable task=()->{
+                    GUISystem.refresh(target.getUniqueId());
+                };
+                platformAdapter.getScheduler().run(ContextualTask.build(task , target));
             }
         });
 
@@ -154,6 +165,11 @@ public class EventListener {
                             "currency",ChatColor.stringValueOf(event.getCurrency().getColor()) +event.getCurrency().format(event.getAmount())
                             ),"deposit"));
                     player.playNotificationSound();
+
+                    Runnable task=()->{
+                        GUISystem.refresh(player.getUniqueId());
+                    };
+                    platformAdapter.getScheduler().run(ContextualTask.build(task , player));
                 }
             }
 
@@ -167,6 +183,11 @@ public class EventListener {
                             "currency",ChatColor.stringValueOf(event.getCurrency().getColor()) +event.getCurrency().format(event.getAmount())
                     ),"withdraw"));
                     player.playNotificationSound();
+
+                    Runnable task=()->{
+                        GUISystem.refresh(player.getUniqueId());
+                    };
+                    platformAdapter.getScheduler().run(ContextualTask.build(task , player));
                 }
             }
         });
@@ -179,6 +200,11 @@ public class EventListener {
                             "currency",ChatColor.stringValueOf(event.getCurrency().getColor()) +event.getCurrency().format(event.getAmount())
                     ),"set"));
                     player.playNotificationSound();
+
+                    Runnable task=()->{
+                        GUISystem.refresh(player.getUniqueId());
+                    };
+                    platformAdapter.getScheduler().run(ContextualTask.build(task , player));
                 }
             }
         });

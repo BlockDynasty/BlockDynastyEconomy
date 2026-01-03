@@ -31,7 +31,7 @@ public class Version {
     public static final boolean hasMojangAuthLib = JavaUtil.classExists("com.mojang.authlib.GameProfile") && JavaUtil.classExists("com.mojang.authlib.properties.Property");
 
     //this dependency is critical, because the library AnvilGUI works directly with NMS code.
-    private static final boolean hasSupportAnvilGUI = !isMohist() && !isHigherThan("1.21.10");
+    private static final boolean hasSupportAnvilGUI = !isMohist() && !isHigherThan("1.21.11");
 
     public static boolean match(String version) {
         return currentVersion.startsWith(version);

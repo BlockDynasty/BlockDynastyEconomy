@@ -23,6 +23,7 @@ import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.courier.Courier;
 import BlockDynasty.Economy.domain.services.courier.Message;
+import BlockDynasty.Economy.domain.services.courier.PlayerTargetMessage;
 
 import java.util.UUID;
 
@@ -91,9 +92,10 @@ public class EditAccountUseCase {
 
     private void update(Account account) {
         dataStore.saveAccount(account);
-        courier.sendUpdateMessage(Message.builder()
+        courier.sendUpdateMessage(PlayerTargetMessage.builder()
                 .setType(Message.Type.ACCOUNT)
                 .setTarget(account.getUuid())
+                .setTargetPlayer(account.getPlayer())
                 .build());
     }
 }

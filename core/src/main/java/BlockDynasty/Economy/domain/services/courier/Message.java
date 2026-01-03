@@ -31,7 +31,7 @@ import java.util.UUID;
  * Supports JSON serialization/deserialization.
  * Uses Builder pattern for construction.
  */
-public class Message {
+public class Message<T extends Message<T>> {
     public enum Type {
         @SerializedName("account")
         ACCOUNT,
@@ -41,14 +41,14 @@ public class Message {
         EVENT;
     }
 
-    private final static UUID serverId = UUID.randomUUID();
-    private Type type;
-    private UUID target;
-    private String data;
-    private UUID instanceId;
+    protected final static UUID serverId = UUID.randomUUID();
+    protected Type type;
+    protected UUID target;
+    protected String data;
+    protected UUID instanceId;
 
-    private Message() {
-        data= "Undefined/Empty";
+    protected Message() {
+        data = "Undefined/Empty";
     }
 
     public Type getType() {
@@ -63,12 +63,12 @@ public class Message {
         return data;
     }
 
-    public String toJsonString(){
+    public String toJsonString() {
         Gson gson = new Gson();
         return gson.toJson(this);
     }
 
-    public boolean isType(Type type){
+    public boolean isType(Type type) {
         return this.type == type;
     }
 
@@ -80,8 +80,8 @@ public class Message {
         return outBytes.toByteArray();
     }
 
-    public boolean isSameOrigin(){
-        if(instanceId != null){
+    public boolean isSameOrigin() {
+        if (instanceId != null) {
             return instanceId.equals(serverId);
         }
         return false;
@@ -92,44 +92,52 @@ public class Message {
         return toJsonString();
     }
 
-    public static Builder builder(){
-        return new Builder();
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static Builder builder() {
+        return new Builder(Message.class);
     }
 
-    public static class Builder {
-        private Message message;
+    public static class Builder<T extends Message<T>> {
+        protected T message;
+        protected final Class<T> messageClass;
 
-        public Builder() {
-            message = new Message();
-            message.instanceId = serverId;
+        @SuppressWarnings("unchecked")
+        public Builder(Class<T> messageClass) {
+            this.messageClass = messageClass;
+            try {
+                this.message = messageClass.getDeclaredConstructor().newInstance();
+                this.message.instanceId = serverId;
+            } catch (Exception e) {
+                throw new RuntimeException("Cannot instantiate message class", e);
+            }
         }
 
-        public Builder setType(Type type) {
+        public Builder<T> setType(Type type) {
             message.type = type;
             return this;
         }
 
-        public Builder setTarget(UUID target) {
+        public Builder<T> setTarget(UUID target) {
             message.target = target;
             return this;
         }
 
-        public Builder setData(String data) {
+        public Builder<T> setData(String data) {
             message.data = data;
             return this;
         }
 
-        public Builder fromJson(String json) {
+        public Builder<T> fromJson(String json) {
             Gson gson = new Gson();
-            try{
-                this.message = gson.fromJson(json, Message.class);
-            }catch(JsonSyntaxException e){
+            try {
+                this.message = gson.fromJson(json, messageClass);
+            } catch (JsonSyntaxException e) {
                 throw new IllegalArgumentException("Invalid JSON format for Message", e);
             }
             return this;
         }
 
-        public Message build() {
+        public T build() {
             if (message.type == null || message.target == null) {
                 throw new IllegalStateException("Type and Target must be set");
             }

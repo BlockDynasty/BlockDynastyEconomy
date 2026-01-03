@@ -20,18 +20,14 @@ import BlockDynasty.Economy.aplication.services.OfferService;
 import BlockDynasty.Economy.domain.entities.offers.Offer;
 
 public class OfferExpired extends OfferEvent {
-    private final Offer offer;
 
     public OfferExpired(Offer offer) {
-        this.offer = offer;
-    }
-
-    public Offer getOffer() {
-        return offer;
+        super(offer);
     }
 
     @Override
     public void syncOffer(OfferService offerService) {
+        Offer offer = getOffer();
         offerService.expireOfferFromEvent(offer);
     }
 }

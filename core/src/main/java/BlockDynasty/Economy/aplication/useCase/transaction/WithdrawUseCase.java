@@ -26,6 +26,7 @@ import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
 import BlockDynasty.Economy.domain.services.courier.Courier;
 import BlockDynasty.Economy.domain.services.courier.Message;
+import BlockDynasty.Economy.domain.services.courier.PlayerTargetMessage;
 import BlockDynasty.Economy.domain.services.log.Log;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
@@ -72,10 +73,11 @@ public class WithdrawUseCase extends SingleAccountSingleCurrencyOp implements IW
 
         this.accountService.syncOnlineAccount(result.getValue());
 
-        this.updateForwarder.sendUpdateMessage( Message.builder()
+        this.updateForwarder.sendUpdateMessage( PlayerTargetMessage.builder()
                 .setType(Message.Type.EVENT)
                 .setData(new WithdrawEvent(account.getPlayer(), currency, amount,context).toJson())
                 .setTarget(account.getUuid())
+                .setTargetPlayer(account.getPlayer())
                 .build());
         this.logger.log("[WITHDRAW] Account: " + account.getNickname() + " has made a withdrawal of " + currency.format(amount) + " " + currency.getSingular());
         this.eventManager.emit(new WithdrawEvent(account.getPlayer(), currency, amount,context));

@@ -36,7 +36,7 @@ public class Currency implements ICurrency{
     private boolean defaultCurrency ;
     private BigDecimal defaultBalance ;
     private double exchangeRate ;
-    private List<ICurrency> interchangeableWith;
+    private transient List<ICurrency> interchangeableWith;
 
     private Currency() {}
 

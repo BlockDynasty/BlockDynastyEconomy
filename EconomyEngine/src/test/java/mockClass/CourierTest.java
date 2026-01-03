@@ -23,12 +23,7 @@ public class CourierTest implements Courier {
 
     @Override
     public void sendUpdateMessage(Message message) {
-
-        if(!message.isSameOrigin()){
-            System.out.println("Message from channel is from same instance origin server, skipping...");
-        }else {
-            System.out.println("[BUNGEE CHANNEL SEND] " +message.toJsonString());
-        }
+        System.out.println("[BUNGEE CHANNEL SEND] " +message.toJsonString());
     }
 
 

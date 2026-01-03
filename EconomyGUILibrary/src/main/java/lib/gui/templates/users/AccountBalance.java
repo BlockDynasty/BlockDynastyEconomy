@@ -40,10 +40,12 @@ import java.util.Map;
 public class AccountBalance extends PaginatedPanel<Money> {
     private final GetBalanceUseCase getBalanceUseCase;
     private final Player targetPlayer;
+    private final IEntityGUI sender;
 
     public AccountBalance(IEntityGUI player, GetBalanceUseCase getBalanceUseCase, IGUI parent) {
         super(Message.process("AccountBalance.title"), 3, player, parent, 7); // 7 currencies per page
         this.getBalanceUseCase = getBalanceUseCase;
+        this.sender = player;
         this.targetPlayer = new Player(player.getUniqueId(), player.getName());
 
         loadBalances();
@@ -53,6 +55,7 @@ public class AccountBalance extends PaginatedPanel<Money> {
         super(Message.process("AccountBalance.title"), 3, sender, parent, 7);
         this.getBalanceUseCase = getBalanceUseCase;
         this.targetPlayer = target;
+        this.sender = sender;
 
         loadBalances();
     }
@@ -95,5 +98,11 @@ public class AccountBalance extends PaginatedPanel<Money> {
                         .setLore( Message.process(Map.of("color",ChatColor.stringValueOf(Colors.WHITE)),"AccountBalance.button3.lore"))
                         .build()))
                 .build());
+    }
+
+    @Override
+    public void refresh(){
+        //GUIFactory.balancePanel(sender,targetPlayer,getParent()).open();
+        loadBalances();
     }
 }

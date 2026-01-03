@@ -26,11 +26,11 @@ import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
 import BlockDynasty.Economy.domain.services.courier.Courier;
 import BlockDynasty.Economy.domain.services.courier.Message;
+import BlockDynasty.Economy.domain.services.courier.PlayerTargetMessage;
 import BlockDynasty.Economy.domain.services.log.Log;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.entities.account.Account;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 
 import java.math.BigDecimal;
@@ -71,10 +71,11 @@ public class SetBalanceUseCase extends SingleAccountSingleCurrencyOp implements 
         this.accountService.syncOnlineAccount(result.getValue());
         //this.updateForwarder.sendUpdateMessage("account", account.getUuid().toString());
 
-        this.updateForwarder.sendUpdateMessage( Message.builder()
+        this.updateForwarder.sendUpdateMessage( PlayerTargetMessage.builder()
                 .setType(Message.Type.EVENT)
                 .setData(new SetEvent(account.getPlayer(), currency, amount,context).toJson())
                 .setTarget(account.getUuid())
+                .setTargetPlayer(account.getPlayer())
                 .build());
         this.logger.log("[BALANCE SET] Account: " + account.getNickname() + " were set to: " + currency.format(amount));
         this.eventManager.emit( new SetEvent(account.getPlayer(), currency, amount,context));

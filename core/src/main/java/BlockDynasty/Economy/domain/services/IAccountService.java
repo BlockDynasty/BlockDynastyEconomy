@@ -42,7 +42,5 @@ public interface IAccountService {
 
     void syncOnlineAccount (Account account);
     void syncDbWithOnlineAccounts();
-    void syncOnlineAccount(UUID uuid);
-
-
+    void syncOnlineAccount(Player player);
 }

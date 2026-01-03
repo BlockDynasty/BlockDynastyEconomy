@@ -20,12 +20,12 @@ import BlockDynasty.Economy.aplication.events.EventManager;
 import BlockDynasty.Economy.aplication.useCase.transaction.genericOperations.SingleAccountMultiCurrencyOp;
 import BlockDynasty.Economy.aplication.useCase.transaction.interfaces.IExchangeUseCase;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
-import BlockDynasty.Economy.domain.events.transactionsEvents.DepositEvent;
 import BlockDynasty.Economy.domain.events.transactionsEvents.ExchangeEvent;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
 import BlockDynasty.Economy.domain.services.courier.Courier;
 import BlockDynasty.Economy.domain.services.courier.Message;
+import BlockDynasty.Economy.domain.services.courier.PlayerTargetMessage;
 import BlockDynasty.Economy.domain.services.log.Log;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
@@ -100,9 +100,10 @@ public class ExchangeUseCase extends SingleAccountMultiCurrencyOp implements IEx
 
         this.accountService.syncOnlineAccount(result.getValue());
 
-        this.updateForwarder.sendUpdateMessage(Message.builder()
+        this.updateForwarder.sendUpdateMessage(PlayerTargetMessage.builder()
                 .setType(Message.Type.ACCOUNT)
                 .setTarget(account.getUuid())
+                .setTargetPlayer(account.getPlayer())
                 .build());
         this.logger.log("[EXCHANGE] Account: " + account.getNickname() + " exchanged " + currencyFrom.format(amountFrom) + " to " + currencyTo.format(amountTo));
         this.eventManager.emit(new ExchangeEvent(account.getPlayer(),currencyFrom,currencyTo,amountFrom,currencyTo.getExchangeRate(),amountTo));

@@ -1,5 +1,6 @@
 package EngineTest.mocks;
 
+import BlockDynasty.Economy.domain.services.courier.Message;
 import EngineTest.mocks.utils.Color;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Platform implements PlatformAdapter {
-
+    IProxySubscriber subscriber;
     @Override
     public IPlayer getPlayer(String name) {
         return MinecraftServer.getOnlinePlayers().stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
@@ -65,11 +66,14 @@ public class Platform implements PlatformAdapter {
             e.printStackTrace();
         }
 
+        this.subscriber.onPluginMessageReceived(channel, message);
+
+
     }
 
     @Override
     public void registerMessageChannel(IProxySubscriber subscriber) {
-
+        this.subscriber = subscriber;
     }
 
     @Override

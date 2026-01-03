@@ -154,19 +154,19 @@ public class AccountService implements IAccountService {
         }
     }
 
-    public void syncOnlineAccount(UUID uuid){
-        Account accountCache = this.getAccountOnline(uuid);
-        if (accountCache != null){
-            Result<Account> result =  this.dataStore.loadAccountByUuid(uuid);
-            if (result.isSuccess()){
-                syncWalletWithSystemCurrencies(result.getValue());
-                accountCache.setBalances(result.getValue().getBalances());
-                accountCache.setBlocked(result.getValue().isBlocked());
-                accountCache.setCanReceiveCurrency(result.getValue().canReceiveCurrency());
+    public void syncOnlineAccount(Player player){
+            Account accountCache = this.getAccountOnline(player);
+            if (accountCache != null){
+                Result<Account> result =  this.dataStore.loadAccountByPlayer(player);
+                if (result.isSuccess()){
+                    syncWalletWithSystemCurrencies(result.getValue());
+                    accountCache.setBalances(result.getValue().getBalances());
+                    accountCache.setBlocked(result.getValue().isBlocked());
+                    accountCache.setCanReceiveCurrency(result.getValue().canReceiveCurrency());
+                }
             }
-        }
-
     }
+
     public void syncDbWithOnlineAccounts(){ //check delete this
         List<Account> accounts = this.getAccountsOnline();
         for (Account account : accounts) {

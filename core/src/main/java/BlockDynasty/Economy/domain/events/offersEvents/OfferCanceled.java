@@ -21,18 +21,14 @@ import BlockDynasty.Economy.domain.entities.offers.Offer;
 
 
 public class OfferCanceled extends OfferEvent {
-    private final Offer offer;
 
     public OfferCanceled(Offer offer) {
-        this.offer = offer;
-    }
-
-    public Offer getOffer() {
-        return offer;
+        super(offer);
     }
 
     @Override
     public void syncOffer(OfferService offerService) {
+        Offer offer = getOffer();
         offerService.cancelOffer(offer.getComprador().getUuid());
     }
 }

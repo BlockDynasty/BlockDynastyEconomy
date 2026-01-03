@@ -76,6 +76,7 @@ public class EventRegistry {
         }
     }
 
+
     static {
         //for recreate and emit Events locally
         registerEventTypeTransaction(DepositEvent.class);

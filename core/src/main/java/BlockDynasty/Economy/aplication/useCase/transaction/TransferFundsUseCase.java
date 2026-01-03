@@ -25,6 +25,7 @@ import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
 import BlockDynasty.Economy.domain.services.courier.Courier;
 import BlockDynasty.Economy.domain.services.courier.Message;
+import BlockDynasty.Economy.domain.services.courier.PlayerTargetMessage;
 import BlockDynasty.Economy.domain.services.log.Log;
 import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
@@ -87,9 +88,10 @@ public class TransferFundsUseCase extends MultiAccountSingleCurrencyOp implement
         this.accountService.syncOnlineAccount(result.getValue().getTo());
         this.accountService.syncOnlineAccount(result.getValue().getFrom());
 
-        this.updateForwarder.sendUpdateMessage(Message.builder().setType(Message.Type.EVENT)
+        this.updateForwarder.sendUpdateMessage(PlayerTargetMessage.builder().setType(Message.Type.EVENT)
                 .setData(new TransferEvent(accountFrom.getPlayer(),accountTo.getPlayer(), currency, amount).toJson())
                 .setTarget( accountTo.getUuid())
+                .setTargetPlayer(accountTo.getPlayer())
                 .build());
         logSuccess(accountFrom, accountTo, currency, amount);
         emitEvent(accountFrom, accountTo, currency, amount);

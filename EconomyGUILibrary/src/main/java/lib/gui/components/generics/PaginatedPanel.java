@@ -50,7 +50,7 @@ public abstract class PaginatedPanel<T> extends AbstractPanel {
         fill();
         if (items.isEmpty()) {
             setButton(getEmptyMessageSlot(), Button.builder().setItemStack(createEmptyMessage()).build());
-            setButton(getBackButtonSlot(), Button.builder().setItemStack(createBackButton()).setLeftClickAction(unused -> this.openParent()).build());
+            createBackButton();
             addCustomButtons();
             return;
         }
@@ -86,7 +86,7 @@ public abstract class PaginatedPanel<T> extends AbstractPanel {
         }
 
         // Back button
-        setButton(getBackButtonSlot(), Button.builder().setItemStack(createBackButton()).setLeftClickAction(unused -> this.openParent()).build()); createBackButton();
+        createBackButton();
 
         // Add additional custom buttons
         addCustomButtons();
@@ -163,6 +163,12 @@ public abstract class PaginatedPanel<T> extends AbstractPanel {
                 .setName( Message.process(Map.of("color", ChatColor.stringValueOf(Colors.RED)),"Paginated.button4.nameItem"))
                 .setLore( Message.process(Map.of("color", ChatColor.stringValueOf(Colors.WHITE)),"Paginated.button4.lore"))
                 .build();
+
+        setButton(getBackButtonSlot(), Button.builder()
+                .setItemStack(Item.of(recipe))
+                .setLeftClickAction(unused -> this.openParent())
+                .build());
+
         return Item.of(recipe);
     }
 

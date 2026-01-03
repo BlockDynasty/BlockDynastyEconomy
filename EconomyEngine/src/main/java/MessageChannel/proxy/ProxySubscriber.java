@@ -42,7 +42,6 @@ public class ProxySubscriber extends Subscriber implements IProxySubscriber {
         }
         try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(bytecode))) {
             String message = in.readUTF();
-            Console.log("Message received: " + message);
             super.processMessage(message);
         }catch (IOException exception){
             Console.logError(exception.getMessage());

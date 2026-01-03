@@ -17,8 +17,17 @@
 package BlockDynasty.Economy.domain.events.offersEvents;
 
 import BlockDynasty.Economy.aplication.services.OfferService;
+import BlockDynasty.Economy.domain.entities.offers.Offer;
 import BlockDynasty.Economy.domain.events.SerializableEvent;
 
 public abstract class OfferEvent extends SerializableEvent {
+    private final Offer offer;
+    public OfferEvent(Offer offer) {
+        this.offer = offer;
+    }
     public abstract void syncOffer(OfferService offerService);
+    public Offer getOffer() {
+        return offer;
+    }
+
 }

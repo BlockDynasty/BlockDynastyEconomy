@@ -221,6 +221,11 @@ public class BankPanel extends AbstractPanel {
         }
     }
 
+    @Override
+    public void refresh() {
+        setupGUI();
+    }
+
     public static boolean isButtonEnabled(int slot) {
         return buttonsEnabled.getOrDefault(slot, true);
     }

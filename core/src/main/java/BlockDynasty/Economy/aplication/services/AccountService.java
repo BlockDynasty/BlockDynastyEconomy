@@ -218,10 +218,9 @@ public class AccountService implements IAccountService {
 
     public Result<Void> checkNameChange(Account account , String newName) {
         if (!account.getNickname().equalsIgnoreCase(newName)) {
-            Player player = new Player(account.getUuid(), account.getNickname());
             account.setNickname(newName);
             try {
-                this.dataStore.saveAccount(player,account);
+                this.dataStore.saveAccount(account);
             } catch (TransactionException e) {
                 return Result.failure(e.getMessage(), ErrorCode.DATA_BASE_ERROR);
             }
@@ -230,10 +229,9 @@ public class AccountService implements IAccountService {
     }
     public Result<Void> checkUuidChange(Account account, UUID newUuid) {
         if (!account.getUuid().equals(newUuid)) {
-            Player player = new Player(account.getUuid(), account.getNickname());
             account.setUuid(newUuid);
             try {
-                this.dataStore.saveAccount(player,account);
+                this.dataStore.saveAccount(account);
             } catch (TransactionException e) {
                 return Result.failure(e.getMessage(), ErrorCode.DATA_BASE_ERROR);
             }

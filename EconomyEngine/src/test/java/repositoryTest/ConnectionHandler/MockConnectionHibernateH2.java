@@ -41,9 +41,9 @@ public class MockConnectionHibernateH2 implements Connection {
         configuration.setProperty("hibernate.hbm2ddl.auto", "create-drop");
         configuration.setProperty("hibernate.connection.autocommit", "true");
         configuration.setProperty("hibernate.cache.use_second_level_cache", "false");
-        configuration.setProperty("hibernate.show_sql", "true");
-        configuration.setProperty("hibernate.format_sql", "true");
-        configuration.setProperty("hibernate.use_sql_comments", "true");
+        configuration.setProperty("hibernate.show_sql", "false");
+        configuration.setProperty("hibernate.format_sql", "false");
+        configuration.setProperty("hibernate.use_sql_comments", "false");
         configuration.addAnnotatedClass(CurrencyDb.class);
         configuration.addAnnotatedClass(AccountDb.class);
         configuration.addAnnotatedClass(BalanceDb.class);

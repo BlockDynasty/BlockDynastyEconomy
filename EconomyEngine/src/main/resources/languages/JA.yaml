@@ -1,0 +1,228 @@
+prefix: "{color}[銀行] "
+
+# イベントメッセージ
+pay1: "{prefix}{color}{playerName} に {currency} を支払いました。"
+pay2: "{prefix}{color}{playerName} から {currency} を受け取りました。"
+
+transfer1: "{prefix}{color}{playerName} に {currency} を送金しました。"
+transfer2: "{prefix}{color}{playerName} から {currency} を受け取りました。"
+
+exchange: "{prefix}{color}{fromCurrency} を {toCurrency} に交換しました。"
+
+trade1: "{prefix}{color}{playerName} に {fromCurrency} を提供し、{toCurrency} を受け取りました。"
+trade2: "{prefix}{color}{playerName} から {fromCurrency} を受け取り、{toCurrency} を提供しました。"
+
+deposit: "{prefix}{color}{currency} が預金されました。"
+
+withdraw: "{prefix}{color}{currency} を引き出しました。"
+
+set: "{prefix}{color}残高が {currency} に設定されました。"
+
+offerCreated1: "{prefix}{color}{playerName} にオファーを送信しました。{fromCurrency} を {toCurrency} と交換します。"
+offerCreated2: "{prefix}{color}{playerName} からオファーを受信しました。{fromCurrency} を {toCurrency} と交換します。"
+
+offerCanceled1: "{prefix}{color}{playerName} からのオファーがキャンセルされました。"
+offerCanceled2: "{prefix}{color}{playerName} へのオファーをキャンセルしました。"
+
+offerExpired1: "{prefix}{color}{playerName} からのオファーが期限切れです。"
+offerExpired2: "{prefix}{color}{playerName} へのオファーが期限切れです。"
+
+
+# GUIメッセージ
+# ユーザーパネル
+listPlayersOnline:
+  title: "プレイヤーを選択"
+  button1:
+    nameItem: "{color}支払い先プレイヤーを選択"
+    lore: "{color}クリックして支払い先のプレイヤーを選択します。{color}#名前順に表示"
+
+AccountList:
+  button1:
+    nameItem: "{color}プレイヤーを検索"
+    lore: "{color}クリックしてプレイヤー名で検索します。{color}#大文字小文字を区別"
+  button2:
+    nameItem: "プレイヤーを検索"
+    lore: "名前を入力..."
+    response: "プレイヤーが見つかりませんでした！"
+
+listPlayersFromDb:
+  title: "プレイヤーを選択"
+  button1:
+    nameItem: "{color}送金先プレイヤーを選択"
+    lore: "{color}クリックして送金先のプレイヤーを選択します。{color}#名前順に表示"
+
+CurrencyListToPay:
+  response: "取引が成功しました！"
+  button1:
+    nameItem: "{color}支払い通貨を選択"
+    lore: "{color}クリックして支払う通貨を選択します。{color}（事前に金額を設定してください）"
+
+BankPanel:
+  title: "銀行"
+  button1:
+    nameItem1: "{color}アカウントはブロック中"
+    nameItem2: "{color}アカウントは有効です"
+    lore: "{color}以下の操作に影響します：,引き出し,預け入れ,送金,支払い,取引,通貨交換,すべての経済操作"
+  button2:
+    nameItem: "{color}通貨を交換"
+    lore: "{color}クリックして通貨を交換します"
+  button3:
+    nameItem: "{color}オンラインプレイヤーへのオファー作成"
+    lore: "{color}クリックして他のオンラインプレイヤーと,{color}通貨取引のオファーを作成します"
+  button4:
+    nameItem: "{color}ネットワークプレイヤーへのオファー作成"
+    lore: "{color}クリックしてネットワーク内の他のプレイヤーと,{color}通貨取引のオファーを作成します"
+  button5:
+    nameItem: "{color}自分のアクティブなオファー"
+    lore: "{color}これらはあなたが作成したオファーです,{color}現在アクティブなもののみ表示されます"
+  button6:
+    nameItem: "{color}残高を確認"
+    lore: "{color}クリックして残高を確認します"
+  button7:
+    nameItem: "{color}受信したオファー"
+    lore: "{color}他のプレイヤーから送信された,{color}すべてのオファーをここで確認できます"
+  button8:
+    nameItem: "{color}オンラインプレイヤーへの支払い"
+    lore: "{color}クリックしてこのサーバーの,{color}他のオンラインプレイヤーに支払います"
+  button9:
+    nameItem: "{color}ネットワークプレイヤーへの送金"
+    lore: "{color}クリックしてネットワーク内の,{color}他のプレイヤーに資金を送金します"
+  button10:
+    nameItem: "{color}終了"
+    lore: "{color}クリックして終了します"
+
+AccountBalance:
+  title: "口座残高"
+  button1:
+    nameItem: "{currency}"
+    lore: "{color}残高: {currency}"
+  button2:
+    nameItem: "{color}通貨がありません"
+    lore: "{color}口座に通貨がありません"
+  button3:
+    nameItem: "{color}口座残高"
+    lore: "{color}利用可能な残高"
+
+ReceivedOffers:
+  title: "受信したオファー"
+  button1:
+    nameItem: "{playerName}"
+    lore: ",数量: {amount}, 価格: {price},,{color1}左クリックで承諾,{color2}右クリックでキャンセル"
+  button2:
+    nameItem: "受信オファー一覧"
+    lore: "クリックして更新"
+
+MyActiveOffers:
+  title: "自分のアクティブなオファー"
+  button1:
+    nameItem: "{playerName}"
+    lore: ",数量: {amount}, 価格: {price},,{color2}右クリックでキャンセル"
+  button2:
+    nameItem: "オファー一覧"
+    lore: "クリックして更新"
+
+OfferListPlayer:
+  button1:
+    nameItem: "{color}オファー先プレイヤーを選択"
+    lore: "{color}クリックしてオファー先のプレイヤーを選択します。{color}（事前に通貨を選択してください）"
+  button2:
+    nameItem: "{color}提供する通貨を選択"
+    lore: "{color}クリックして提供する通貨を選択します。{color}（事前に金額を設定してください）"
+  button3:
+    nameItem: "{color}受け取る通貨を選択"
+    lore: "{color}クリックして受け取る通貨を選択します。{color}（事前に金額を設定してください）"
+
+CurrencySelector:
+  title: "通貨一覧"
+  button1:
+    nameItem: "{currency}"
+    lore: "単数形: {singular},複数形: {plural},送金可能: {transferable},為替レート: {exchangeRate}"
+  button2:
+    nameItem: "{currency} の金額"
+    lore: "0"
+
+Exchange:
+  button1:
+    nameItem: "{color}受け取る通貨を選択"
+    lore: "{color}クリックして受け取る通貨を選択します。{color}（事前に金額を設定してください）"
+  button2:
+    nameItem: "{color}提供する通貨を選択"
+    lore: "{color}クリックして提供する通貨を選択します"
+
+Paginated:
+  button1:
+    nameItem: "{color}表示する項目がありません"
+    lore: "{color}表示するアイテムがありません"
+  button2:
+    nameItem: "{color}前のページ"
+    lore: "{color}クリックして前のアイテムを表示します"
+  button3:
+    nameItem: "{color}次のページ"
+    lore: "{color}クリックして次のアイテムを表示します"
+  button4:
+    nameItem: "{color}戻る"
+    lore: "{color}クリックして戻ります"
+
+# 管理者パネル
+EconomyAdminPanel:
+  title: "経済管理パネル"
+  button1:
+    nameItem: "{color}通貨を編集"
+    lore: "{color}クリックして通貨を編集します"
+  button2:
+    nameItem: "{color}アカウントを管理"
+    lore: "{color}クリックしてプレイヤーアカウントを管理します"
+  button3:
+    nameItem: "{color}終了"
+    lore: "{color}クリックして終了します"
+
+CurrencyAdminPanel:
+  title: "通貨管理"
+  button1:
+    nameItem: "{color}通貨を作成"
+    lore: "{color}クリックして新しい通貨を作成します"
+  button2:
+    nameItem: "{color}通貨を削除"
+    lore: "{color}クリックして通貨を削除します"
+  button3:
+    nameItem: "{color}通貨を編集"
+    lore: "{color}クリックして通貨を編集します"
+  button4:
+    nameItem: "{color}機能を設定"
+    lore: "{color}クリック"
+  button5:
+    nameItem: "{color}戻る"
+    lore: "{color}クリックして戻ります"
+
+AccountSelectorToEdit:
+  title: "プレイヤーを選択"
+  button1:
+    nameItem: "編集するアカウントを選択"
+    lore: "クリックしてアカウントを選択するか、名前で検索します（名前順、大文字小文字を区別）"
+
+EditCurrencyPanel:
+  title: "通貨の編集: {currency}"
+  button1:
+    nameItem: "{currency}"
+    lore: "シンボル: {symbol},色: {color},初期残高: {balance},為替レート: {rate},送金可能: {transferable},デフォルト通貨: {default},小数点対応: {decimals}"
+  button2:
+    nameItem: "{color}初期残高を編集"
+    lore: "{color}クリックして初期残高を変更します"
+  button3:
+    nameItem: "{color}為替レートを設定"
+    lore: "{color}クリックして為替レートを変更します"
+  button4:
+    nameItem: "{color}色を編集"
+    lore: "{color}クリックして通貨の色を変更します"
+  button5:
+    nameItem: "{color}シンボルを編集"
+    lore: "{color}クリックして通貨シンボルを変更します"
+  button6:
+    nameItem: "{color}デフォルトに設定"
+    lore: "{color}クリックしてこの通貨をデフォルトに設定します"
+  button7:
+    nameItem: "{color}単数形を編集"
+    lore: "{color}クリックして単数形の名前を変更します"
+  button8:
+    nameItem: "{color}複数形を編集"
+    lore: "{color}クリックして複数形の名前を変更します"

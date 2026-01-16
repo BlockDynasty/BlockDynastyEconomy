@@ -24,6 +24,12 @@ Bukkit: https://dev.bukkit.org/projects/dynastyeconomy
 
 > **💡 Note**: REDIS replaces the need to use proxy plugins like Velocity or BungeeCord.
 ----
+### 🎯 Hytale Support
+| Version | Status | Required JDK | Notes |
+|---------|--------|--------------|-------|
+| Alpha | ✅ | JDK 25 | Legacy Support/only Commands |
+
+----
 ### 🎯 Supported Versions Paper/Spigot/Folia/Canvas
 - **Spigot API version**: `1.15`  
 - **JDK**: `17` (minimum requirement)  

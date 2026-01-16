@@ -1,8 +1,7 @@
 package com.BlockDynasty.hytale.adapters.listener;
 
-
 import com.BlockDynasty.hytale.adapters.PlayerAdapter;
-import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
+import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import platform.listeners.IPlayerJoin;
 
 public class PlayerQuitListener {
@@ -12,7 +11,7 @@ public class PlayerQuitListener {
         this.playerJoin = playerJoin;
     }
 
-    public void onPlayerQuit(PlayerConnectEvent event) {
+    public void onPlayerQuit(PlayerDisconnectEvent event) {
         playerJoin.offLoadPlayerAccount(new PlayerAdapter(event.getPlayerRef()));
     }
 }

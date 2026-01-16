@@ -13,7 +13,9 @@
   "Website": "wiki.blockdynasty.net",
   "ServerVersion": "*",
   "Dependencies": {},
-  "OptionalDependencies": {},
+  "OptionalDependencies": {
+    "TheNewEconomy:VaultUnlocked": "*"
+  },
   "DisabledByDefault": false,
   "Main": "com.BlockDynasty.hytale.BlockDynastyEconomy"
 }

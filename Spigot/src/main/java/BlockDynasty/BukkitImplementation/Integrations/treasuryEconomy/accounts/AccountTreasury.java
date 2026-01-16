@@ -15,16 +15,16 @@
  */
 package BlockDynasty.BukkitImplementation.Integrations.treasuryEconomy.accounts;
 
-import api.IApi;
+import com.BlockDynasty.api.DynastyEconomy;
 import me.lokka30.treasury.api.economy.account.accessor.AccountAccessor;
 import me.lokka30.treasury.api.economy.account.accessor.NonPlayerAccountAccessor;
 import me.lokka30.treasury.api.economy.account.accessor.PlayerAccountAccessor;
 import org.jetbrains.annotations.NotNull;
 
 public class AccountTreasury implements AccountAccessor {
-    private IApi api;
-    public AccountTreasury(@NotNull IApi api) {
-        this.api = api;
+    private static DynastyEconomy api;
+    public AccountTreasury(@NotNull DynastyEconomy api) {
+        AccountTreasury.api = api;
     }
     @Override
     public @NotNull PlayerAccountAccessor player() {

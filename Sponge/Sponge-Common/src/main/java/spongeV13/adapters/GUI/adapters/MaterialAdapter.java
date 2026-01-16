@@ -16,8 +16,10 @@
 
 package spongeV13.adapters.GUI.adapters;
 
-import lib.gui.components.recipes.RecipeItem;
-import lib.util.materials.Materials;
+import abstractions.platform.materials.Materials;
+import abstractions.platform.recipes.RecipeItem;
+import domain.entity.currency.NbtData;
+import domain.entity.currency.RecipeItemCurrency;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.spongepowered.api.Sponge;
@@ -28,6 +30,7 @@ import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.profile.GameProfile;
 import org.spongepowered.api.profile.property.ProfileProperty;
+import spongeV13.adapters.platformAdapter.NBTApi.CustomKeys;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -81,6 +84,16 @@ public class MaterialAdapter {
         item.offer(Keys.GAME_PROFILE, profile);
     }
 
+    public static void applyNbtData(ItemStack item, NbtData nbtData){
+        //item.offer(Keys.)
+        String nameCurrency = nbtData.getItemType();
+        String value = nbtData.getValue();
+        String uuidCurrency = nbtData.getUuidCurrency();
+        item.offer(CustomKeys.NAME_CURRENCY,nameCurrency);
+        item.offer(CustomKeys.VALUE,value);
+        item.offer(CustomKeys.UUID_CURRENCY,uuidCurrency);
+    }
+
     private static GameProfile crearGameProfileDesdeTextureURL(String textureURL) {
         return profileCacheHeadsTextures.computeIfAbsent(textureURL, url -> {
             GameProfile profile = GameProfile.of(UUID.randomUUID(), "CustomHead");
@@ -115,6 +128,13 @@ public class MaterialAdapter {
             applyItemLore(itemStack, List.of(recipeItem.getLore()));
             applyTexture(itemStack, recipeItem.getTexture());
         }
+        return itemStack;
+    }
+
+    public static ItemStack createItemStackCurrency(RecipeItemCurrency recipe){
+        ItemStack itemStack = createItemStack(recipe);
+        NbtData nbtData = recipe.getNbtData();
+        applyNbtData(itemStack, nbtData);
         return itemStack;
     }
 }

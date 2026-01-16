@@ -17,19 +17,22 @@
 package BlockDynasty.BukkitImplementation.adapters.commands;
 
 import BlockDynasty.BukkitImplementation.BlockDynastyEconomy;
+import BlockDynasty.BukkitImplementation.utils.Console;
 import lib.commands.abstractions.Command;
 import lib.commands.CommandService;
 import org.bukkit.command.PluginCommand;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CommandRegister {
-    private static List<Command> commands = CommandService.getMainCommands();
     private static final BlockDynastyEconomy plugin= BlockDynastyEconomy.getInstance();
 
     public static void registerAllEconomySystem(){
+        List<Command> commands = CommandService.getMainCommands();
         CommandService.registerSubCommand("eco",new ReloadCommand(plugin));
-
         for(Command command: commands){
             CommandAdapter commandAdapter = new CommandAdapter(command);
             TabCompletionAdapter tabCompleterAdapter = new TabCompletionAdapter(command);

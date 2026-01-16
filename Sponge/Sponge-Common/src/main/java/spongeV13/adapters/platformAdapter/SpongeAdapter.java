@@ -17,20 +17,20 @@
 package spongeV13.adapters.platformAdapter;
 
 import MessageChannel.proxy.ProxyData;
-import lib.abstractions.IProxySubscriber;
+import domain.entity.currency.ItemStackCurrency;
+import domain.entity.currency.RecipeItemCurrency;
+import domain.entity.platform.HardCashCreator;
+import lib.gui.components.IInventory;
+import lib.gui.components.IItemStack;
+import lib.gui.components.ITextInput;
+import platform.IPlatform;
+import platform.IPlayer;
 import spongeV13.adapters.GUI.adapters.InventoryAdapter;
 import spongeV13.adapters.GUI.adapters.ItemStackAdapter;
 import spongeV13.adapters.GUI.adapters.MaterialAdapter;
 import spongeV13.SpongePluginCommon;
 import spongeV13.adapters.GUI.adapters.TextInput;
 import spongeV13.adapters.scheduler.Scheduler;
-import lib.abstractions.IConsole;
-import lib.abstractions.IPlayer;
-import lib.abstractions.PlatformAdapter;
-import lib.gui.components.*;
-import lib.gui.components.recipes.RecipeInventory;
-import lib.gui.components.recipes.RecipeItem;
-import lib.scheduler.IScheduler;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.item.inventory.ContainerType;
@@ -41,17 +41,21 @@ import org.spongepowered.api.network.channel.ChannelBuf;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
 import org.spongepowered.api.network.channel.raw.play.RawPlayDataChannel;
 import org.spongepowered.plugin.PluginContainer;
-import spongeV13.utils.Console;
 import spongeV13.utils.Version;
 
+import abstractions.platform.IConsole;
+import abstractions.platform.IProxySubscriber;
+import abstractions.platform.recipes.RecipeInventory;
+import abstractions.platform.recipes.RecipeItem;
+import abstractions.platform.scheduler.IScheduler;
+
 import java.io.File;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class SpongeAdapter implements PlatformAdapter {
+public class SpongeAdapter implements IPlatform {
     private PluginContainer pluginContainer = SpongePluginCommon.getPlugin();
     private RawDataChannel channel = SpongePluginCommon.getChannel();
 
@@ -65,7 +69,7 @@ public class SpongeAdapter implements PlatformAdapter {
     }
 
     @Override
-    public List<IPlayer> getOnlinePlayers() {
+    public List<abstractions.platform.entity.IPlayer> getOnlinePlayers() {
         return Sponge.server().onlinePlayers().stream()
                 .map(EntityPlayerAdapter::of)
                 .collect(Collectors.toList());
@@ -132,6 +136,11 @@ public class SpongeAdapter implements PlatformAdapter {
     }
 
     @Override
+    public HardCashCreator asPlatformHardCash() {
+        return this;
+    }
+
+    @Override
     public IItemStack createItemStack(RecipeItem recipeItem){
         ItemStack itemStack = MaterialAdapter.createItemStack(recipeItem);
         return new ItemStackAdapter(itemStack);
@@ -167,4 +176,18 @@ public class SpongeAdapter implements PlatformAdapter {
         }
     }
 
+    @Override
+    public ItemStackCurrency createItemStackCurrency(RecipeItemCurrency recipe) {
+        return new ItemStackCurrencyAdapter(MaterialAdapter.createItemStackCurrency(recipe));
+    }
+
+    @Override
+    public boolean hasSupportHardCash() {
+        return true;
+    }
+
+    @Override
+    public boolean hasSupportGui() {
+        return true;
+    }
 }

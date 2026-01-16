@@ -16,7 +16,8 @@
 
 package adapters;
 
-import lib.abstractions.IPlayer;
+import domain.entity.currency.ItemStackCurrency;
+import domain.entity.player.IEntityHardCash;
 import lib.commands.abstractions.IEntityCommands;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.IInventory;
@@ -29,6 +30,7 @@ import net.minestom.server.advancements.Notification;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import platform.IPlayer;
 
 import java.util.UUID;
 
@@ -110,5 +112,35 @@ public class PlayerAdapter implements IPlayer {
     @Override
     public IEntityCommands asEntityCommands() {
         return this;
+    }
+
+    @Override
+    public IEntityHardCash asEntityHardCash() {
+        return this;
+    }
+
+    @Override
+    public void giveItem(ItemStackCurrency item) {
+
+    }
+
+    @Override
+    public ItemStackCurrency takeHandItem() {
+        return null;
+    }
+
+    @Override
+    public boolean hasItem(ItemStackCurrency itemCurrency) {
+        return false;
+    }
+
+    @Override
+    public boolean hasEmptySlot() {
+        return false;
+    }
+
+    @Override
+    public void removeItem(ItemStackCurrency itemCurrency) {
+
     }
 }

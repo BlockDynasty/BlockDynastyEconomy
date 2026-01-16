@@ -46,11 +46,11 @@ public class MainTest {
         });
 
         minecraftServer.start("0.0.0.0", 25565);
+        //MinecraftServer.getCommandManager().register(new permsCommand()); //test perms command to give basic permissions
         //--------fin basic server setup-------------------------
 
-        MinecraftServer.getCommandManager().register(new permsCommand()); //test perms command to give basic permissions
 
-
+        //--------start economy system setup----------------------
         EconomySystem.start(true, new PermsServiceDefault()); // <----------Initialize the economy system and this is ready to use!
     }
 }

@@ -16,7 +16,7 @@
 
 package BlockDynasty.BukkitImplementation.adapters.platformAdapter;
 
-import lib.abstractions.IConsole;
+import abstractions.platform.IConsole;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;

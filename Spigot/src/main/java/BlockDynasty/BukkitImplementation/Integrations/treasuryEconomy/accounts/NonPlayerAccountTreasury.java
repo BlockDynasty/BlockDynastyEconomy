@@ -15,9 +15,9 @@
  */
 package BlockDynasty.BukkitImplementation.Integrations.treasuryEconomy.accounts;
 
-import BlockDynasty.Economy.domain.entities.account.Account;
-import api.EconomyResponse;
-import api.IApi;
+import com.BlockDynasty.api.EconomyResponse;
+import com.BlockDynasty.api.DynastyEconomy;
+import com.BlockDynasty.api.entity.Account;
 import me.lokka30.treasury.api.common.NamespacedKey;
 import me.lokka30.treasury.api.common.misc.TriState;
 import me.lokka30.treasury.api.economy.account.AccountPermission;
@@ -34,10 +34,10 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class NonPlayerAccountTreasury implements NonPlayerAccount {
-    private IApi api;
+    private DynastyEconomy api;
     private String nameAccount;
 
-    public NonPlayerAccountTreasury(@NotNull IApi api,String nameAccount) {
+    public NonPlayerAccountTreasury(@NotNull DynastyEconomy api, String nameAccount) {
         this.api = api;
         this.nameAccount = nameAccount;
     }

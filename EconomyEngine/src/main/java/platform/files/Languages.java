@@ -17,6 +17,7 @@
 package platform.files;
 
 import platform.files.yaml.YamlConfig;
+import services.configuration.IConfiguration;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -26,7 +27,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Languages extends YamlConfig {
-    private final Configuration config;
+    private final IConfiguration config;
     private final String languagePath = "/languages";
     private String[] languagesFiles = {"EN.yaml", "ES.yaml","RU.yaml","ZH.yaml","DE.yaml","FR.yaml","IT.yaml","JA.yaml"};
     //string nombre EN, ES, etc y File objeto File
@@ -35,7 +36,7 @@ public class Languages extends YamlConfig {
     private File langDirectory;
     private File rootDirectory;
 
-    public Languages(File rootDirectory,Configuration config) {
+    public Languages(File rootDirectory, IConfiguration config) {
         this.config = config;
         this.rootDirectory = rootDirectory;
         this.langDirectory = new File(rootDirectory, languagePath);

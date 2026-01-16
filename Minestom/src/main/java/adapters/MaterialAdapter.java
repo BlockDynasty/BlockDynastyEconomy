@@ -16,8 +16,8 @@
 
 package adapters;
 
-import lib.gui.components.recipes.RecipeItem;
-import lib.util.materials.Materials;
+import abstractions.platform.recipes.RecipeItem;
+import abstractions.platform.materials.Materials;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.PlayerSkin;

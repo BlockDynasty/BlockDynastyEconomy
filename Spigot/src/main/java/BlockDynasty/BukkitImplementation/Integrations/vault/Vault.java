@@ -16,24 +16,25 @@
 
 package BlockDynasty.BukkitImplementation.Integrations.vault;
 
-import BlockDynasty.BukkitImplementation.BlockDynastyEconomy;
 import BlockDynasty.BukkitImplementation.Integrations.vaultUnloked.VaultUnlockedHandler;
 import BlockDynasty.BukkitImplementation.Integrations.vault2.Vault2Handler;
 import BlockDynasty.BukkitImplementation.utils.JavaUtil;
 import BlockDynasty.BukkitImplementation.utils.Console;
-import api.IApi;
+import com.BlockDynasty.api.DynastyEconomy;
+import com.BlockDynasty.api.DynastyEconomyWithoutLogger;
+import com.BlockDynasty.api.ServiceProvider;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Vault {
-    private static final BlockDynastyEconomy plugin = BlockDynastyEconomy.getInstance();
+    private static final BlockDynasty.BukkitImplementation.BlockDynastyEconomy plugin = BlockDynasty.BukkitImplementation.BlockDynastyEconomy.getInstance();
     private static List<IVaultHandler> vaultsInjected = new ArrayList<>();
-
-    public static void init(IApi api) {
+    
+    public static void init() {
         Vault.vaultsInjected = new ArrayList<>();
-        if (!BlockDynastyEconomy.getConfiguration().getBoolean("vault")) {
+        if (!BlockDynasty.BukkitImplementation.BlockDynastyEconomy.getConfiguration().getBoolean("vault")) {
             Console.log("Vault integration is disabled.");
             return;
         }
@@ -45,15 +46,15 @@ public class Vault {
 
         //VAULT 2.0 CHECK
         if(JavaUtil.classExists("net.milkbowl.vault.economy.EconomyMultiCurrency")) {
-            vaultsInjected.add(new Vault2Handler(plugin, api));
+            vaultsInjected.add(new Vault2Handler(plugin));
         }else{
             //DEFAULT VAULT V1.7
-            vaultsInjected.add(new VaultHandler(plugin,api));
+            vaultsInjected.add(new VaultHandler(plugin));
         }
 
         //VAULT UNLOCKED CHECK
         if(JavaUtil.classExists("net.milkbowl.vault2.economy.Economy")){
-            vaultsInjected.add(new VaultUnlockedHandler(plugin,api));
+            vaultsInjected.add(new VaultUnlockedHandler(plugin));
         }
 
         vaultsInjected.forEach(IVaultHandler::hook);

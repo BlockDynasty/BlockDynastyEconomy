@@ -13,11 +13,15 @@
         <module>core</module>
         <module>Spigot</module>
         <module>Sponge</module>
-        <module>EconomyGUILibrary</module>
+        <module>EconomyGUI</module>
         <module>EconomyEngine</module>
         <module>Velocity</module>
         <module>BungeeCord</module>
         <module>Minestom</module>
+        <module>EconomyHardCash</module>
+        <module>EconomyLibrary</module>
+        <module>EconomyApi</module>
+        <module>Hytale</module>
     </modules>
 
 </project>

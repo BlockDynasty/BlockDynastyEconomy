@@ -1,0 +1,19 @@
+{
+  "Group": "com.BlockDynastyEconomy",
+  "Name": "DynastyEconomy",
+  "Version": "1.0.0",
+  "Description": "Modern Economy Plugin for Hytale Servers",
+  "Authors": [
+    {
+      "Name": "Federkone",
+      "Email": "federicobarrionuevo47@gmail.com",
+      "Url": "wiki.blockdynasty.net"
+    }
+  ],
+  "Website": "wiki.blockdynasty.net",
+  "ServerVersion": "*",
+  "Dependencies": {},
+  "OptionalDependencies": {},
+  "DisabledByDefault": false,
+  "Main": "com.BlockDynasty.hytale.BlockDynastyEconomy"
+}

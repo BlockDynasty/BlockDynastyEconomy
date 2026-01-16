@@ -90,6 +90,18 @@ BankPanel:
   button10:
     nameItem: "{color}終了"
     lore: "{color}クリックして終了します"
+  button11:
+    nameItem: "{color}ATM"
+    lore: "{color}自動表示はこちらをクリック"
+
+MachinePanel:
+  title: "現金自動預け払い機"
+  button1:
+    nameItem: "{color}硬貨を入金"
+    lore: "{color}クリックで硬貨を入金"
+  button2:
+    nameItem: "{color}硬貨を引き出し"
+    lore: "{color}クリックで硬貨を引き出し"
 
 AccountBalance:
   title: "口座残高"

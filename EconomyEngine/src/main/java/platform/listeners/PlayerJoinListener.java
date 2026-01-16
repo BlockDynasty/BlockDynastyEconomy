@@ -19,7 +19,7 @@ package platform.listeners;
 import BlockDynasty.Economy.aplication.useCase.UseCaseFactory;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import lib.commands.abstractions.IEntityCommands;
-import utils.Console;
+import services.Console;
 
 public class PlayerJoinListener implements IPlayerJoin {
     private final LoadAccount loadAccount;

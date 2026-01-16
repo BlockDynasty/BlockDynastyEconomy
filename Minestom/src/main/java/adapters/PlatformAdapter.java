@@ -17,18 +17,23 @@
 package adapters;
 
 import DynastyEconomy.Console;
-import lib.abstractions.IConsole;
-import lib.abstractions.IPlayer;
-import lib.abstractions.IProxySubscriber;
+import abstractions.platform.IConsole;
+import abstractions.platform.IProxySubscriber;
+import abstractions.platform.recipes.RecipeItem;
+import domain.entity.currency.ItemStackCurrency;
+import domain.entity.currency.RecipeItemCurrency;
+import domain.entity.platform.HardCashCreator;
 import lib.gui.components.IInventory;
 import lib.gui.components.IItemStack;
 import lib.gui.components.ITextInput;
-import lib.gui.components.recipes.RecipeInventory;
-import lib.scheduler.IScheduler;
+import abstractions.platform.recipes.RecipeInventory;
+import abstractions.platform.scheduler.IScheduler;
 import adapters.inventory.MinestomInventory;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
+import platform.IPlatform;
+import platform.IPlayer;
 
 import java.io.File;
 import java.util.Collection;
@@ -36,7 +41,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class PlatformAdapter implements lib.abstractions.PlatformAdapter {
+public class PlatformAdapter implements IPlatform {
     public static boolean onlineMode = false;
     public PlatformAdapter(boolean onlineMode) {
         PlatformAdapter.onlineMode=onlineMode;
@@ -60,13 +65,13 @@ public class PlatformAdapter implements lib.abstractions.PlatformAdapter {
     }
 
     @Override
-    public List<IPlayer> getOnlinePlayers() {
+    public List<abstractions.platform.entity.IPlayer> getOnlinePlayers() {
         Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
         return players.stream().map(PlayerAdapter::new).collect(Collectors.toUnmodifiableList());
     }
 
     @Override
-    public IItemStack createItemStack(lib.gui.components.recipes.RecipeItem recipeItem) {
+    public IItemStack createItemStack(RecipeItem recipeItem) {
         ItemStack item= MaterialAdapter.createItem(recipeItem);
         return new ItemStackAdapter(item);
     }
@@ -125,5 +130,25 @@ public class PlatformAdapter implements lib.abstractions.PlatformAdapter {
     @Override
     public ITextInput getTextInput() {
         return new TextInput();
+    }
+
+    @Override
+    public HardCashCreator asPlatformHardCash() {
+        return this;
+    }
+
+    @Override
+    public ItemStackCurrency createItemStackCurrency(RecipeItemCurrency recipe) {
+        return null;
+    }
+
+    @Override
+    public boolean hasSupportHardCash() {
+        return false;
+    }
+
+    @Override
+    public boolean hasSupportGui() {
+        return true;
     }
 }

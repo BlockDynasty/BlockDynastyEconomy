@@ -1,7 +1,7 @@
 package EngineTest.mocks;
 
-import lib.scheduler.ContextualTask;
-import lib.scheduler.IScheduler;
+import abstractions.platform.scheduler.ContextualTask;
+import abstractions.platform.scheduler.IScheduler;
 
 public class Scheduler implements IScheduler {
 

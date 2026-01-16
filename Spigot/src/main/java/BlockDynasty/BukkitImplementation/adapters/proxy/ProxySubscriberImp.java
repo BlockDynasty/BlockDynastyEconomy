@@ -15,8 +15,7 @@
  */
 package BlockDynasty.BukkitImplementation.adapters.proxy;
 
-import BlockDynasty.BukkitImplementation.utils.Console;
-import lib.abstractions.IProxySubscriber;
+import abstractions.platform.IProxySubscriber;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 

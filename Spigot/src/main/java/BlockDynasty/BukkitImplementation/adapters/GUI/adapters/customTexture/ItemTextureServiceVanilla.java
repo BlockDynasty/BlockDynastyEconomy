@@ -16,9 +16,9 @@
 
 package BlockDynasty.BukkitImplementation.adapters.GUI.adapters.customTexture;
 
-import BlockDynasty.BukkitImplementation.adapters.GUI.adapters.MaterialAdapter;
+import BlockDynasty.BukkitImplementation.adapters.GUI.adapters.Materials.MaterialProvider;
 import BlockDynasty.BukkitImplementation.utils.Console;
-import lib.util.materials.Materials;
+import abstractions.platform.materials.Materials;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -44,7 +44,7 @@ public class ItemTextureServiceVanilla implements ItemTextureService {
         if (!serviceEnabled || textureUrl == null || textureUrl.isEmpty()) return;
 
         try {
-            item.setType(MaterialAdapter.toBukkitMaterial(Materials.PLAYER_HEAD));
+            item.setType(MaterialProvider.toBukkitMaterial(Materials.PLAYER_HEAD));
             item.setDurability((short) 3);
 
             SkullMeta meta = (SkullMeta) item.getItemMeta();

@@ -16,7 +16,7 @@
 
 package BlockDynasty.BukkitImplementation.scheduler;
 
-import lib.scheduler.ContextualTask;
+import abstractions.platform.scheduler.ContextualTask;
 
 public class Scheduler {
 

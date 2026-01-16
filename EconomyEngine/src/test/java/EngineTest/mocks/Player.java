@@ -1,16 +1,16 @@
 package EngineTest.mocks;
 
 import EngineTest.mocks.utils.Color;
-import lib.abstractions.IPlayer;
+import domain.entity.currency.ItemStackCurrency;
+import domain.entity.player.IEntityHardCash;
 import lib.commands.abstractions.IEntityCommands;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.IInventory;
+import platform.IPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Player implements IPlayer {
     private List<String> permissions;
@@ -99,6 +99,11 @@ public class Player implements IPlayer {
         return this;
     }
 
+    @Override
+    public IEntityHardCash asEntityHardCash() {
+        return null;
+    }
+
     public void addPermission(String permission){
         this.permissions.add(permission);
     }
@@ -106,5 +111,30 @@ public class Player implements IPlayer {
 
     public void setOp(boolean op){
         this.op = op;
+    }
+
+    @Override
+    public void giveItem(ItemStackCurrency item) {
+
+    }
+
+    @Override
+    public ItemStackCurrency takeHandItem() {
+        return null;
+    }
+
+    @Override
+    public boolean hasItem(ItemStackCurrency itemCurrency) {
+        return false;
+    }
+
+    @Override
+    public boolean hasEmptySlot() {
+        return false;
+    }
+
+    @Override
+    public void removeItem(ItemStackCurrency itemCurrency) {
+
     }
 }

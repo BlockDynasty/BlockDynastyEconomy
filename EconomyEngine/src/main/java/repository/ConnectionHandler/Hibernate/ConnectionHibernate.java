@@ -56,7 +56,7 @@ public abstract class ConnectionHibernate implements Connection {
 
     @Override
     public void close() {
-        if (sessionFactory != null) {
+        if (sessionFactory != null && !sessionFactory.isClosed()) {
             sessionFactory.close();
         }
         stopServer();

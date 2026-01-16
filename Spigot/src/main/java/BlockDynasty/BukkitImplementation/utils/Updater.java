@@ -2,7 +2,7 @@
 package BlockDynasty.BukkitImplementation.utils;
 
 import BlockDynasty.BukkitImplementation.scheduler.Scheduler;
-import lib.scheduler.ContextualTask;
+import abstractions.platform.scheduler.ContextualTask;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;

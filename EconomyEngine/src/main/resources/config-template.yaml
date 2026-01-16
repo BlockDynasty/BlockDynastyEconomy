@@ -17,6 +17,15 @@ lang: EN
 #-> Make your decision carefully and set the same value on all your servers. Thank you.
 online: true
 
+#Hardcash
+# this option enables or disables the Hard cash system. ItemStack/Items based economy.
+# when enabled, players will have a physical item in their inventory that represents their money.
+# when disabled, players will have a virtual balance that is not represented by any item.
+#Disclaimer: this system its objected to vulnerabilities and exploits related to the game engine or another plugins: example item duplication's, be careful and Test.
+HardCash:
+  enable: true
+  customHeadTexture: true
+
 #Console log some information for debugging.
 debug: false
 

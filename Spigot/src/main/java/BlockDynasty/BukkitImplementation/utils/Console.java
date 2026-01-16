@@ -16,7 +16,7 @@
 
 package BlockDynasty.BukkitImplementation.utils;
 import BlockDynasty.BukkitImplementation.adapters.platformAdapter.ConsoleAdapter;
-import lib.abstractions.IConsole;
+import abstractions.platform.IConsole;
 
 public class Console {
     private static final IConsole console = new ConsoleAdapter();

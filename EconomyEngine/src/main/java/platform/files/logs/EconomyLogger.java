@@ -17,14 +17,16 @@
 package platform.files.logs;
 
 import BlockDynasty.Economy.domain.services.log.Log;
-import utils.Console;
+import platform.files.IConfigurationEngine;
+import services.Console;
 import platform.files.Configuration;
-import lib.scheduler.IScheduler;
+import abstractions.platform.scheduler.IScheduler;
+import services.configuration.IConfiguration;
 
 public class EconomyLogger extends AbstractLogger{
     private boolean enable = true;
 
-    public EconomyLogger(Configuration configuration, IScheduler scheduler) {
+    public EconomyLogger(IConfigurationEngine configuration, IScheduler scheduler) {
         super(configuration, scheduler);
         this.enable = configuration.getBoolean("transaction_log");
     }

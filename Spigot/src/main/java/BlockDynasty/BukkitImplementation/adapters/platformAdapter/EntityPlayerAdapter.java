@@ -17,16 +17,19 @@
 package BlockDynasty.BukkitImplementation.adapters.platformAdapter;
 
 import BlockDynasty.BukkitImplementation.BlockDynastyEconomy;
-import BlockDynasty.BukkitImplementation.adapters.GUI.adapters.MaterialAdapter;
+import BlockDynasty.BukkitImplementation.adapters.GUI.adapters.Materials.MaterialProvider;
 import BlockDynasty.BukkitImplementation.utils.Version;
+import domain.entity.currency.ItemStackCurrency;
+import domain.entity.player.IEntityHardCash;
 import lib.commands.abstractions.IEntityCommands;
 import lib.gui.components.IEntityGUI;
-import lib.abstractions.IPlayer;
 import lib.gui.components.IInventory;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import platform.IPlayer;
 
 import java.util.UUID;
 
@@ -94,12 +97,12 @@ public class EntityPlayerAdapter implements IPlayer {
 
     @Override
     public void playNotificationSound() {
-        player.playSound(player.getLocation(), MaterialAdapter.getPickupSound(), 1.0f, 1.0f);
+        player.playSound(player.getLocation(), MaterialProvider.getPickupSound(), 1.0f, 1.0f);
     }
 
     @Override
     public void playSuccessSound() {
-        player.playSound(player.getLocation(),  MaterialAdapter.getClickSound(), 0.3f, 1.0f);
+        player.playSound(player.getLocation(),  MaterialProvider.getClickSound(), 0.3f, 1.0f);
     }
 
     @Override
@@ -122,4 +125,41 @@ public class EntityPlayerAdapter implements IPlayer {
         return this;
     }
 
+    @Override
+    public IEntityHardCash asEntityHardCash() {
+        return this;
+    }
+
+    @Override
+    public void giveItem(ItemStackCurrency item) {
+        this.player.getInventory().addItem((ItemStack) item.getRoot());
+    }
+
+    @Override
+    public ItemStackCurrency takeHandItem() {
+        ItemStack itemStack = player.getItemInHand();
+        return new ItemStackCurrencyAdapter(itemStack);
+    }
+
+    @Override
+    public boolean hasItem(ItemStackCurrency itemCurrency) {
+        for (ItemStack itemStack : player.getInventory().getContents()) {
+            if (itemStack != null && itemStack.isSimilar((ItemStack) itemCurrency.getRoot())) {
+                if (itemStack.getAmount() < 64) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean hasEmptySlot() {
+        return player.getInventory().firstEmpty() != -1;
+    }
+
+    @Override
+    public void removeItem(ItemStackCurrency itemCurrency) {
+        player.getInventory().removeItem((ItemStack) itemCurrency.getRoot());
+    }
 }

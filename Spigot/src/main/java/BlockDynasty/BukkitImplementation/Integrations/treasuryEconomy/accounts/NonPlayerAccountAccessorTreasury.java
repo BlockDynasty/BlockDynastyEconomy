@@ -15,7 +15,7 @@
  */
 package BlockDynasty.BukkitImplementation.Integrations.treasuryEconomy.accounts;
 
-import api.IApi;
+import com.BlockDynasty.api.DynastyEconomy;
 import me.lokka30.treasury.api.economy.account.NonPlayerAccount;
 import me.lokka30.treasury.api.economy.account.accessor.NonPlayerAccountAccessor;
 import org.jetbrains.annotations.NotNull;
@@ -23,9 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.CompletableFuture;
 
 public class NonPlayerAccountAccessorTreasury extends NonPlayerAccountAccessor {
-    private IApi api;
+    private DynastyEconomy api;
 
-    public NonPlayerAccountAccessorTreasury(@NotNull IApi api) {
+    public NonPlayerAccountAccessorTreasury(@NotNull DynastyEconomy api) {
         this.api = api;
     }
 

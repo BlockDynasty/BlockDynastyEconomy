@@ -6,7 +6,6 @@ import BlockDynasty.Economy.aplication.useCase.account.CreateAccountUseCase;
 import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByNameUseCase;
 import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetAccountByUUIDUseCase;
 import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.GetOfflineAccountsUseCase;
-import BlockDynasty.Economy.aplication.useCase.account.getAccountUseCase.SearchAccountUseCase;
 import BlockDynasty.Economy.domain.entities.account.Account;
 import BlockDynasty.Economy.domain.entities.account.Player;
 import BlockDynasty.Economy.domain.persistence.entities.IRepository;
@@ -59,10 +58,12 @@ public class PlayerJoinListenerTest {
         Result<List<Account>> result = getOfflineAccountsUseCase.execute();
         long count = result.getValue().stream().filter(acc -> acc.getPlayer().getNickname().equals(playerExist.getNickname())).count();
         assertEquals(1, count);
+
+        Result<Account> resultAccount = getAccountByNameUseCase.execute(playerExist.getNickname());
+        assertEquals(playerNewUUID.getUuid(), resultAccount.getValue().getPlayer().getUuid());
     }
 
     @Test
-    //
     void testLoadAccountOnline(){
         Player playerExist = new Player(UUID.randomUUID(), "Nullplague");
         createAccountUseCase.execute(playerExist.getUuid(), playerExist.getNickname());
@@ -73,6 +74,9 @@ public class PlayerJoinListenerTest {
         Result<List<Account>> result = getOfflineAccountsUseCase.execute();
         long count = result.getValue().stream().filter(acc -> acc.getPlayer().getUuid().equals(playerExist.getUuid())).count();
         assertEquals(1, count);
+
+        Result<Account> resultAccount = getAccountByUUIDUseCase.execute(playerExist.getUuid());
+        assertEquals(playerNewName.getNickname(), resultAccount.getValue().getPlayer().getNickname());
     }
 
     public class MockPlayer implements IEntityCommands{

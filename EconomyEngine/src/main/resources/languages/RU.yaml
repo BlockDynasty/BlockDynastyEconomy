@@ -91,6 +91,18 @@ BankPanel:
   button10:
     nameItem: "{color}Выход"
     lore: "{color}Нажмите для выхода"
+  button11:
+    nameItem: "{color}банкомат"
+    lore: "{color}Нажмите, чтобы открыть банкомат."
+
+MachinePanel:
+  title: "Банкомат"
+  button1:
+    nameItem: "{color}Внести монеты"
+    lore: "{color}Кликните, чтобы внести монеты"
+  button2:
+    nameItem: "{color}Снять монеты"
+    lore: "{color}Кликните, чтобы снять монеты"
 
 AccountBalance:
   title: "Баланс счета"

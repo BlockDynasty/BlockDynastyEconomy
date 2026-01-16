@@ -2,9 +2,7 @@ package EngineTest.mocks;
 
 import EngineTest.mocks.utils.Color;
 import lib.gui.components.IItemStack;
-import lib.gui.components.recipes.RecipeItem;
-
-import java.util.List;
+import abstractions.platform.recipes.RecipeItem;
 
 public class ItemStack implements IItemStack {
     private RecipeItem recipeItem;

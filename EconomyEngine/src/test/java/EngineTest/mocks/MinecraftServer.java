@@ -1,7 +1,7 @@
 package EngineTest.mocks;
 
 import Main.Economy;
-import api.IApi;
+import com.BlockDynasty.api.DynastyEconomy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,20 +12,21 @@ public class MinecraftServer {
     private static final boolean onlineMode= true;
 
     private MinecraftServer(){
-        System.out.println("Server Testing Environment Initialized.");
-        economy = Economy.init( new EngineTest.mocks.Platform());
     }
 
-    public static MinecraftServer start(){
-        return new MinecraftServer();
+    public static void start(){
+        System.out.println("Server Testing Environment Initialized.");
+        if (economy == null){
+            economy = Economy.init( new EngineTest.mocks.Platform());
+        }
     }
 
     public static void stop(){
-        Economy.shutdown();
+        //Economy.shutdown();
         System.out.println("Server Testing Environment Stopped.");
     }
 
-    public static IApi getApi(){
+    public static DynastyEconomy getApi(){
         return economy.getApi();
     }
 

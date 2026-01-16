@@ -1,19 +1,23 @@
 package EngineTest.mocks;
 
-import BlockDynasty.Economy.domain.services.courier.Message;
 import EngineTest.mocks.utils.Color;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import lib.abstractions.IConsole;
-import lib.abstractions.IPlayer;
-import lib.abstractions.IProxySubscriber;
-import lib.abstractions.PlatformAdapter;
-import lib.gui.components.recipes.RecipeItem;
+import abstractions.platform.IConsole;
+import abstractions.platform.IProxySubscriber;
+import domain.entity.currency.ItemStackCurrency;
+import domain.entity.currency.RecipeItemCurrency;
+import domain.entity.platform.HardCashCreator;
+import lib.commands.PlatformCommand;
+import lib.gui.components.PlatformGUI;
+import abstractions.platform.recipes.RecipeItem;
 import lib.gui.components.IInventory;
 import lib.gui.components.IItemStack;
 import lib.gui.components.ITextInput;
-import lib.gui.components.recipes.RecipeInventory;
-import lib.scheduler.IScheduler;
+import abstractions.platform.recipes.RecipeInventory;
+import abstractions.platform.scheduler.IScheduler;
+import platform.IPlatform;
+import platform.IPlayer;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -23,8 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Platform implements PlatformAdapter {
+public class Platform implements IPlatform {
     IProxySubscriber subscriber;
+
     @Override
     public IPlayer getPlayer(String name) {
         return MinecraftServer.getOnlinePlayers().stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
@@ -36,8 +41,13 @@ public class Platform implements PlatformAdapter {
     }
 
     @Override
-    public List<IPlayer> getOnlinePlayers() {
+    public List<abstractions.platform.entity.IPlayer> getOnlinePlayers() {
         return new ArrayList<>(MinecraftServer.getOnlinePlayers());
+    }
+
+    @Override
+    public boolean hasSupportGui() {
+        return true;
     }
 
     @Override
@@ -51,7 +61,7 @@ public class Platform implements PlatformAdapter {
     }
 
     @Override
-    public void dispatchCommand(String command) throws Exception {
+    public void dispatchCommand(String command){
         System.out.println("[BlockDynastyEconomy] "+command);
     }
 
@@ -111,5 +121,20 @@ public class Platform implements PlatformAdapter {
     @Override
     public ITextInput getTextInput() {
         return new TextInput();
+    }
+
+    @Override
+    public HardCashCreator asPlatformHardCash() {
+        return this;
+    }
+
+    @Override
+    public ItemStackCurrency createItemStackCurrency(RecipeItemCurrency recipe) {
+        return null;
+    }
+
+    @Override
+    public boolean hasSupportHardCash() {
+        return false;
     }
 }

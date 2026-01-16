@@ -16,8 +16,8 @@
 
 package BlockDynasty.BukkitImplementation.Integrations.vaultUnloked;
 
-
-import api.IApi;
+import com.BlockDynasty.api.DynastyEconomyWithoutLogger;
+import com.BlockDynasty.api.ServiceProvider;
 import net.milkbowl.vault2.economy.AccountPermission;
 import net.milkbowl.vault2.economy.Economy;
 import net.milkbowl.vault2.economy.EconomyResponse;
@@ -28,10 +28,10 @@ import java.math.BigDecimal;
 import java.util.*;
 
 public class VaultUnlockedHook implements Economy {
-    IApi api;
+    private static DynastyEconomyWithoutLogger api;
 
-    public VaultUnlockedHook(IApi api) {
-        this.api = api;
+    public VaultUnlockedHook() {
+        VaultUnlockedHook.api = ServiceProvider.get(DynastyEconomyWithoutLogger.class);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class VaultUnlockedHook implements Economy {
     public Optional<String> getAccountName(@NotNull UUID accountID) {
         String accountResult;
         try {
-             accountResult = api.getAccount(accountID).getNickname();
+             accountResult = api.getAccount(accountID).getName();
         }catch (NullPointerException e){
             return Optional.empty();
         }
@@ -224,7 +224,7 @@ public class VaultUnlockedHook implements Economy {
     //todo: implementar
     @Override
     public EconomyResponse set(@NotNull String pluginName, @NotNull UUID accountID, @NotNull BigDecimal amount) {
-        api.EconomyResponse response = api.setBalance(accountID, amount);
+        com.BlockDynasty.api.EconomyResponse response = api.setBalance(accountID, amount);
         if(response.isSuccess()){
             return new EconomyResponse(amount, getBalance("",accountID), EconomyResponse.ResponseType.SUCCESS, "set balance success for "+accountID);
         }else {
@@ -234,7 +234,7 @@ public class VaultUnlockedHook implements Economy {
 
     @Override
     public EconomyResponse set(@NotNull String pluginName, @NotNull UUID accountID, @NotNull String worldName, @NotNull BigDecimal amount) {
-        api.EconomyResponse response = api.setBalance(accountID, amount);
+        com.BlockDynasty.api.EconomyResponse response = api.setBalance(accountID, amount);
         if(response.isSuccess()){
             return new EconomyResponse(amount, getBalance("",accountID), EconomyResponse.ResponseType.SUCCESS, "set balance success for "+accountID);
         }else {
@@ -244,7 +244,7 @@ public class VaultUnlockedHook implements Economy {
 
     @Override
     public EconomyResponse set(@NotNull String pluginName, @NotNull UUID accountID, @NotNull String worldName, @NotNull String currency, @NotNull BigDecimal amount) {
-        api.EconomyResponse response = api.setBalance(accountID, amount,currency);
+        com.BlockDynasty.api.EconomyResponse response = api.setBalance(accountID, amount,currency);
         if(response.isSuccess()){
             return new EconomyResponse(amount, getBalance("",accountID), EconomyResponse.ResponseType.SUCCESS, "set balance success for "+accountID);
         }else {
@@ -254,7 +254,7 @@ public class VaultUnlockedHook implements Economy {
 
     @Override
     public @NotNull EconomyResponse withdraw(@NotNull String pluginName, @NotNull UUID accountID, @NotNull BigDecimal amount) {
-        api.EconomyResponse resultWithdraw = api.withdraw(accountID, amount);
+        com.BlockDynasty.api.EconomyResponse resultWithdraw = api.withdraw(accountID, amount);
         if(resultWithdraw.isSuccess()){
             return new EconomyResponse(amount, getBalance("",accountID), EconomyResponse.ResponseType.SUCCESS, "withdraw success for "+accountID);
         }
@@ -268,7 +268,7 @@ public class VaultUnlockedHook implements Economy {
 
     @Override
     public @NotNull EconomyResponse withdraw(@NotNull String pluginName, @NotNull UUID accountID, @NotNull String worldName, @NotNull String currency, @NotNull BigDecimal amount) {
-        api.EconomyResponse resultWithdraw = api.withdraw(accountID, amount,currency);
+        com.BlockDynasty.api.EconomyResponse resultWithdraw = api.withdraw(accountID, amount,currency);
         if(resultWithdraw.isSuccess()){
             return new EconomyResponse(amount, getBalance("",accountID), EconomyResponse.ResponseType.SUCCESS, "withdraw success for "+accountID);
         }
@@ -277,7 +277,7 @@ public class VaultUnlockedHook implements Economy {
 
     @Override
     public @NotNull EconomyResponse deposit(@NotNull String pluginName, @NotNull UUID accountID, @NotNull BigDecimal amount) {
-        api.EconomyResponse resultDeposit = api.deposit(accountID, amount);
+        com.BlockDynasty.api.EconomyResponse resultDeposit = api.deposit(accountID, amount);
         if(resultDeposit.isSuccess()){
             return new EconomyResponse(amount, getBalance("",accountID), EconomyResponse.ResponseType.SUCCESS, "deposit success for "+accountID);
         }
@@ -291,7 +291,7 @@ public class VaultUnlockedHook implements Economy {
 
     @Override
     public @NotNull EconomyResponse deposit(@NotNull String pluginName, @NotNull UUID accountID, @NotNull String worldName, @NotNull String currency, @NotNull BigDecimal amount) {
-        api.EconomyResponse resultDeposit = api.deposit(accountID, amount,currency);
+        com.BlockDynasty.api.EconomyResponse resultDeposit = api.deposit(accountID, amount,currency);
         if(resultDeposit.isSuccess()){
             return new EconomyResponse(amount, getBalance("",accountID,"",currency), EconomyResponse.ResponseType.SUCCESS, "deposit success for "+accountID);
         }

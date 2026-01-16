@@ -16,15 +16,16 @@
 
 package platform.files;
 
-import lib.abstractions.IConfiguration;
+import lib.abstractions.IConfigurationGUI;
 import platform.files.yaml.YamlConfig;
+import services.configuration.IConfiguration;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public class Configuration extends YamlConfig implements IConfiguration {
+public class Configuration extends YamlConfig implements IConfigurationEngine {
     private Map<Object, Object> config;
     private Map<Object, Object> configButtons;
     private final String databasePath = "/database";

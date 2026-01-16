@@ -90,6 +90,18 @@ BankPanel:
   button10:
     nameItem: "{color}Salir"
     lore: "{color}Click para salir"
+  button11:
+    nameItem: "{color}Cajero Automático"
+    lore: "{color}Click para abrir el cajero automático"
+
+MachinePanel:
+  title: "Cajero Automático"
+  button1:
+    nameItem: "{color}Depositar Monedas"
+    lore: "{color}Click para depositar monedas"
+  button2:
+    nameItem: "{color}Retirar Monedas"
+    lore: "{color}Click para retirar monedas"
 
 AccountBalance:
   title: "Balance de Cuenta"

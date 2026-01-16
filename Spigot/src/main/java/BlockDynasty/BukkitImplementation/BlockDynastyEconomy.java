@@ -20,6 +20,7 @@ import BlockDynasty.BukkitImplementation.Integrations.treasuryEconomy.TreasuryHo
 import BlockDynasty.BukkitImplementation.adapters.GUI.listener.ClickListener;
 import BlockDynasty.BukkitImplementation.adapters.GUI.listener.CloseListener;
 import BlockDynasty.BukkitImplementation.Integrations.Placeholder.PlaceHolder;
+import BlockDynasty.BukkitImplementation.adapters.listeners.BlockPlaceListener;
 import BlockDynasty.BukkitImplementation.adapters.platformAdapter.EntityPlayerAdapter;
 import BlockDynasty.BukkitImplementation.adapters.proxy.ChannelRegister;
 import BlockDynasty.BukkitImplementation.Integrations.vault.Vault;
@@ -32,17 +33,17 @@ import BlockDynasty.BukkitImplementation.utils.Console;
 import BlockDynasty.BukkitImplementation.utils.Updater;
 import BlockDynasty.BukkitImplementation.utils.Version;
 import Main.Economy;
-import api.IApi;
+import com.BlockDynasty.api.DynastyEconomy;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
-import platform.files.Configuration;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
+import services.configuration.IConfiguration;
 
 public class BlockDynastyEconomy extends JavaPlugin {
     private static BlockDynastyEconomy instance;
     private static Economy economy;
-    private static Configuration configuration;
+    private static IConfiguration configuration;
     private Metrics metrics;
 
     @Override
@@ -83,6 +84,7 @@ public class BlockDynastyEconomy extends JavaPlugin {
             registerEvents();
             Bukkit.getOnlinePlayers().forEach(player -> {economy.getPlayerJoinListener().loadPlayerAccount(EntityPlayerAdapter.of(player));});
             registerIntegrations();
+            registerCommands();
             Console.log("§aPlugin enabled successfully!");
         } catch (Exception e) {
             Console.logError("during plugin initialization: " + e.getMessage());
@@ -112,10 +114,11 @@ public class BlockDynastyEconomy extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(economy.getPlayerJoinListener()), this);
         getServer().getPluginManager().registerEvents(new ClickListener(),this);
         getServer().getPluginManager().registerEvents(new CloseListener(),this);
+        getServer().getPluginManager().registerEvents(new BlockPlaceListener(),this);
 
     }
     private void registerIntegrations() {
-        Vault.init(economy.getApiWithLog(economy.getVaultLogger()));
+        Vault.init();
         PlaceHolder.register(economy.getPlaceHolder());
         TreasuryHook.register();
     }
@@ -123,10 +126,7 @@ public class BlockDynastyEconomy extends JavaPlugin {
     public static BlockDynastyEconomy getInstance() {
         return instance;
     }
-    public static Configuration getConfiguration() {
+    public static IConfiguration getConfiguration() {
         return configuration;
-    }
-    public static IApi getApi() {
-        return economy.getApi();
     }
 }

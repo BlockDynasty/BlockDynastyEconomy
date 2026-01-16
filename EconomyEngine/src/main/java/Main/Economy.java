@@ -21,17 +21,22 @@ import BlockDynasty.Economy.domain.persistence.entities.IRepository;
 import BlockDynasty.Economy.domain.services.courier.Courier;
 import BlockDynasty.Economy.domain.services.log.Log;
 import api.Api;
-import api.IApi;
-import lib.abstractions.IProxySubscriber;
+import com.BlockDynasty.api.DynastyEconomy;
+import abstractions.platform.IProxySubscriber;
+import aplication.HardCashService;
+import com.BlockDynasty.api.DynastyEconomyWithoutLogger;
+import com.BlockDynasty.api.ServiceProvider;
 import lib.gui.GUISystem;
+import platform.IPlatform;
 import platform.files.Configuration;
+import platform.files.IConfigurationEngine;
 import platform.files.Languages;
 import platform.files.logs.EconomyLogger;
 import platform.files.logs.VaultLogger;
 import lib.commands.CommandService;
-import lib.abstractions.PlatformAdapter;
 import lib.placeholder.PlaceHolder;
-import lib.util.colors.ChatColor;
+import services.configuration.IConfiguration;
+import util.colors.ChatColor;
 import platform.listeners.EventListener;
 import platform.listeners.IPlayerJoin;
 import platform.listeners.PlayerJoinListener;
@@ -43,20 +48,20 @@ import MessageChannel.redis.RedisSubscriber;
 import repository.ConnectionHandler.Hibernate.*;
 import repository.Repository;
 import services.Message;
-import utils.Console;
+import services.Console;
 
 public class Economy {
     private Core core;
     private static IRepository repository;
     private PlayerJoinListener playerJoinListener;
-    private IApi api;
+    private DynastyEconomy api;
     private PlaceHolder placeHolder;
     private static RedisSubscriber subscriber;
-    private Configuration configuration;
+    private IConfigurationEngine configuration;
     private Languages languages;
-    private PlatformAdapter platformAdapter;
+    private IPlatform platformAdapter;
 
-    private Economy(PlatformAdapter platformAdapter){
+    private Economy(IPlatform platformAdapter){
         this.platformAdapter=platformAdapter;
         this.configuration= new Configuration(platformAdapter.getDataFolder());
         ChatColor.setupSystem(platformAdapter.hasSupportAdventureText(),configuration.getBoolean("forceVanillaColorsSystem") );
@@ -70,18 +75,24 @@ public class Economy {
         this.core=new Core(repository,60,createPublisher(configuration,platformAdapter),new EconomyLogger( configuration,platformAdapter.getScheduler()));
         this.createSubscriber(configuration,platformAdapter);
         this.api = new Api(core.getUseCaseFactory(),core.getServicesManager().getAccountService());
+
+
         this.placeHolder = new PlaceHolder(core.getUseCaseFactory());
         this.playerJoinListener = new PlayerJoinListener(core.getUseCaseFactory(),core.getServicesManager().getAccountService(),configuration.getBoolean("online"),platformAdapter.isOnlineMode());
+
+        ServiceProvider.register(DynastyEconomy.class, this.api);
+        ServiceProvider.register(DynastyEconomyWithoutLogger.class, new Api(core.getUseCaseFactory(),core.getServicesManager().getAccountService(), getVaultLogger()));
+        HardCashService.init(configuration, platformAdapter, core.getUseCaseFactory().deposit(),core.getUseCaseFactory().withdraw(),core.getUseCaseFactory().searchCurrency());
         CommandService.init(platformAdapter,core.getUseCaseFactory());
         GUISystem.init(core.getUseCaseFactory(),platformAdapter,new Message(),configuration);
         EventListener.register(core.getServicesManager().getEventManager(),platformAdapter);
     }
 
-    public static Economy init( PlatformAdapter platformAdapter){
+    public static Economy init( IPlatform platformAdapter){
         return new Economy(platformAdapter);
     }
 
-    private void initDatabase(Configuration configuration){
+    private void initDatabase(IConfigurationEngine configuration){
         try{
             Connection connection = getConnectionDatabase(configuration);
             repository = new Repository(connection);
@@ -91,7 +102,7 @@ public class Economy {
             throw new RuntimeException(e.getMessage());
         }
     }
-    private Connection getConnectionDatabase(Configuration configuration){
+    private Connection getConnectionDatabase(IConfigurationEngine configuration){
         switch (configuration.getString("sql.type")){
             case "mysql":
                 return new ConnectionHibernateMysql(configuration.getString("sql.host"), configuration.getInt("sql.port"), configuration.getString("sql.database"), configuration.getString("sql.username"), configuration.getString("sql.password"));
@@ -106,7 +117,7 @@ public class Economy {
         }
     }
 
-    private Courier createPublisher(Configuration configuration, PlatformAdapter platformAdapter){
+    private Courier createPublisher(IConfiguration configuration, IPlatform platformAdapter){
         if(configuration.getBoolean("redis.enabled")){
             Console.log("Redis Enabled");
             return new RedisPublisher( new RedisData(configuration),platformAdapter);
@@ -115,7 +126,7 @@ public class Economy {
             return new ProxyPublisher(platformAdapter);
         }
     }
-    private void createSubscriber(Configuration configuration, PlatformAdapter platformAdapter){
+    private void createSubscriber(IConfiguration configuration, IPlatform platformAdapter){
         if(configuration.getBoolean("redis.enabled")){
             subscriber = new RedisSubscriber(new RedisData(configuration),platformAdapter,
                     core.getServicesManager().getOfferService(),
@@ -135,18 +146,14 @@ public class Economy {
         return playerJoinListener;
     }
 
-    public IApi getApi(){
+    public DynastyEconomy getApi(){
         return api;
     }
     public PlaceHolder getPlaceHolder(){
         return placeHolder;
     }
 
-    public IApi getApiWithLog(Log log){
-        return new Api(core.getUseCaseFactory(),core.getServicesManager().getAccountService(), log);
-    }
-
-    public Configuration getConfiguration(){
+    public IConfiguration getConfiguration(){
         return configuration;
     }
 
@@ -155,6 +162,8 @@ public class Economy {
     }
 
     public static void shutdown(){
+        ServiceProvider.unregister(DynastyEconomyWithoutLogger.class);
+        ServiceProvider.unregister(DynastyEconomyWithoutLogger.class);
         if (repository != null) {
             repository.close();
         }

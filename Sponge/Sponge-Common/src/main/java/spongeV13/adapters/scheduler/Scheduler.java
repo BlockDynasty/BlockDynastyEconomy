@@ -16,9 +16,9 @@
 
 package spongeV13.adapters.scheduler;
 
+import abstractions.platform.scheduler.ContextualTask;
+import abstractions.platform.scheduler.IScheduler;
 import spongeV13.SpongePluginCommon;
-import lib.scheduler.ContextualTask;
-import lib.scheduler.IScheduler;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.scheduler.Task;
 

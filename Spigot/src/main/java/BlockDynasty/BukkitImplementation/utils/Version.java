@@ -29,10 +29,14 @@ public class Version {
     public static final boolean isCanvas = JavaUtil.classExists("io.canvasmc.canvas.server.ThreadedServer");
     public static final boolean supportCustomProfile = isHigherThan("1.20") && JavaUtil.classExists("org.bukkit.profile.PlayerProfile");
     public static final boolean hasMojangAuthLib = JavaUtil.classExists("com.mojang.authlib.GameProfile") && JavaUtil.classExists("com.mojang.authlib.properties.Property");
+    public static final boolean hasSupportHardCash = isHigherThan("1.8.7");
 
     //this dependency is critical, because the library AnvilGUI works directly with NMS code.
     private static final boolean hasSupportAnvilGUI = !isMohist() && !isHigherThan("1.21.11");
 
+    public static boolean hasSupportHardCash() {
+        return hasSupportHardCash;
+    }
     public static boolean match(String version) {
         return currentVersion.startsWith(version);
     }

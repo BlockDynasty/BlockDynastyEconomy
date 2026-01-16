@@ -16,8 +16,8 @@
 
 package spongeV13.adapters.platformAdapter;
 
+import abstractions.platform.IConsole;
 import spongeV13.SpongePluginCommon;
-import lib.abstractions.IConsole;
 import org.apache.logging.log4j.Logger;
 
 public class ConsoleAdapter implements IConsole {

@@ -16,7 +16,7 @@
 
 package BlockDynasty.FoliaImplementation.scheduler;
 
-import lib.scheduler.ILocation;
+import abstractions.platform.scheduler.ILocation;
 import org.bukkit.Location;
 
 public class LocationAdapter implements ILocation {

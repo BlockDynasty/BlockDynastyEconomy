@@ -17,7 +17,6 @@
 package platform.listeners;
 
 import BlockDynasty.Economy.aplication.events.EventManager;
-import BlockDynasty.Economy.domain.entities.currency.Currency;
 import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.entities.offers.Offer;
 import BlockDynasty.Economy.domain.events.Context;
@@ -26,12 +25,11 @@ import BlockDynasty.Economy.domain.events.offersEvents.OfferCanceled;
 import BlockDynasty.Economy.domain.events.offersEvents.OfferCreated;
 import BlockDynasty.Economy.domain.events.offersEvents.OfferExpired;
 import BlockDynasty.Economy.domain.events.transactionsEvents.*;
-import lib.abstractions.PlatformAdapter;
-import lib.commands.abstractions.IEntityCommands;
-import lib.gui.GUIFactory;
+import abstractions.platform.entity.IPlayer;
 import lib.gui.GUISystem;
-import lib.scheduler.ContextualTask;
-import lib.util.colors.ChatColor;
+import abstractions.platform.scheduler.ContextualTask;
+import util.colors.ChatColor;
+import platform.IPlatform;
 import services.Message;
 
 import java.math.BigDecimal;
@@ -39,11 +37,11 @@ import java.util.Map;
 
 public class EventListener {
 
-    public static void register(EventManager eventManager, PlatformAdapter platformAdapter) {
+    public static void register(EventManager eventManager, IPlatform platformAdapter) {
 
         eventManager.subscribe(PayEvent.class, event -> {
-            IEntityCommands player = platformAdapter.getPlayer(event.getPayer().getNickname());
-            IEntityCommands target = platformAdapter.getPlayer(event.getReceived().getNickname());
+            IPlayer player = platformAdapter.getPlayer(event.getPayer().getNickname());
+            IPlayer target = platformAdapter.getPlayer(event.getReceived().getNickname());
 
             ICurrency currency = event.getCurrency();
             String format = currency.format(event.getAmount());
@@ -72,8 +70,8 @@ public class EventListener {
         });
 
         eventManager.subscribe(TransferEvent.class, event -> {
-            IEntityCommands player = platformAdapter.getPlayer(event.getFromPlayer().getNickname());
-            IEntityCommands target = platformAdapter.getPlayer(event.getToPlayer().getNickname());
+            IPlayer player = platformAdapter.getPlayer(event.getFromPlayer().getNickname());
+            IPlayer target = platformAdapter.getPlayer(event.getToPlayer().getNickname());
 
             ICurrency currency = event.getCurrency();
             String format = currency.format(event.getAmount());
@@ -103,7 +101,7 @@ public class EventListener {
         });
 
         eventManager.subscribe(ExchangeEvent.class, event -> {
-            IEntityCommands player = platformAdapter.getPlayer(event.getPlayer().getNickname());
+            IPlayer player = platformAdapter.getPlayer(event.getPlayer().getNickname());
 
             ICurrency fromCurrency = event.getFromCurrency();
             String fromFormat = fromCurrency.format(event.getAmount());
@@ -118,8 +116,8 @@ public class EventListener {
         });
 
         eventManager.subscribe(TradeEvent.class, event -> {
-            IEntityCommands sender = platformAdapter.getPlayer(event.getFromPlayer().getNickname());
-            IEntityCommands receiver = platformAdapter.getPlayer(event.getToPlayer().getNickname());
+            IPlayer sender = platformAdapter.getPlayer(event.getFromPlayer().getNickname());
+            IPlayer receiver = platformAdapter.getPlayer(event.getToPlayer().getNickname());
 
             ICurrency fromCurrency = event.getCurrencyFrom();
             String fromFormat = fromCurrency.format(event.getAmountFrom());
@@ -159,7 +157,7 @@ public class EventListener {
 
         eventManager.subscribe(DepositEvent.class, event -> {
             if (event.getContext() == Context.COMMAND){
-                IEntityCommands player = platformAdapter.getPlayer(event.getPlayer().getNickname());
+                IPlayer player = platformAdapter.getPlayer(event.getPlayer().getNickname());
                 if (player != null) {
                     player.sendMessage(Message.process(Map.of(
                             "currency",ChatColor.stringValueOf(event.getCurrency().getColor()) +event.getCurrency().format(event.getAmount())
@@ -177,7 +175,7 @@ public class EventListener {
 
         eventManager.subscribe(WithdrawEvent.class, event -> {
             if (event.getContext() == Context.COMMAND){
-                IEntityCommands player = platformAdapter.getPlayer(event.getPlayer().getNickname());
+                IPlayer player = platformAdapter.getPlayer(event.getPlayer().getNickname());
                 if (player != null) {
                     player.sendMessage(Message.process(Map.of(
                             "currency",ChatColor.stringValueOf(event.getCurrency().getColor()) +event.getCurrency().format(event.getAmount())
@@ -194,7 +192,7 @@ public class EventListener {
 
         eventManager.subscribe(SetEvent.class, event -> {
             if (event.getContext() == Context.COMMAND){
-                IEntityCommands player = platformAdapter.getPlayer(event.getPlayer().getNickname());
+                IPlayer player = platformAdapter.getPlayer(event.getPlayer().getNickname());
                 if (player != null) {
                     player.sendMessage(Message.process(Map.of(
                             "currency",ChatColor.stringValueOf(event.getCurrency().getColor()) +event.getCurrency().format(event.getAmount())
@@ -211,8 +209,8 @@ public class EventListener {
 
         eventManager.subscribe(OfferCreated.class, event -> {
             Offer offer = event.getOffer();
-            IEntityCommands receiver = platformAdapter.getPlayerByUUID(offer.getComprador().getUuid());
-            IEntityCommands sender = platformAdapter.getPlayerByUUID(offer.getVendedor().getUuid());
+            IPlayer receiver = platformAdapter.getPlayerByUUID(offer.getComprador().getUuid());
+            IPlayer sender = platformAdapter.getPlayerByUUID(offer.getVendedor().getUuid());
 
             ICurrency currencyOffered = offer.getTipoCantidad();
             BigDecimal amountOffered = offer.getCantidad();
@@ -246,8 +244,8 @@ public class EventListener {
 
         eventManager.subscribe(OfferCanceled.class, event -> {
             Offer offer = event.getOffer();
-            IEntityCommands receiver = platformAdapter.getPlayerByUUID(offer.getComprador().getUuid());
-            IEntityCommands sender = platformAdapter.getPlayerByUUID(offer.getVendedor().getUuid());
+            IPlayer receiver = platformAdapter.getPlayerByUUID(offer.getComprador().getUuid());
+            IPlayer sender = platformAdapter.getPlayerByUUID(offer.getVendedor().getUuid());
 
             if (receiver != null ) {
                 receiver.sendMessage(Message.process(Map.of("playerName",offer.getVendedor().getNickname()),"offerCanceled1"));
@@ -272,8 +270,8 @@ public class EventListener {
 
         eventManager.subscribe(OfferExpired.class, event -> {
             Offer offer = event.getOffer();
-            IEntityCommands receiver = platformAdapter.getPlayerByUUID(offer.getComprador().getUuid());
-            IEntityCommands sender = platformAdapter.getPlayerByUUID(offer.getVendedor().getUuid());
+            IPlayer receiver = platformAdapter.getPlayerByUUID(offer.getComprador().getUuid());
+            IPlayer sender = platformAdapter.getPlayerByUUID(offer.getVendedor().getUuid());
 
             if (receiver != null ) {
                 receiver.sendMessage(Message.process(Map.of("playerName", offer.getVendedor().getNickname()),"offerExpired1"));
@@ -294,8 +292,8 @@ public class EventListener {
 
         eventManager.subscribe(OfferAccepted.class, event -> {
             Offer offer = event.getOffer();
-            IEntityCommands receiver = platformAdapter.getPlayerByUUID(offer.getComprador().getUuid());
-            IEntityCommands sender = platformAdapter.getPlayerByUUID(offer.getVendedor().getUuid());
+            IPlayer receiver = platformAdapter.getPlayerByUUID(offer.getComprador().getUuid());
+            IPlayer sender = platformAdapter.getPlayerByUUID(offer.getVendedor().getUuid());
 
             if (receiver != null ) {
                 Runnable task=()->{

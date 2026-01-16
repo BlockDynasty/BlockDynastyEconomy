@@ -16,7 +16,7 @@
 
 package adapters.inventory;
 
-import lib.gui.components.recipes.RecipeInventory;
+import abstractions.platform.recipes.RecipeInventory;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;

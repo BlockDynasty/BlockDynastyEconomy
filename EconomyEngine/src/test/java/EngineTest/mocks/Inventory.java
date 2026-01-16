@@ -2,7 +2,7 @@ package EngineTest.mocks;
 
 import lib.gui.components.IInventory;
 import lib.gui.components.IItemStack;
-import lib.gui.components.recipes.RecipeInventory;
+import abstractions.platform.recipes.RecipeInventory;
 
 public class Inventory implements IInventory {
     //matriz de items [][]

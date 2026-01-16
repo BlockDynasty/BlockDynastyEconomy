@@ -16,7 +16,7 @@
 
 package DynastyEconomy;
 
-import lib.abstractions.IConsole;
+import abstractions.platform.IConsole;
 import net.minestom.server.MinecraftServer;
 import org.slf4j.Logger;
 

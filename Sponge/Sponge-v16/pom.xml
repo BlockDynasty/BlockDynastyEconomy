@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.blockdynasty</groupId>
-  <artifactId>Sponge-v16</artifactId>
+  <artifactId>BlockDynastyEconomy</artifactId>
   <version>1.0</version>
   <packaging>jar</packaging>
 

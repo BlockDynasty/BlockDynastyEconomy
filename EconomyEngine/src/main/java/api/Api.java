@@ -32,13 +32,18 @@ import BlockDynasty.Economy.domain.entities.currency.ICurrency;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.log.Log;
+import com.BlockDynasty.api.DynastyEconomyWithoutLogger;
+import com.BlockDynasty.api.EconomyResponse;
+import com.BlockDynasty.api.DynastyEconomy;
+import com.BlockDynasty.api.entity.Currency;
+import com.BlockDynasty.api.entity.Wallet;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class Api implements IApi {
+public class Api implements DynastyEconomyWithoutLogger {
     private final SearchCurrencyUseCase searchCurrencyUseCase;
     private final GetBalanceUseCase getBalanceUseCase;
     private final CreateAccountUseCase createAccountUseCase;
@@ -121,13 +126,48 @@ public class Api implements IApi {
     }
 
     @Override
-    public ICurrency getDefaultCurrency() {
-        return this.searchCurrencyUseCase.getDefaultCurrency().getValue();
+    public Currency getDefaultCurrency() {
+        //format core currency to api currency
+        ICurrency currency =this.searchCurrencyUseCase.getDefaultCurrency().getValue();
+        return new Currency(
+                currency.getUuid(),
+                currency.getPlural(),
+                currency.getSingular(),
+                currency.getSymbol(),
+                currency.getDefaultBalance(),
+                currency.getExchangeRate(),
+                currency.isDefaultCurrency()
+        );
     }
 
     @Override
-    public List<Account> getAccountsOffline() {
-        return accountService.getAccountsOffline();
+    public List<com.BlockDynasty.api.entity.Account> getAccountsOffline() {
+        //format core account to api account
+        List<Account> accounts = accountService.getAccountsOffline();
+        return accounts.stream().map(coreA ->{
+            List<com.BlockDynasty.api.entity.Money> moneyList =coreA.getWallet().getBalances().stream()
+                    .map(coreMoney ->{
+                       return new com.BlockDynasty.api.entity.Money(
+                                new Currency(
+                                        coreMoney.getCurrency().getUuid(),
+                                        coreMoney.getCurrency().getPlural(),
+                                        coreMoney.getCurrency().getSingular(),
+                                        coreMoney.getCurrency().getSymbol(),
+                                        coreMoney.getCurrency().getDefaultBalance(),
+                                        coreMoney.getCurrency().getExchangeRate(),
+                                        coreMoney.getCurrency().isDefaultCurrency()
+
+                                ),coreMoney.getAmount()
+                        );
+                    }).collect(Collectors.toList());
+           return new com.BlockDynasty.api.entity.Account(
+                coreA.getNickname(),
+                coreA.getUuid(),
+                new Wallet(moneyList),
+                coreA.canReceiveCurrency(),
+                coreA.isBlocked()
+            );
+        }).collect(Collectors.toList());
     }
 
     public EconomyResponse deposit(UUID uuid, BigDecimal amount, String currency){
@@ -352,8 +392,19 @@ public class Api implements IApi {
     }
 
     @Override
-    public List<ICurrency> getCurrencies() {
-        return this.searchCurrencyUseCase.getCurrencies();
+    public List<Currency> getCurrencies() {
+        //return api currencies
+        return this.searchCurrencyUseCase.getCurrencies().stream().map(coreCurrency -> {
+            return new Currency(
+                    coreCurrency.getUuid(),
+                    coreCurrency.getPlural(),
+                    coreCurrency.getSingular(),
+                    coreCurrency.getSymbol(),
+                    coreCurrency.getDefaultBalance(),
+                    coreCurrency.getExchangeRate(),
+                    coreCurrency.isDefaultCurrency()
+            );
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -428,38 +479,104 @@ public class Api implements IApi {
     }
 
     @Override
-    public Account getAccount(UUID uuid) {
-        return getAccountByUUIDUseCase.execute(uuid).getValue();
+    public com.BlockDynasty.api.entity.Account getAccount(UUID uuid) {
+        Account account = getAccountByUUIDUseCase.execute(uuid).getValue();
+        return new com.BlockDynasty.api.entity.Account(
+                account.getNickname(),
+                account.getUuid(),
+                new Wallet(
+                        account.getWallet().getBalances().stream()
+                                .map(coreMoney -> new com.BlockDynasty.api.entity.Money(
+                                        new Currency(
+                                                coreMoney.getCurrency().getUuid(),
+                                                coreMoney.getCurrency().getPlural(),
+                                                coreMoney.getCurrency().getSingular(),
+                                                coreMoney.getCurrency().getSymbol(),
+                                                coreMoney.getCurrency().getDefaultBalance(),
+                                                coreMoney.getCurrency().getExchangeRate(),
+                                                coreMoney.getCurrency().isDefaultCurrency()
+                                        ),
+                                        coreMoney.getAmount()
+                                )).collect(Collectors.toList())
+                ),
+                account.canReceiveCurrency(),
+                account.isBlocked()
+        );
     }
 
     @Override
-    public Account getAccount(String name) {
-        return getAccountByNameUseCase.execute(name).getValue();
+    public com.BlockDynasty.api.entity.Account getAccount(String name) {
+        Account account = getAccountByNameUseCase.execute(name).getValue();
+        return new com.BlockDynasty.api.entity.Account(
+                account.getNickname(),
+                account.getUuid(),
+                new Wallet(
+                        account.getWallet().getBalances().stream()
+                                .map(coreMoney -> new com.BlockDynasty.api.entity.Money(
+                                        new Currency(
+                                                coreMoney.getCurrency().getUuid(),
+                                                coreMoney.getCurrency().getPlural(),
+                                                coreMoney.getCurrency().getSingular(),
+                                                coreMoney.getCurrency().getSymbol(),
+                                                coreMoney.getCurrency().getDefaultBalance(),
+                                                coreMoney.getCurrency().getExchangeRate(),
+                                                coreMoney.getCurrency().isDefaultCurrency()
+                                        ),
+                                        coreMoney.getAmount()
+                                )).collect(Collectors.toList())
+                ),
+                account.canReceiveCurrency(),
+                account.isBlocked()
+        );
     }
 
     @Override
-    public List<Account> getTopAccounts(int limit, String currency) {
-        return topAccounts.execute( currency, limit,0).getValue();
+    public List< com.BlockDynasty.api.entity.Account> getTopAccounts(int limit, String currency) {
+        List<Account> accounts = topAccounts.execute( currency, limit,0).getValue();
+        return accounts.stream().map(coreA ->{
+            List<com.BlockDynasty.api.entity.Money> moneyList =coreA.getWallet().getBalances().stream()
+                    .map(coreMoney ->{
+                        return new com.BlockDynasty.api.entity.Money(
+                                new Currency(
+                                        coreMoney.getCurrency().getUuid(),
+                                        coreMoney.getCurrency().getPlural(),
+                                        coreMoney.getCurrency().getSingular(),
+                                        coreMoney.getCurrency().getSymbol(),
+                                        coreMoney.getCurrency().getDefaultBalance(),
+                                        coreMoney.getCurrency().getExchangeRate(),
+                                        coreMoney.getCurrency().isDefaultCurrency()
+
+                                ),coreMoney.getAmount()
+                        );
+                    }).collect(Collectors.toList());
+            return new com.BlockDynasty.api.entity.Account(
+                    coreA.getNickname(),
+                    coreA.getUuid(),
+                    new Wallet(moneyList),
+                    coreA.canReceiveCurrency(),
+                    coreA.isBlocked()
+            );
+        }).collect(Collectors.toList());
     }
 
     @Override
     public EconomyResponse setCurrencyStartBalance(String name, BigDecimal startBal) {
-        return null;
+        return EconomyResponse.notImplemented();
     }
 
     @Override
     public EconomyResponse setCurrencyColor(String currencyName, String colorString) {
-        return null;
+        return EconomyResponse.notImplemented();
     }
 
     @Override
     public EconomyResponse setCurrencyRate(String currencyName, BigDecimal rate) {
-        return null;
+        return EconomyResponse.notImplemented();
     }
 
     @Override
     public EconomyResponse setCurrencyDecimalSupport(String currencyName, boolean supportDecimals) {
-        return null;
+        return EconomyResponse.notImplemented();
     }
 
     @Override
@@ -469,7 +586,7 @@ public class Api implements IApi {
 
     @Override
     public EconomyResponse setDefaultCurrency(String currencyName) {
-        return null;
+        return EconomyResponse.notImplemented();
     }
 
     @Override
@@ -484,11 +601,20 @@ public class Api implements IApi {
 
     @Override
     public EconomyResponse setPayable(String currencyName, boolean isPayable) {
-        return null;
+        return EconomyResponse.notImplemented();
     }
 
-    public ICurrency getCurrency(String name){
-        return  this.searchCurrencyUseCase.getCurrency(name).getValue();
+    public Currency getCurrency(String name){
+        ICurrency currency = this.searchCurrencyUseCase.getCurrency(name).getValue();
+        return new Currency(
+                currency.getUuid(),
+                currency.getPlural(),
+                currency.getSingular(),
+                currency.getSymbol(),
+                currency.getDefaultBalance(),
+                currency.getExchangeRate(),
+                currency.isDefaultCurrency()
+        );
     }
 
 }

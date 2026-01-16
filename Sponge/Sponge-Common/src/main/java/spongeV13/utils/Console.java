@@ -16,8 +16,8 @@
 
 package spongeV13.utils;
 
+import abstractions.platform.IConsole;
 import spongeV13.adapters.platformAdapter.ConsoleAdapter;
-import lib.abstractions.IConsole;
 
 public class Console {
     private static final IConsole console= new ConsoleAdapter();

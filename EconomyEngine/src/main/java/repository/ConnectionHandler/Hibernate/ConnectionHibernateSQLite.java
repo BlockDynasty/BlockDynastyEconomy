@@ -16,7 +16,7 @@
 
 package repository.ConnectionHandler.Hibernate;
 
-import utils.Console;
+import services.Console;
 import org.h2.tools.Server;
 
 import java.nio.charset.StandardCharsets;

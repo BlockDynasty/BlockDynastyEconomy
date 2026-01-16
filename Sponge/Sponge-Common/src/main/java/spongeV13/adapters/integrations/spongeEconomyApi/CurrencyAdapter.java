@@ -22,10 +22,9 @@ import org.spongepowered.api.service.economy.Currency;
 import java.math.BigDecimal;
 
 public class CurrencyAdapter implements Currency {
-    private BlockDynasty.Economy.domain.entities.currency.ICurrency currency;
+    private  com.BlockDynasty.api.entity.Currency currency;
 
-    public CurrencyAdapter(BlockDynasty.Economy.domain.entities.currency.ICurrency currency
-    ) {
+    public CurrencyAdapter( com.BlockDynasty.api.entity.Currency currency) {
         this.currency = currency;
     }
 

@@ -89,6 +89,18 @@ BankPanel:
   button10:
     nameItem: "{color}Esci"
     lore: "{color}Clicca per uscire"
+  button11:
+    nameItem: "{color}ATM"
+    lore: "{color}Clicca per aprire il bancomat"
+
+MachinePanel:
+  title: "Bancomat"
+  button1:
+    nameItem: "{color}Depositare Monete"
+    lore: "{color}Clicca per depositare monete"
+  button2:
+    nameItem: "{color}Prelevare Monete"
+    lore: "{color}Clicca per prelevare monete"
 
 AccountBalance:
   title: "Saldo del Conto"

@@ -15,9 +15,9 @@
  */
 package BlockDynasty.BukkitImplementation.Integrations.treasuryEconomy.accounts;
 
-import BlockDynasty.Economy.domain.entities.account.Account;
-import api.EconomyResponse;
-import api.IApi;
+import com.BlockDynasty.api.EconomyResponse;
+import com.BlockDynasty.api.DynastyEconomy;
+import com.BlockDynasty.api.entity.Account;
 import me.lokka30.treasury.api.economy.account.PlayerAccount;
 import me.lokka30.treasury.api.economy.currency.Currency;
 import me.lokka30.treasury.api.economy.transaction.EconomyTransaction;
@@ -33,10 +33,10 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class PlayerAccountTreasury implements PlayerAccount {
-    private IApi api; //una instancia de la api del sistema economico para realizar las operaciones
+    private DynastyEconomy api; //una instancia de la api del sistema economico para realizar las operaciones
     private UUID accountUUID;
 
-    public PlayerAccountTreasury(IApi api, UUID accountUUID) {
+    public PlayerAccountTreasury(DynastyEconomy api, UUID accountUUID) {
         this.api = api;
         this.accountUUID = accountUUID;
     }
@@ -48,7 +48,7 @@ public class PlayerAccountTreasury implements PlayerAccount {
 
     @Override
     public @NotNull Optional<String> getName() {
-        return Optional.of(api.getAccount(accountUUID).getNickname());
+        return Optional.of(api.getAccount(accountUUID).getName());
     }
 
     @Override

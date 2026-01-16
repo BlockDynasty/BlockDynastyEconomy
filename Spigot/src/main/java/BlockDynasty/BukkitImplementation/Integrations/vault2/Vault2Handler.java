@@ -16,21 +16,19 @@
 
 package BlockDynasty.BukkitImplementation.Integrations.vault2;
 
-import BlockDynasty.BukkitImplementation.BlockDynastyEconomy;
 import BlockDynasty.BukkitImplementation.Integrations.vault.IVaultHandler;
 import BlockDynasty.BukkitImplementation.utils.Console;
-import api.IApi;
+import com.BlockDynasty.api.DynastyEconomy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.ServicesManager;
 
 public class Vault2Handler implements IVaultHandler {
     private Vault2Hook economy = null;
-    private final IApi api;
-    private final BlockDynastyEconomy plugin;
+    private final BlockDynasty.BukkitImplementation.BlockDynastyEconomy plugin;
 
-    public Vault2Handler(BlockDynastyEconomy plugin, IApi api) {
-        this.api = api;
+    public Vault2Handler(BlockDynasty.BukkitImplementation.BlockDynastyEconomy plugin) {
+
         this.plugin = plugin;
     }
 
@@ -38,7 +36,7 @@ public class Vault2Handler implements IVaultHandler {
     public void hook() {
         try {
             if (this.economy == null) {
-                this.economy = new Vault2Hook(api);
+                this.economy = new Vault2Hook();
             }
 
             ServicesManager sm = Bukkit.getServicesManager();

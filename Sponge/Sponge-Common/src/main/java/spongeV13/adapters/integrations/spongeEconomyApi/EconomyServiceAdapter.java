@@ -16,7 +16,9 @@
 
 package spongeV13.adapters.integrations.spongeEconomyApi;
 
-import api.IApi;
+import com.BlockDynasty.api.DynastyEconomy;
+import com.BlockDynasty.api.DynastyEconomyWithoutLogger;
+import com.BlockDynasty.api.ServiceProvider;
 import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.service.economy.account.Account;
 import org.spongepowered.api.service.economy.account.AccountDeletionResultType;
@@ -30,12 +32,11 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 public class EconomyServiceAdapter implements MultiCurrencyService {
-    private static IApi api;
+    private static DynastyEconomyWithoutLogger api;
 
-    public static void init(IApi api)
+    public static void init()
     {
-        EconomyServiceAdapter.api = api;
-
+        EconomyServiceAdapter.api = ServiceProvider.get(DynastyEconomyWithoutLogger.class);
     }
 
     @Override
@@ -55,18 +56,18 @@ public class EconomyServiceAdapter implements MultiCurrencyService {
 
     @Override
     public Optional<UniqueAccount> findOrCreateAccount(UUID uuid) {
-        BlockDynasty.Economy.domain.entities.account.Account response = api.getAccount(uuid);
+        com.BlockDynasty.api.entity.Account response = api.getAccount(uuid);
         if (response != null) {
-            return Optional.of(new UniqueAccountAdapter(response, api));
+            return Optional.of(new UniqueAccountAdapter(response));
         }
         return Optional.empty();
     }
 
     @Override
     public Optional<Account> findOrCreateAccount(String identifier) {
-        BlockDynasty.Economy.domain.entities.account.Account response = api.getAccount(identifier);
+        com.BlockDynasty.api.entity.Account response = api.getAccount(identifier);
         if (response != null) {
-            return Optional.of(new UniqueAccountAdapter(response, api));
+            return Optional.of(new UniqueAccountAdapter(response));
         }
         return Optional.empty();
     }
@@ -108,7 +109,7 @@ public class EconomyServiceAdapter implements MultiCurrencyService {
 
     @Override
     public Optional<Currency> getCurrency(String currencyName) {
-        BlockDynasty.Economy.domain.entities.currency.ICurrency response = api.getCurrency(currencyName);
+        com.BlockDynasty.api.entity.Currency response = api.getCurrency(currencyName);
         if (response != null) {
             return Optional.of(new CurrencyAdapter(response));
         }

@@ -19,34 +19,37 @@ package BlockDynasty.BukkitImplementation.adapters.platformAdapter;
 import BlockDynasty.BukkitImplementation.BlockDynastyEconomy;
 import BlockDynasty.BukkitImplementation.adapters.GUI.adapters.InventoryAdapter;
 import BlockDynasty.BukkitImplementation.adapters.GUI.adapters.ItemStackAdapter;
-import BlockDynasty.BukkitImplementation.adapters.GUI.adapters.MaterialAdapter;
+import BlockDynasty.BukkitImplementation.adapters.GUI.adapters.Materials.MaterialProvider;
 import BlockDynasty.BukkitImplementation.adapters.GUI.adapters.textInput.TextInputFactory;
 import BlockDynasty.BukkitImplementation.adapters.proxy.ProxySubscriberImp;
 import BlockDynasty.BukkitImplementation.scheduler.Scheduler;
 import BlockDynasty.BukkitImplementation.scheduler.SchedulerFactory;
-import BlockDynasty.BukkitImplementation.utils.Console;
 import BlockDynasty.BukkitImplementation.utils.Version;
-import lib.abstractions.IConsole;
-import lib.abstractions.IPlayer;
-import lib.abstractions.IProxySubscriber;
-import lib.abstractions.PlatformAdapter;
+import abstractions.platform.IConsole;
+import abstractions.platform.IProxySubscriber;
+import abstractions.platform.recipes.RecipeInventory;
+import abstractions.platform.recipes.RecipeItem;
+import abstractions.platform.scheduler.ContextualTask;
+import abstractions.platform.scheduler.IScheduler;
+import domain.entity.currency.ItemStackCurrency;
+import domain.entity.currency.RecipeItemCurrency;
+import domain.entity.platform.HardCashCreator;
 import lib.gui.components.*;
-import lib.gui.components.recipes.RecipeInventory;
-import lib.gui.components.recipes.RecipeItem;
-import lib.scheduler.ContextualTask;
-import lib.scheduler.IScheduler;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import MessageChannel.proxy.ProxyData;
+import platform.IPlatform;
+import platform.IPlayer;
 
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class BukkitAdapter implements PlatformAdapter {
+public class BukkitAdapter implements IPlatform {
 
     @Override
     public IPlayer getPlayer(String name) {
@@ -106,8 +109,19 @@ public class BukkitAdapter implements PlatformAdapter {
 
     @Override
     public IItemStack createItemStack(RecipeItem recipeItem) {
-        ItemStack itemStack = MaterialAdapter.createItemStack(recipeItem);
+        ItemStack itemStack = MaterialProvider.createItemStack(recipeItem);
         return new ItemStackAdapter(itemStack);
+    }
+
+    @Override
+    public ItemStackCurrency createItemStackCurrency(RecipeItemCurrency recipe) {
+        ItemStack itemStack = MaterialProvider.createItemStackCurrency(recipe);
+        return new ItemStackCurrencyAdapter(itemStack);
+    }
+
+    @Override
+    public boolean hasSupportHardCash() {
+        return Version.hasSupportHardCash();
     }
 
     @Override
@@ -126,12 +140,22 @@ public class BukkitAdapter implements PlatformAdapter {
     }
 
     @Override
-    public List<IPlayer> getOnlinePlayers() {
+    public List<abstractions.platform.entity.IPlayer> getOnlinePlayers() {
         return Bukkit.getOnlinePlayers().stream().map(EntityPlayerAdapter::of).collect(Collectors.toList());
     }
 
     @Override
     public ITextInput getTextInput() {
         return TextInputFactory.getTextInput();
+    }
+
+    @Override
+    public HardCashCreator asPlatformHardCash() {
+        return this;
+    }
+
+    @Override
+    public boolean hasSupportGui() {
+        return true;
     }
 }

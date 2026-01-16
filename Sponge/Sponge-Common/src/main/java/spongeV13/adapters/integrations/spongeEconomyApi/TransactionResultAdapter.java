@@ -16,14 +16,13 @@
 
 package spongeV13.adapters.integrations.spongeEconomyApi;
 
-import api.EconomyResponse;
+import com.BlockDynasty.api.EconomyResponse;
 import org.spongepowered.api.service.context.Context;
 import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.service.economy.account.Account;
 import org.spongepowered.api.service.economy.transaction.ResultType;
 import org.spongepowered.api.service.economy.transaction.TransactionResult;
 import org.spongepowered.api.service.economy.transaction.TransactionType;
-import org.spongepowered.api.service.economy.transaction.TransactionTypes;
 
 import java.math.BigDecimal;
 import java.util.Set;

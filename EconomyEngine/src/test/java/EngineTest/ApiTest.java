@@ -2,10 +2,10 @@ package EngineTest;
 
 import EngineTest.mocks.MinecraftServer;
 import EngineTest.mocks.Player;
-import api.EconomyResponse;
-import api.IApi;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import com.BlockDynasty.api.EconomyResponse;
+import com.BlockDynasty.api.DynastyEconomy;
+import com.BlockDynasty.api.ServiceProvider;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -14,15 +14,15 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ApiTest {
-    private static MinecraftServer server;
-    private static IApi api;
+    private MinecraftServer server;
+    private static DynastyEconomy api;
     private static Player nullplague = new Player(UUID.fromString("55e72bac-6481-3abe-9c9b-94cefed85271"), "Nullplague");
     private static Player fede = new Player(UUID.fromString("51a888b7-5a59-3f3d-9922-08746bcd8cd6"), "Fede");
 
-    @BeforeAll
-    public static void setup(){
+    @BeforeEach
+    public void setup(){
         MinecraftServer.start();
-        api = MinecraftServer.getApi();
+        api = ServiceProvider.get(DynastyEconomy.class);
         MinecraftServer.connectPlayer(nullplague);
         MinecraftServer.connectPlayer(fede);
     }
@@ -72,10 +72,5 @@ public class ApiTest {
         assertTrue(response.isSuccess());
         assertEquals(balanceNew1, balanceAct1.add(BigDecimal.valueOf(2000)));
         assertEquals(balanceNew2, balanceAct2.subtract(BigDecimal.valueOf(2000)));
-    }
-
-    @AfterAll
-    public static void tearDown(){
-        MinecraftServer.stop();
     }
 }

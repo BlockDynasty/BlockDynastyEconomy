@@ -17,6 +17,7 @@
 package MessageChannel.redis;
 
 import platform.files.Configuration;
+import services.configuration.IConfiguration;
 
 import java.util.UUID;
 
@@ -26,7 +27,7 @@ public class RedisData {
     private String password= "";
     private String username= "";
 
-    public RedisData(Configuration configuration){
+    public RedisData(IConfiguration configuration){
         this.host = configuration.getString("redis.host");
         this.port = configuration.getInt("redis.port");
         this.password = configuration.getString("redis.password");

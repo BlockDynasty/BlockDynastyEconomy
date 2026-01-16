@@ -16,7 +16,7 @@
 
 package BlockDynasty.FoliaImplementation.scheduler;
 
-import lib.scheduler.IEntity;
+import abstractions.platform.scheduler.IEntity;
 import org.bukkit.entity.Entity;
 
 public class EntityAdapter implements IEntity {

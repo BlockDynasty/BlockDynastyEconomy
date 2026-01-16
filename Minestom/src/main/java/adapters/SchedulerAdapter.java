@@ -16,8 +16,8 @@
 
 package adapters;
 
-import lib.scheduler.ContextualTask;
-import lib.scheduler.IScheduler;
+import abstractions.platform.scheduler.ContextualTask;
+import abstractions.platform.scheduler.IScheduler;
 
 public class SchedulerAdapter implements IScheduler {
     @Override

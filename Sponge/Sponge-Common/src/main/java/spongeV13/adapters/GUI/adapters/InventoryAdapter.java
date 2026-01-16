@@ -16,9 +16,9 @@
 
 package spongeV13.adapters.GUI.adapters;
 
+import abstractions.platform.recipes.RecipeInventory;
 import lib.gui.components.IInventory;
 import lib.gui.components.IItemStack;
-import lib.gui.components.recipes.RecipeInventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.type.ViewableInventory;
 

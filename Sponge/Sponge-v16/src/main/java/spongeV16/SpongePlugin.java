@@ -21,10 +21,8 @@ import org.apache.logging.log4j.Logger;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.lifecycle.ProvideServiceEvent;
-import org.spongepowered.api.event.lifecycle.RegisterChannelEvent;
-import org.spongepowered.api.event.lifecycle.StartingEngineEvent;
-import org.spongepowered.api.event.lifecycle.StoppingEngineEvent;
+import org.spongepowered.api.event.block.InteractBlockEvent;
+import org.spongepowered.api.event.lifecycle.*;
 import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
@@ -59,5 +57,15 @@ public class SpongePlugin extends SpongePluginCommon {
     @Listener
     public void onServerStopping(final StoppingEngineEvent<Server> event) {
         super.onServerStopping(event);
+    }
+
+    @Listener
+    public void onRegisterData(RegisterDataEvent event) {
+        super.onRegisterData(event);
+    }
+
+    @Listener
+    public void onBlockPlace(InteractBlockEvent.Secondary event){
+        super.onBlockPlace(event);
     }
 }

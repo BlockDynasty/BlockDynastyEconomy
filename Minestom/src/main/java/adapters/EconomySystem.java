@@ -17,7 +17,7 @@
 package adapters;
 
 import Main.Economy;
-import api.IApi;
+import com.BlockDynasty.api.DynastyEconomy;
 import adapters.commands.Commands;
 import adapters.events.ClickInventoryEvent;
 import adapters.events.playerExitEvent;
@@ -50,7 +50,7 @@ public class EconomySystem {
         return EconomySystem.economy!=null;
     }
 
-    public static IApi getApi(){
+    public static DynastyEconomy getApi(){
         return EconomySystem.economy.getApi();
     }
 }

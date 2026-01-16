@@ -18,7 +18,8 @@ package BlockDynasty.BukkitImplementation.adapters.listeners;
 
 import BlockDynasty.BukkitImplementation.adapters.platformAdapter.EntityPlayerAdapter;
 import BlockDynasty.BukkitImplementation.scheduler.Scheduler;
-import lib.scheduler.ContextualTask;
+
+import abstractions.platform.scheduler.ContextualTask;
 import platform.listeners.IPlayerJoin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -89,6 +89,18 @@ BankPanel:
   button10:
     nameItem: "{color}Beenden"
     lore: "{color}Klicken, um zu beenden"
+  button11:
+    nameItem: "{color}Geldautomat"
+    lore: "{color}Klicken Sie hier, um den Geldautomaten zu öffnen."
+
+MachinePanel:
+  title: "Geldautomat"
+  button1:
+    nameItem: "{color}Münzen einzahlen"
+    lore: "{color}Klicken, um Münzen einzuzahlen"
+  button2:
+    nameItem: "{color}Münzen abheben"
+    lore: "{color}Klicken, um Münzen abzuheben"
 
 AccountBalance:
   title: "Kontostand"

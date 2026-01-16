@@ -18,9 +18,11 @@ package platform.files.logs;
 
 import BlockDynasty.Economy.domain.services.log.Log;
 import platform.files.Configuration;
-import lib.scheduler.ContextualTask;
-import utils.Console;
-import lib.scheduler.IScheduler;
+import abstractions.platform.scheduler.ContextualTask;
+import platform.files.IConfigurationEngine;
+import services.Console;
+import abstractions.platform.scheduler.IScheduler;
+import services.configuration.IConfiguration;
 import utils.UtilTime;
 
 import java.io.*;
@@ -39,7 +41,7 @@ public abstract class AbstractLogger implements Log {
     private final IScheduler scheduler;
 
 
-    public AbstractLogger(Configuration config, IScheduler scheduler) {
+    public AbstractLogger(IConfigurationEngine config, IScheduler scheduler) {
         //this.plugin = plugin;
         this.scheduler = scheduler;
         this.folder = new File(config.getLogsPath());

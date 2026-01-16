@@ -89,6 +89,18 @@ BankPanel:
   button10:
     nameItem: "{color}Quitter"
     lore: "{color}Cliquez pour quitter"
+  button11:
+    nameItem: "{color}ATM"
+    lore: "{color}Cliquez pour ouvrir le distributeur automatique de billets"
+
+MachinePanel:
+  title: "Distributeur Automatique"
+  button1:
+    nameItem: "{color}Déposer des Pièces"
+    lore: "{color}Cliquer pour déposer des pièces"
+  button2:
+    nameItem: "{color}Retirer des Pièces"
+    lore: "{color}Cliquer pour retirer des pièces"
 
 AccountBalance:
   title: "Solde du compte"

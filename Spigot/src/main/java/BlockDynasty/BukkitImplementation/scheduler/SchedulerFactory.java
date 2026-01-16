@@ -19,8 +19,8 @@ package BlockDynasty.BukkitImplementation.scheduler;
 import BlockDynasty.BukkitImplementation.utils.Console;
 import BlockDynasty.BukkitImplementation.utils.Version;
 import BlockDynasty.FoliaImplementation.scheduler.SchedulerFolia;
-import lib.scheduler.ContextualTask;
-import lib.scheduler.IScheduler;
+import abstractions.platform.scheduler.ContextualTask;
+import abstractions.platform.scheduler.IScheduler;
 
 public class SchedulerFactory {
     private static IScheduler schedulerInstance;

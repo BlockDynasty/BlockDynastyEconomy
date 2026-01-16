@@ -90,6 +90,18 @@ BankPanel:
   button10:
     nameItem: "{color}退出"
     lore: "{color}点击退出"
+  button11:
+    nameItem: "{color}自動提款機"
+    lore: "{color}點選開啟ATM機"
+
+MachinePanel:
+  title: "自动取款机"
+  button1:
+    nameItem: "{color}存入硬币"
+    lore: "{color}点击存入硬币"
+  button2:
+    nameItem: "{color}取出硬币"
+    lore: "{color}点击取出硬币"
 
 AccountBalance:
   title: "账户余额"

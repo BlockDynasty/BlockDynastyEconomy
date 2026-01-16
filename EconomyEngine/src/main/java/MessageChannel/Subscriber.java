@@ -5,21 +5,22 @@ import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
 import BlockDynasty.Economy.domain.services.IOfferService;
 import BlockDynasty.Economy.domain.services.courier.PlayerTargetMessage;
-import lib.abstractions.IPlayer;
-import lib.abstractions.PlatformAdapter;
+import abstractions.platform.entity.IPlayer;
+import lib.gui.components.PlatformGUI;
 import lib.gui.GUISystem;
-import lib.scheduler.ContextualTask;
+import abstractions.platform.scheduler.ContextualTask;
+import platform.IPlatform;
 
 import java.util.UUID;
 
 public abstract class Subscriber {
-    private final PlatformAdapter platformAdapter;
+    private final IPlatform platformAdapter;
     private final IOfferService offerService;
     private final EventManager eventManager;
     private final ICurrencyService currencyService;
     private final IAccountService accountService;
 
-    public Subscriber(PlatformAdapter platformAdapter,
+    public Subscriber(IPlatform platformAdapter,
                       IOfferService offerService, ICurrencyService currencyService,
                       IAccountService accountService, EventManager eventManager) {
         this.platformAdapter = platformAdapter;

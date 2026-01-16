@@ -16,7 +16,9 @@
 
 package BlockDynasty.BukkitImplementation.Integrations.vault;
 
-import api.IApi;
+import com.BlockDynasty.api.DynastyEconomy;
+import com.BlockDynasty.api.DynastyEconomyWithoutLogger;
+import com.BlockDynasty.api.ServiceProvider;
 import net.milkbowl.vault.economy.AbstractEconomy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -28,11 +30,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VaultHook extends AbstractEconomy {
-    private IApi api;
+    private static DynastyEconomyWithoutLogger api;
 
 
-    public VaultHook(IApi api) {
-        this.api = api;
+    public VaultHook() {
+        VaultHook.api = ServiceProvider.get(DynastyEconomyWithoutLogger.class);
     }
 
     @Override
@@ -106,7 +108,7 @@ public class VaultHook extends AbstractEconomy {
 
     @Override
     public EconomyResponse withdrawPlayer(String player, double amount) {
-        api.EconomyResponse resultWithdraw = api.withdraw(player, BigDecimal.valueOf(amount));
+        com.BlockDynasty.api.EconomyResponse resultWithdraw = api.withdraw(player, BigDecimal.valueOf(amount));
         if(resultWithdraw.isSuccess()){
             return new EconomyResponse(amount, getBalance(player), EconomyResponse.ResponseType.SUCCESS, "withdraw success for "+player);
         }
@@ -115,7 +117,7 @@ public class VaultHook extends AbstractEconomy {
 
     @Override
     public EconomyResponse depositPlayer(String player, double amount) {
-        api.EconomyResponse resultDeposit = api.deposit(player, BigDecimal.valueOf(amount));
+        com.BlockDynasty.api.EconomyResponse resultDeposit = api.deposit(player, BigDecimal.valueOf(amount));
         if(resultDeposit.isSuccess()){
             return new EconomyResponse(amount, getBalance(player), EconomyResponse.ResponseType.SUCCESS, "Deposit success for "+player);
         }

@@ -90,6 +90,18 @@ BankPanel:
   button10:
     nameItem: "{color}Exit"
     lore: "{color}Click to exit"
+  button11:
+    nameItem: "{color}ATM"
+    lore: "{color}Click to open the ATM"
+
+MachinePanel:
+  title: "ATM"
+  button1:
+    nameItem: "{color}Deposit Currency"
+    lore: "{color}Click to deposit Currencies"
+  button2:
+    nameItem: "{color}Withdraw Currency"
+    lore: "{color}Click to withdraw Currencies"
 
 AccountBalance:
   title: "Account balance"

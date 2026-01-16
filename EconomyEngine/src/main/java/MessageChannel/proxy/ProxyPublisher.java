@@ -18,15 +18,15 @@ package MessageChannel.proxy;
 
 import BlockDynasty.Economy.domain.services.courier.Message;
 import MessageChannel.Publisher;
-import utils.Console;
-import lib.abstractions.PlatformAdapter;
+import platform.IPlatform;
+import services.Console;
 
 import java.io.IOException;
 
 public class ProxyPublisher extends Publisher {
-    private final PlatformAdapter platformAdapter;
+    private final IPlatform platformAdapter;
 
-    public ProxyPublisher(PlatformAdapter platformAdapter) {
+    public ProxyPublisher(IPlatform platformAdapter) {
         super(platformAdapter);
         this.platformAdapter = platformAdapter;
     }

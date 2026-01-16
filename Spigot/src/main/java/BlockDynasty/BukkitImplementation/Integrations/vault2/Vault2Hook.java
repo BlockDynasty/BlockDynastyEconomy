@@ -17,8 +17,10 @@
 package BlockDynasty.BukkitImplementation.Integrations.vault2;
 
 import BlockDynasty.BukkitImplementation.Integrations.vault.VaultHook;
-import BlockDynasty.Economy.domain.entities.currency.ICurrency;
-import api.IApi;
+import com.BlockDynasty.api.DynastyEconomy;
+import com.BlockDynasty.api.DynastyEconomyWithoutLogger;
+import com.BlockDynasty.api.ServiceProvider;
+import com.BlockDynasty.api.entity.Currency;
 import net.milkbowl.vault.economy.EconomyMultiCurrency;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.OfflinePlayer;
@@ -27,16 +29,15 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class Vault2Hook extends VaultHook implements EconomyMultiCurrency {
-    private final IApi api;
+    private static DynastyEconomyWithoutLogger api;
 
-    public Vault2Hook(IApi api) {
-        super(api);
-        this.api = api;
+    public Vault2Hook() {
+        Vault2Hook.api = ServiceProvider.get(DynastyEconomyWithoutLogger.class);
     }
 
     @Override
     public List<String> getCurrencies() {
-        return api.getCurrencies().stream().map(ICurrency::getSingular).toList();
+        return api.getCurrencies().stream().map(Currency::getSingular).toList();
     }
 
     @Override
@@ -75,7 +76,7 @@ public class Vault2Hook extends VaultHook implements EconomyMultiCurrency {
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double amount, String currencyName) {
-        api.EconomyResponse resultWithdraw = api.withdraw(offlinePlayer.getName(), BigDecimal.valueOf(amount), currencyName);
+        com.BlockDynasty.api.EconomyResponse resultWithdraw = api.withdraw(offlinePlayer.getName(), BigDecimal.valueOf(amount), currencyName);
         if(resultWithdraw.isSuccess()){
             return new EconomyResponse(amount, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, "withdraw success for "+ offlinePlayer.getPlayer());
         }
@@ -89,7 +90,7 @@ public class Vault2Hook extends VaultHook implements EconomyMultiCurrency {
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double amount, String currencyName) {
-        api.EconomyResponse resultDeposit = api.deposit(offlinePlayer.getName(), BigDecimal.valueOf(amount),currencyName);
+        com.BlockDynasty.api.EconomyResponse resultDeposit = api.deposit(offlinePlayer.getName(), BigDecimal.valueOf(amount),currencyName);
         if(resultDeposit.isSuccess()){
             return new EconomyResponse(amount, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, "Deposit success for "+ offlinePlayer.getPlayer());
         }

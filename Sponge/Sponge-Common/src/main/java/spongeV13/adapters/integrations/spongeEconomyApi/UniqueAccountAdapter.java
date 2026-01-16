@@ -15,9 +15,10 @@
  */
 
 package spongeV13.adapters.integrations.spongeEconomyApi;
-import BlockDynasty.Economy.domain.entities.balance.Money;
-import api.EconomyResponse;
-import api.IApi;
+import com.BlockDynasty.api.EconomyResponse;
+import com.BlockDynasty.api.DynastyEconomy;
+import com.BlockDynasty.api.ServiceProvider;
+import com.BlockDynasty.api.entity.Money;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.spongepowered.api.event.Cause;
@@ -36,17 +37,16 @@ import java.util.Set;
 import java.util.UUID;
 
 public class UniqueAccountAdapter implements UniqueAccount{
-    private BlockDynasty.Economy.domain.entities.account.Account account;
-    private IApi api;
+    private com.BlockDynasty.api.entity.Account account;
+    private static DynastyEconomy api = ServiceProvider.get(DynastyEconomy.class);
 
-    public UniqueAccountAdapter(BlockDynasty.Economy.domain.entities.account.Account account, IApi api) {
+    public UniqueAccountAdapter( com.BlockDynasty.api.entity.Account account) {
         this.account = account;
-        this.api = api;
     }
 
     @Override
     public Component displayName() {
-        return Component.text(account.getNickname());
+        return Component.text(account.getName());
     }
 
     @Override
@@ -182,7 +182,7 @@ public class UniqueAccountAdapter implements UniqueAccount{
 
     @Override
     public String identifier() {
-        return account.getNickname();
+        return account.getName();
     }
 
     @Override

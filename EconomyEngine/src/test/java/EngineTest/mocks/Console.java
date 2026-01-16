@@ -1,10 +1,7 @@
 package EngineTest.mocks;
 
 import EngineTest.mocks.utils.Color;
-import lib.abstractions.IConsole;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import abstractions.platform.IConsole;
 
 public class Console implements IConsole {
 

@@ -16,7 +16,7 @@
 
 package spongeV13.adapters.integrations.spongeEconomyApi;
 
-import api.EconomyResponse;
+import com.BlockDynasty.api.EconomyResponse;
 import org.spongepowered.api.service.context.Context;
 import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.service.economy.account.Account;

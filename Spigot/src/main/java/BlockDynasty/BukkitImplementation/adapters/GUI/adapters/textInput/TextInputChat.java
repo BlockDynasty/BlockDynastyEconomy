@@ -2,12 +2,13 @@ package BlockDynasty.BukkitImplementation.adapters.GUI.adapters.textInput;
 
 import BlockDynasty.BukkitImplementation.BlockDynastyEconomy;
 import BlockDynasty.BukkitImplementation.scheduler.Scheduler;
+import abstractions.platform.scheduler.ContextualTask;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.IGUI;
 import lib.gui.components.ITextInput;
-import lib.scheduler.ContextualTask;
-import lib.util.colors.ChatColor;
-import lib.util.colors.Colors;
+
+import util.colors.ChatColor;
+import util.colors.Colors;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

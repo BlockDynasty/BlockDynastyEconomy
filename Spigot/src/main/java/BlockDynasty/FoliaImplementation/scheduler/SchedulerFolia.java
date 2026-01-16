@@ -17,8 +17,8 @@
 package BlockDynasty.FoliaImplementation.scheduler;
 
 import BlockDynasty.BukkitImplementation.BlockDynastyEconomy;
-import lib.scheduler.IScheduler;
-import lib.scheduler.ContextualTask;
+import abstractions.platform.scheduler.ContextualTask;
+import abstractions.platform.scheduler.IScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

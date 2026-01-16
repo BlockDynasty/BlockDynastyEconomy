@@ -7,9 +7,9 @@ import BlockDynasty.Economy.domain.result.ErrorCode;
 import BlockDynasty.Economy.domain.result.Result;
 import BlockDynasty.Economy.domain.services.IAccountService;
 import lib.commands.abstractions.IEntityCommands;
-import lib.util.colors.ChatColor;
-import lib.util.colors.Colors;
-import utils.Console;
+import util.colors.ChatColor;
+import util.colors.Colors;
+import services.Console;
 
 public class PlayerJoinListenerOnline implements LoadAccount{
     private final GetAccountByUUIDUseCase getAccountByUUIDUseCase;

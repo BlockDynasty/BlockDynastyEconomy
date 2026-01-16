@@ -21,8 +21,8 @@ import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
 import BlockDynasty.Economy.domain.services.IOfferService;
 import MessageChannel.Subscriber;
-import utils.Console;
-import lib.abstractions.PlatformAdapter;
+import platform.IPlatform;
+import services.Console;
 import redis.clients.jedis.*;
 
 public class RedisSubscriber extends Subscriber {
@@ -32,7 +32,7 @@ public class RedisSubscriber extends Subscriber {
     private boolean running = false;
     private final String channelName;
 
-    public RedisSubscriber(RedisData redisData, PlatformAdapter platformAdapter,
+    public RedisSubscriber(RedisData redisData, IPlatform platformAdapter,
                            IOfferService offerService, ICurrencyService currencyService,
                            IAccountService accountService, EventManager eventManager) {
         super(platformAdapter, offerService, currencyService, accountService, eventManager);

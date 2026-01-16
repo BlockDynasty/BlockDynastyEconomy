@@ -3,8 +3,8 @@ package BlockDynasty.BukkitImplementation.adapters.commands;
 import BlockDynasty.BukkitImplementation.BlockDynastyEconomy;
 import BlockDynasty.BukkitImplementation.adapters.platformAdapter.EntityConsoleAdapter;
 import lib.commands.abstractions.AbstractCommand;
-import lib.util.colors.ChatColor;
-import lib.util.colors.Colors;
+import util.colors.ChatColor;
+import util.colors.Colors;
 
 public class ReloadCommand extends AbstractCommand {
     private BlockDynastyEconomy plugin ;

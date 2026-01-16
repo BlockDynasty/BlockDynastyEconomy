@@ -1,8 +1,8 @@
 package services;
 
-import lib.abstractions.IMessages;
-import lib.util.colors.ChatColor;
-import lib.util.colors.Colors;
+import services.messages.IMessages;
+import util.colors.ChatColor;
+import util.colors.Colors;
 import platform.files.Languages;
 
 import java.util.Map;

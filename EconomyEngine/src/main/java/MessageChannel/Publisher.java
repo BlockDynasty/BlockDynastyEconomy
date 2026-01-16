@@ -2,12 +2,14 @@ package MessageChannel;
 
 import BlockDynasty.Economy.domain.services.courier.Courier;
 import BlockDynasty.Economy.domain.services.courier.Message;
-import lib.abstractions.PlatformAdapter;
+import abstractions.platform.entity.IPlayer;
+import lib.gui.components.PlatformGUI;
+import platform.IPlatform;
 
 public abstract class Publisher implements Courier {
-    private final PlatformAdapter platformAdapter;
+    private final IPlatform platformAdapter;
 
-    public Publisher(PlatformAdapter platformAdapter) {
+    public Publisher(IPlatform platformAdapter) {
         this.platformAdapter = platformAdapter;
     }
 
@@ -25,7 +27,7 @@ public abstract class Publisher implements Courier {
         switch (message.getType()) {
             case ACCOUNT:
             case EVENT:
-                lib.abstractions.IPlayer player = platformAdapter.getPlayerByUUID(message.getTarget());
+                IPlayer player = platformAdapter.getPlayerByUUID(message.getTarget());
                 return player != null && player.isOnline();
             default:
                 return false;

@@ -14,14 +14,13 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EngineGUITest {
-    private static MinecraftServer server;
     private static Player player= new Player(UUID.fromString("55e72bac-6481-3abe-9c9b-94cefed85271"), "Nullplague");
     private static Player player2= new Player(UUID.fromString("51a888b7-5a59-3f3d-9922-08746bcd8cd6"), "Fede");
 
-    @BeforeAll
-    public static void setup(){
-        player.addPermission("BlockDynastyEconomy.economy");
+    @BeforeEach
+    public void setup(){
         MinecraftServer.start();
+        player.addPermission("BlockDynastyEconomy.economy");
         MinecraftServer.connectPlayer(player);
         MinecraftServer.connectPlayer(player2);
     }
@@ -156,9 +155,5 @@ public class EngineGUITest {
         TextInput.setInput("give Fede Diamond_sword 1");
     }
 
-    @AfterAll
-    public static void afterAll() {
-        MinecraftServer.stop();
-    }
 
 }

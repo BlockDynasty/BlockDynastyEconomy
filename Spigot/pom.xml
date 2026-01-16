@@ -77,6 +77,10 @@
                                     <pattern>org.antlr</pattern>
                                     <shadedPattern>com.BlockDynasty.antlr</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>de.tr7zw.changeme.nbtapi</pattern>
+                                    <shadedPattern>com.BlockDynasty.nbtapi</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -152,7 +156,12 @@
             <version>1.10.11-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-
+        <dependency>
+            <groupId>de.tr7zw</groupId>
+            <artifactId>item-nbt-api</artifactId>
+            <version>2.15.5</version>
+            <scope>compile</scope>
+        </dependency>
         <!--  -->
         <dependency>
             <groupId>me.clip</groupId>

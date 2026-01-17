@@ -23,7 +23,7 @@ public class vaultHook implements Economy {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 
     @Override

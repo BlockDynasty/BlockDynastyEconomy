@@ -28,7 +28,7 @@ public class vaultHook implements Economy {
 
     @Override
     public @NotNull String getName() {
-        return "BlockDynastyEconomy";
+        return "DynastyEconomy";
     }
 
     @Override

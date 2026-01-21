@@ -40,6 +40,18 @@ public class MessageAdapter {
         return messages.isEmpty() ? Message.raw("") : Message.join(messages.toArray(new Message[0]));
     }
 
+    public static Message formatVanillaMessage(String[] stringlist){
+        List<Message> messages = new ArrayList<>();
+        for (String s : stringlist) {
+            messages.add(formatVanillaMessage(s));
+        }
+        return Message.join(messages.toArray(new Message[0]));
+    }
+
+    public static String clearColorCodes(String message) {
+        return message.replaceAll("§[0-9a-fA-Fk-oK-OrR]", "");
+    }
+
     public static Message formatModernMessage(String message) {
         return Message.raw(message);
     }

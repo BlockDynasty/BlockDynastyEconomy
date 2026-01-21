@@ -3,21 +3,28 @@ package com.BlockDynasty.hytale.adapters.commands;
 import com.BlockDynasty.hytale.adapters.PlayerAdapter;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.HytaleServer;
+import com.hypixel.hytale.server.core.command.system.AbstractCommand;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
+import com.hypixel.hytale.server.core.command.system.CommandSender;
 import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
-import com.hypixel.hytale.server.core.command.system.basecommands.AbstractTargetPlayerCommand;
+import com.hypixel.hytale.server.core.command.system.basecommands.AbstractAsyncCommand;
+import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
+import com.hypixel.hytale.server.core.console.ConsoleSender;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import lib.commands.abstractions.Command;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-public class CommandAdapter extends AbstractTargetPlayerCommand {
+public class CommandAdapter extends CommandBase {
     private Command command;
     private List<RequiredArg<String>> requiredArgs;
 
@@ -43,7 +50,39 @@ public class CommandAdapter extends AbstractTargetPlayerCommand {
         requirePermission(command.getPermission());
     }
 
+
     @Override
+    protected void executeSync(@Nonnull CommandContext commandContext) {
+        CommandSender sender = commandContext.sender();
+        if (sender instanceof Player player) {
+            Ref<EntityStore> ref = player.getReference();
+            if (ref != null && ref.isValid()){
+                Store<EntityStore> store = ref.getStore();
+                World world = store.getExternalData().getWorld();
+
+                CompletableFuture.runAsync(()->{
+                    PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
+                    if (playerRef != null){
+                        List<String> argValues = new ArrayList<>();
+                        for (RequiredArg<String> requiredArg : requiredArgs){
+                            String argValue = commandContext.get(requiredArg);
+                            argValues.add(argValue);
+                        }
+                        this.command.execute(new PlayerAdapter(playerRef,ref,store),argValues.toArray(new String[0]));
+                    }
+                },world);
+            }
+        }else if(sender instanceof ConsoleSender console){
+                List<String> argValues = new ArrayList<>();
+                for (RequiredArg<String> requiredArg : requiredArgs) {
+                    String argValue = commandContext.get(requiredArg);
+                    argValues.add(argValue);
+                }
+                this.command.execute(new CommandConsoleAdapter(console), argValues.toArray(new String[0]));
+        }
+    }
+
+    /*@Override
     protected void execute(@Nonnull CommandContext commandContext, @Nullable Ref<EntityStore> ref,
                            @Nonnull Ref<EntityStore> ref1,
                            @Nonnull PlayerRef playerRef, @Nonnull World world,
@@ -54,8 +93,15 @@ public class CommandAdapter extends AbstractTargetPlayerCommand {
                 String argValue = commandContext.get(requiredArg);
                 argValues.add(argValue);
             }
-            this.command.execute(new PlayerAdapter(playerRef),argValues.toArray(new String[0]));
+            this.command.execute(new PlayerAdapter(playerRef,ref,store),argValues.toArray(new String[0]));
+        }else if(commandContext.sender() instanceof ConsoleSender console){
+            List<String> argValues = new ArrayList<>();
+            for (RequiredArg<String> requiredArg : requiredArgs){
+                String argValue = commandContext.get(requiredArg);
+                argValues.add(argValue);
+            }
+            this.command.execute(new CommandConsoleAdapter(console),argValues.toArray(new String[0]));
         }
 
-    }
+    }*/
 }

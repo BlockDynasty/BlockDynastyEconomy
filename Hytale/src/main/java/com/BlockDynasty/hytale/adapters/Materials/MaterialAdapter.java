@@ -12,13 +12,13 @@ public class MaterialAdapter {
 
     //icono personalizado para lagui
     public static IItemStack createItemStack(RecipeItem recipeItem) {
-        recipeItem.getMaterial();
+        /*recipeItem.getMaterial();
         recipeItem.getName();
         recipeItem.getLore();
-        recipeItem.getTexture();
+        recipeItem.getTexture();*/
         //todo la textura puede ser la referencia a algun asset en memoria
 
-        return new ItemStackAdapter(new ItemStack(""));
+        return new ItemStackAdapter(recipeItem);
     }
     public static ItemStackCurrency createItemStack(RecipeItemCurrency recipeItemCurrency){
         return null;

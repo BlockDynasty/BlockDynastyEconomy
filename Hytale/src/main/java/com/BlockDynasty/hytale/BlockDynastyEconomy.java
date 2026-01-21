@@ -31,6 +31,7 @@ public class BlockDynastyEconomy extends JavaPlugin {
         this.getEventRegistry().registerGlobal(PlayerConnectEvent.class, playerJoinListener::onPlayerConnect);
         this.getEventRegistry().registerGlobal(PlayerDisconnectEvent.class, playerQuitListener::onPlayerQuit);
         Vault.register();
+
     }
 
     public static BlockDynastyEconomy getInstance() {

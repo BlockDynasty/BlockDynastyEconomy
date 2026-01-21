@@ -1,0 +1,80 @@
+$C = "../Common.ui";
+
+Group {
+  LayoutMode: CenterMiddle;
+  Background: #2a2a2a;
+  Style: (TextColor: #ffffff);
+  $C.@PageOverlay {
+    LayoutMode: Top;
+    Background: linear-gradient(#222222, #333333);
+    $C.@Container {
+      ScrollbarStyle: $C.@DefaultScrollbarStyle;
+      LayoutMode: Top;
+      Background: #8B8B8B;
+      Anchor: (Width: 360, Height: 240);
+
+      #Title {
+        Group {
+          LayoutMode: Top;
+          $C.@Title {
+            @Text = "Mi Inventario";
+            Style: (TextColor: #ffffff, FontSize: 20, RenderBold: true,
+                   TextShadowColor: #000000, TextShadowBlur: 2);
+          }
+        }
+      }
+
+      #Content {
+        Group #InventoryGrid {
+          Group {
+            LayoutMode: Grid;
+            Background: #3C3C3C;
+            Anchor: (Width: 324, Height: 108);
+            Padding: (Full: 8);
+            Group #Slot_0_Example {
+              LayoutMode: Vertical;
+              Background: #4A4A4A;
+              Anchor: (Width: 36, Height: 36);
+              $C.@Tooltip {
+                Style: (Background: #1a1a1aCC, BorderColor: #555555,
+                     BorderWidth: 1, Padding: (All: 8));
+              }
+              $C.@TextButton #SlotButton_0 {
+                @Text = "";
+                Background: transparent;
+                Anchor: (Width: 100, Height: 100);
+                Style: (TextButtonStyle(
+                Default: (Background: transparent),
+                Hover: (Background: #FFFFFF20),
+                Pressed: (Background: #FFFFFF40)
+              ));
+              }
+              Label #SlotLabel_0 {
+                Style: (FontSize: 9, TextColor: #ffffff, RenderBold: true,
+                     Position: Absolute, Top: 2, Left: 2,
+                     TextShadowColor: #000000, TextShadowBlur: 1);
+                Text: "Espada";
+              }
+              Label #SlotCount_0 {
+                Style: (FontSize: 10, TextColor: #ffffff, RenderBold: true,
+                     Position: Absolute, Bottom: 2, Right: 2,
+                     TextShadowColor: #000000, TextShadowBlur: 1);
+                Text: "1";
+              }
+            }
+          }
+        }
+        Group #Hotbar {
+          Group {
+            LayoutMode: Horizontal;
+            Background: #2A2A2A;
+            Anchor: (Width: 324, Height: 44);
+            Padding: (Full: 6);
+          }
+        }
+      }
+    }
+  }
+}
+
+$C.@BackButton {}

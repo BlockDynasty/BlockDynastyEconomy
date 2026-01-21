@@ -8,10 +8,9 @@ import abstractions.platform.scheduler.IScheduler;
 import com.BlockDynasty.hytale.adapters.Materials.MaterialAdapter;
 import com.BlockDynasty.hytale.adapters.sheduler.SchedulerAdapter;
 import com.BlockDynasty.hytale.adapters.textInput.ChatInput;
-import com.hypixel.hytale.server.core.NameMatching;
-import com.hypixel.hytale.server.core.inventory.Inventory;
+import com.hypixel.hytale.server.core.command.system.CommandManager;
+import com.hypixel.hytale.server.core.console.ConsoleSender;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
-import com.hypixel.hytale.server.core.universe.Universe;
 import domain.entity.currency.ItemStackCurrency;
 import domain.entity.currency.RecipeItemCurrency;
 import domain.entity.platform.HardCashCreator;
@@ -22,13 +21,26 @@ import platform.IPlatform;
 import platform.IPlayer;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 
 public class HytaleAdapter implements IPlatform {
-    private static Universe universe= Universe.get();
+    private static Map<UUID, PlayerRef> playerUUIDCache = new HashMap<>();
+    private static Map<String, PlayerRef> playerNameCache = new HashMap<>();
+
+    public static void connectPlayer(PlayerRef playerRef){
+        playerUUIDCache.put(playerRef.getUuid(), playerRef);
+        playerNameCache.put(playerRef.getUsername(), playerRef);
+    }
+
+    public static void disconnectPlayer(PlayerRef playerRef){
+        playerUUIDCache.remove(playerRef.getUuid());
+        playerNameCache.remove(playerRef.getUsername());
+    }
 
     @Override
     public void sendPluginMessage(String s, byte[] bytes) {
@@ -77,13 +89,7 @@ public class HytaleAdapter implements IPlatform {
 
     @Override
     public IInventory createInventory(RecipeInventory recipeInventory) {
-        recipeInventory.getRows(); //tamaño
-        recipeInventory.getTitle(); //titulo
-        //create a cintainer indexado
-        int size = recipeInventory.getRows() * 9;
-        Inventory inventory = new Inventory((short)size, (short) 0, (short)0, (short)0, (short)0 );
-
-        return new InventoryAdapter(inventory);
+        return new InventoryAdapter(recipeInventory);
     }
 
     @Override
@@ -93,14 +99,13 @@ public class HytaleAdapter implements IPlatform {
 
     @Override
     public IPlayer getPlayer(String s) {
-        //obtener jugador por nombre
-        PlayerRef p = universe.getPlayer(s, NameMatching.EXACT);
+        PlayerRef p = playerNameCache.get(s);
         return p != null ? new PlayerAdapter(p) : null;
     }
 
     @Override
     public void dispatchCommand(String s) throws Exception {
-
+        CommandManager.get().handleCommand(ConsoleSender.INSTANCE,s);
     }
 
     @Override
@@ -110,15 +115,13 @@ public class HytaleAdapter implements IPlatform {
 
     @Override
     public IPlayer getPlayerByUUID(UUID uuid) {
-        //obtener jugador por uuid
-        PlayerRef p= universe.getPlayer(uuid);
+        PlayerRef p= playerUUIDCache.get(uuid);
         return p != null ? new PlayerAdapter(p) : null;
     }
 
     @Override
     public List<abstractions.platform.entity.IPlayer> getOnlinePlayers() {
-        //obtener todos los jugadores en linea
-        List<PlayerRef> playerRefs = universe.getPlayers();
+        List<PlayerRef> playerRefs = playerNameCache.values().stream().collect(Collectors.toList());
         return playerRefs.stream().map(PlayerAdapter::new).collect(Collectors.toList());
     }
 
@@ -134,6 +137,6 @@ public class HytaleAdapter implements IPlatform {
 
     @Override
     public boolean hasSupportGui() {
-        return false;
+        return true;
     }
 }

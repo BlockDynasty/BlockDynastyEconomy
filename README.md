@@ -27,7 +27,7 @@ Bukkit: https://dev.bukkit.org/projects/dynastyeconomy
 ### 🎯 Hytale Support
 | Version | Status | Required JDK | Notes |
 |---------|--------|--------------|-------|
-| Alpha | ✅ | JDK 25 | Legacy Support/only Commands |
+| Alpha | ✅ | JDK 25 | Fully supported |
 
 ----
 ### 🎯 Supported Versions Paper/Spigot/Folia/Canvas

@@ -3,7 +3,7 @@ package com.BlockDynasty.hytale.adapters.listener;
 import com.BlockDynasty.hytale.adapters.HytaleAdapter;
 import com.BlockDynasty.hytale.adapters.PlayerAdapter;
 import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
-import platform.listeners.IPlayerJoin;
+import com.blockdynasty.economy.platform.listeners.IPlayerJoin;
 
 public class PlayerQuitListener {
     private IPlayerJoin playerJoin;

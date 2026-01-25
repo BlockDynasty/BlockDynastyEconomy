@@ -127,7 +127,7 @@
         </dependency>
         <dependency>
             <groupId>com.BlockDynasty</groupId>
-            <artifactId>EconomyApi</artifactId>
+            <artifactId>DynastyEconomyApi</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>

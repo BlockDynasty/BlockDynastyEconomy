@@ -8,16 +8,14 @@ import abstractions.platform.IProxySubscriber;
 import domain.entity.currency.ItemStackCurrency;
 import domain.entity.currency.RecipeItemCurrency;
 import domain.entity.platform.HardCashCreator;
-import lib.commands.PlatformCommand;
-import lib.gui.components.PlatformGUI;
 import abstractions.platform.recipes.RecipeItem;
 import lib.gui.components.IInventory;
 import lib.gui.components.IItemStack;
 import lib.gui.components.ITextInput;
 import abstractions.platform.recipes.RecipeInventory;
 import abstractions.platform.scheduler.IScheduler;
-import platform.IPlatform;
-import platform.IPlayer;
+import com.blockdynasty.economy.platform.IPlatform;
+import com.blockdynasty.economy.platform.IPlayer;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;

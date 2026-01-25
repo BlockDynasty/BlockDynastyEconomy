@@ -1,0 +1,50 @@
+/**
+ * Copyright 2025 Federico Barrionuevo "@federkone"
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.blockdynasty.economy.MessageChannel.proxy;
+
+import BlockDynasty.Economy.aplication.events.EventManager;
+import BlockDynasty.Economy.domain.services.IAccountService;
+import BlockDynasty.Economy.domain.services.ICurrencyService;
+import BlockDynasty.Economy.domain.services.IOfferService;
+import com.blockdynasty.economy.MessageChannel.Subscriber;
+import abstractions.platform.IProxySubscriber;
+import com.blockdynasty.economy.platform.IPlatform;
+import services.Console;
+
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+
+public class ProxySubscriber extends Subscriber implements IProxySubscriber {
+    public ProxySubscriber(IPlatform platformAdapter, IOfferService offerService, ICurrencyService currencyService, IAccountService accountService, EventManager eventManager) {
+        super(platformAdapter, offerService, currencyService, accountService, eventManager);
+        platformAdapter.registerMessageChannel(this);
+    }
+
+    @Override
+    public void onPluginMessageReceived(String channel, byte[] bytecode) {
+        if (!channel.equals(ProxyData.getChannelName())) {
+            return;
+        }
+        try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(bytecode))) {
+            String message = in.readUTF();
+            super.processMessage(message);
+        }catch (IOException exception){
+            Console.logError(exception.getMessage());
+        }
+    }
+}

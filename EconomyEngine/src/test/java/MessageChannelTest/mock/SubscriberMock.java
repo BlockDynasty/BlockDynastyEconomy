@@ -5,11 +5,10 @@ import BlockDynasty.Economy.domain.services.IAccountService;
 import BlockDynasty.Economy.domain.services.ICurrencyService;
 import BlockDynasty.Economy.domain.services.IOfferService;
 import BlockDynasty.Economy.domain.services.courier.PlayerTargetMessage;
-import MessageChannel.Subscriber;
-import lib.gui.components.PlatformGUI;
+import com.blockdynasty.economy.MessageChannel.Subscriber;
 import lib.gui.GUISystem;
 import abstractions.platform.scheduler.ContextualTask;
-import platform.IPlatform;
+import com.blockdynasty.economy.platform.IPlatform;
 
 public class SubscriberMock extends Subscriber {
     private ICurrencyService currencyService;

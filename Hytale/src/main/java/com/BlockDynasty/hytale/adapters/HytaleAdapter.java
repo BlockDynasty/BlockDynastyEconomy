@@ -17,8 +17,8 @@ import domain.entity.platform.HardCashCreator;
 import lib.gui.components.IInventory;
 import lib.gui.components.IItemStack;
 import lib.gui.components.ITextInput;
-import platform.IPlatform;
-import platform.IPlayer;
+import com.blockdynasty.economy.platform.IPlatform;
+import com.blockdynasty.economy.platform.IPlayer;
 
 import java.io.File;
 import java.util.HashMap;

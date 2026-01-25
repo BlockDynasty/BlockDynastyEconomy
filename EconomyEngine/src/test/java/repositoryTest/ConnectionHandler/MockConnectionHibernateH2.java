@@ -18,11 +18,11 @@ package repositoryTest.ConnectionHandler;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import repository.ConnectionHandler.Hibernate.Connection;
-import repository.Models.AccountDb;
-import repository.Models.BalanceDb;
-import repository.Models.CurrencyDb;
-import repository.Models.WalletDb;
+import com.blockdynasty.economy.repository.ConnectionHandler.Hibernate.Connection;
+import com.blockdynasty.economy.repository.Models.AccountDb;
+import com.blockdynasty.economy.repository.Models.BalanceDb;
+import com.blockdynasty.economy.repository.Models.CurrencyDb;
+import com.blockdynasty.economy.repository.Models.WalletDb;
 
 public class MockConnectionHibernateH2 implements Connection {
     private SessionFactory sessionFactory;

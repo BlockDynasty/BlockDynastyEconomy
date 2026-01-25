@@ -18,12 +18,13 @@ package com.BlockDynasty.api;
 
 import com.BlockDynasty.api.entity.Account;
 import com.BlockDynasty.api.entity.Currency;
+import net.blockdynasty.providers.services.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-public interface DynastyEconomy {
+public interface DynastyEconomy extends Service<UUID> {
 
     /**
      *

@@ -30,8 +30,7 @@ import spongeV13.adapters.platformAdapter.SpongeAdapter;
 import spongeV13.adapters.listeners.PlayerJoinListener;
 import spongeV13.adapters.integrations.spongeEconomyApi.EconomyServiceAdapter;
 import spongeV13.utils.Console;
-import Main.Economy;
-import com.BlockDynasty.api.DynastyEconomy;
+import com.blockdynasty.economy.Economy;
 
 import lib.commands.CommandService;
 import org.apache.logging.log4j.Logger;
@@ -44,7 +43,7 @@ import org.spongepowered.api.event.lifecycle.*;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
 import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.plugin.PluginContainer;
-import MessageChannel.proxy.ProxyData;
+import com.blockdynasty.economy.MessageChannel.proxy.ProxyData;
 import spongeV13.utils.TestEconomyCommand;
 
 import java.lang.invoke.MethodHandles;

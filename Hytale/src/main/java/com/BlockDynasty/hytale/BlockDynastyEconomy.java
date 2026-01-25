@@ -1,6 +1,6 @@
 package com.BlockDynasty.hytale;
 
-import Main.Economy;
+import com.blockdynasty.economy.Economy;
 import com.BlockDynasty.hytale.adapters.HytaleAdapter;
 import com.BlockDynasty.hytale.adapters.commands.CommandRegister;
 import com.BlockDynasty.hytale.adapters.listener.PlayerJoinListener;

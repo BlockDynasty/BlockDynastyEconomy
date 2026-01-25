@@ -16,15 +16,15 @@
 
 package spongeV13.adapters.platformAdapter;
 
-import MessageChannel.proxy.ProxyData;
+import com.blockdynasty.economy.MessageChannel.proxy.ProxyData;
 import domain.entity.currency.ItemStackCurrency;
 import domain.entity.currency.RecipeItemCurrency;
 import domain.entity.platform.HardCashCreator;
 import lib.gui.components.IInventory;
 import lib.gui.components.IItemStack;
 import lib.gui.components.ITextInput;
-import platform.IPlatform;
-import platform.IPlayer;
+import com.blockdynasty.economy.platform.IPlatform;
+import com.blockdynasty.economy.platform.IPlayer;
 import spongeV13.adapters.GUI.adapters.InventoryAdapter;
 import spongeV13.adapters.GUI.adapters.ItemStackAdapter;
 import spongeV13.adapters.GUI.adapters.MaterialAdapter;

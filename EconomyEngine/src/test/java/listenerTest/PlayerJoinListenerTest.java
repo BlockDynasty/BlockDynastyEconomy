@@ -14,8 +14,8 @@ import lib.commands.abstractions.IEntityCommands;
 import lib.gui.components.IEntityGUI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import platform.listeners.PlayerJoinListenerOffline;
-import platform.listeners.PlayerJoinListenerOnline;
+import com.blockdynasty.economy.platform.listeners.PlayerJoinListenerOffline;
+import com.blockdynasty.economy.platform.listeners.PlayerJoinListenerOnline;
 import repositoryTest.FactoryRepo;
 
 import java.util.List;

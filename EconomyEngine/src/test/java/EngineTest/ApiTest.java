@@ -4,7 +4,7 @@ import EngineTest.mocks.MinecraftServer;
 import EngineTest.mocks.Player;
 import com.BlockDynasty.api.EconomyResponse;
 import com.BlockDynasty.api.DynastyEconomy;
-import com.BlockDynasty.api.ServiceProvider;
+import net.blockdynasty.providers.services.ServiceProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

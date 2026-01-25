@@ -21,8 +21,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
-import net.minestom.server.event.player.PlayerLoadedEvent;
-import platform.listeners.IPlayerJoin;
+import com.blockdynasty.economy.platform.listeners.IPlayerJoin;
 
 public class playerJoinEvent {
 

@@ -17,8 +17,7 @@
 package spongeV13.adapters.integrations.spongeEconomyApi;
 
 import com.BlockDynasty.api.DynastyEconomy;
-import com.BlockDynasty.api.DynastyEconomyWithoutLogger;
-import com.BlockDynasty.api.ServiceProvider;
+import net.blockdynasty.providers.services.ServiceProvider;
 import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.service.economy.account.Account;
 import org.spongepowered.api.service.economy.account.AccountDeletionResultType;
@@ -32,11 +31,11 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 public class EconomyServiceAdapter implements MultiCurrencyService {
-    private static DynastyEconomyWithoutLogger api;
+    private static DynastyEconomy api;
 
     public static void init()
     {
-        EconomyServiceAdapter.api = ServiceProvider.get(DynastyEconomyWithoutLogger.class);
+        EconomyServiceAdapter.api = ServiceProvider.get(DynastyEconomy.class);
     }
 
     @Override

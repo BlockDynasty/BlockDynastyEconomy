@@ -40,9 +40,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import MessageChannel.proxy.ProxyData;
-import platform.IPlatform;
-import platform.IPlayer;
+import com.blockdynasty.economy.MessageChannel.proxy.ProxyData;
+import com.blockdynasty.economy.platform.IPlatform;
+import com.blockdynasty.economy.platform.IPlayer;
 
 import java.io.File;
 import java.util.List;

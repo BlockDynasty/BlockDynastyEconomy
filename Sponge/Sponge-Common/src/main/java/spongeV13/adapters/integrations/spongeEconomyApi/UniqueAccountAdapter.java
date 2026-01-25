@@ -17,7 +17,7 @@
 package spongeV13.adapters.integrations.spongeEconomyApi;
 import com.BlockDynasty.api.EconomyResponse;
 import com.BlockDynasty.api.DynastyEconomy;
-import com.BlockDynasty.api.ServiceProvider;
+import net.blockdynasty.providers.services.ServiceProvider;
 import com.BlockDynasty.api.entity.Money;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;

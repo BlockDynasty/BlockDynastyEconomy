@@ -4,7 +4,7 @@ package com.BlockDynasty.hytale.adapters.listener;
 import com.BlockDynasty.hytale.adapters.HytaleAdapter;
 import com.BlockDynasty.hytale.adapters.PlayerAdapter;
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
-import platform.listeners.IPlayerJoin;
+import com.blockdynasty.economy.platform.listeners.IPlayerJoin;
 
 public class PlayerJoinListener {
     private IPlayerJoin playerJoin;

@@ -22,6 +22,7 @@
         <module>EconomyLibrary</module>
         <module>EconomyApi</module>
         <module>Hytale</module>
+        <module>ServiceProvider</module>
     </modules>
 
 </project>

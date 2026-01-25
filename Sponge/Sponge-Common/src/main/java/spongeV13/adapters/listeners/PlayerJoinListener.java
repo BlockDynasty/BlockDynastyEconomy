@@ -1,7 +1,7 @@
 package spongeV13.adapters.listeners;
 
 import spongeV13.adapters.platformAdapter.EntityPlayerAdapter;
-import platform.listeners.IPlayerJoin;
+import com.blockdynasty.economy.platform.listeners.IPlayerJoin;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.network.ServerSideConnectionEvent;
 

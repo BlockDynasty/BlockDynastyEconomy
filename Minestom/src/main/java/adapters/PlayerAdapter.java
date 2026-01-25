@@ -30,7 +30,7 @@ import net.minestom.server.advancements.Notification;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import platform.IPlayer;
+import com.blockdynasty.economy.platform.IPlayer;
 
 import java.util.UUID;
 

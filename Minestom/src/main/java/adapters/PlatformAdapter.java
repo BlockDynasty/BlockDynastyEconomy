@@ -32,8 +32,8 @@ import adapters.inventory.MinestomInventory;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
-import platform.IPlatform;
-import platform.IPlayer;
+import com.blockdynasty.economy.platform.IPlatform;
+import com.blockdynasty.economy.platform.IPlayer;
 
 import java.io.File;
 import java.util.Collection;

@@ -20,7 +20,7 @@ import BlockDynasty.BukkitImplementation.adapters.platformAdapter.EntityPlayerAd
 import BlockDynasty.BukkitImplementation.scheduler.Scheduler;
 
 import abstractions.platform.scheduler.ContextualTask;
-import platform.listeners.IPlayerJoin;
+import com.blockdynasty.economy.platform.listeners.IPlayerJoin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

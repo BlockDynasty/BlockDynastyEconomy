@@ -20,9 +20,7 @@ import BlockDynasty.BukkitImplementation.Integrations.vaultUnloked.VaultUnlocked
 import BlockDynasty.BukkitImplementation.Integrations.vault2.Vault2Handler;
 import BlockDynasty.BukkitImplementation.utils.JavaUtil;
 import BlockDynasty.BukkitImplementation.utils.Console;
-import com.BlockDynasty.api.DynastyEconomy;
-import com.BlockDynasty.api.DynastyEconomyWithoutLogger;
-import com.BlockDynasty.api.ServiceProvider;
+import net.blockdynasty.providers.services.ServiceProvider;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;

@@ -2,7 +2,7 @@ package MessageChannelTest.mock;
 
 import BlockDynasty.Economy.domain.services.courier.Courier;
 import BlockDynasty.Economy.domain.services.courier.Message;
-import MessageChannel.Subscriber;
+import com.blockdynasty.economy.MessageChannel.Subscriber;
 
 public class PublisherMock implements Courier {
     private Subscriber subscriber;

@@ -6,7 +6,7 @@ import domain.entity.player.IEntityHardCash;
 import lib.commands.abstractions.IEntityCommands;
 import lib.gui.components.IEntityGUI;
 import lib.gui.components.IInventory;
-import platform.IPlayer;
+import com.blockdynasty.economy.platform.IPlayer;
 
 import java.util.ArrayList;
 import java.util.List;

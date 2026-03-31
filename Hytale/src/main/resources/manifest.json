@@ -1,7 +1,7 @@
 {
   "Group": "com.BlockDynastyEconomy",
   "Name": "DynastyEconomy",
-  "Version": "1.2.2",
+  "Version": "1.3.3",
   "Description": "Modern Economy Plugin for Hytale Servers",
   "Authors": [
     {
@@ -17,6 +17,6 @@
     "TheNewEconomy:VaultUnlocked": "*"
   },
   "DisabledByDefault": false,
-  "Main": "com.BlockDynasty.hytale.BlockDynastyEconomy",
+  "Main": "net.blockdynasty.economy.hytale.BlockDynastyEconomy",
   "IncludesAssetPack": true
 }

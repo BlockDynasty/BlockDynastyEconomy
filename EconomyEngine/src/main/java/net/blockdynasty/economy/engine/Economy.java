@@ -20,6 +20,8 @@ import net.blockdynasty.economy.core.Core;
 import net.blockdynasty.economy.core.domain.persistence.entities.IRepository;
 import net.blockdynasty.economy.core.domain.services.courier.Courier;
 import net.blockdynasty.economy.core.domain.services.log.Log;
+import net.blockdynasty.economy.engine.repository.hibernate.Connection;
+import net.blockdynasty.economy.engine.repository.hibernate.ConnectionFactory;
 import net.blockdynasty.economy.libs.abstractions.platform.entity.IPlayer;
 import net.blockdynasty.economy.engine.apiImplement.ApiFactory;
 import net.blockdynasty.economy.engine.configFromChannel.ProxyConfigRequest;
@@ -113,26 +115,12 @@ public class Economy {
 
     private void initDatabase(IConfigurationEngine configuration){
         try{
-            Connection connection = getConnectionDatabase(configuration);
-            repository = new Repository(connection);
+            ConnectionFactory connectionFactory = new ConnectionFactory(configuration);
+            repository = new Repository(connectionFactory.get());
             Console.log("Database connected successfully.");
         }catch (Exception e){
             Console.logError("Error connection database, check your credentials.");
             throw new RuntimeException(e.getMessage());
-        }
-    }
-    private Connection getConnectionDatabase(IConfigurationEngine configuration){
-        switch (configuration.getString("sql.type")){
-            case "mysql":
-                return new ConnectionHibernateMysql(configuration.getString("sql.host"), configuration.getInt("sql.port"), configuration.getString("sql.database"), configuration.getString("sql.username"), configuration.getString("sql.password"));
-            case "mariadb":
-                return new ConnectionHibernateMariaDb(configuration.getString("sql.host"), configuration.getInt("sql.port"), configuration.getString("sql.database"), configuration.getString("sql.username"), configuration.getString("sql.password"));
-            case "h2":
-                return new ConnectionHibernateH2(configuration.getDatabasePath(),configuration.getBoolean("sql.EnableWebEditorSqlServer"));
-            case "sqlite":
-                return new ConnectionHibernateSQLite(configuration.getDatabasePath(),configuration.getBoolean("sql.EnableWebEditorSqlServer"));
-            default:
-                throw new IllegalArgumentException("Unsupported database type: " + configuration.getString("sql.type"));
         }
     }
 

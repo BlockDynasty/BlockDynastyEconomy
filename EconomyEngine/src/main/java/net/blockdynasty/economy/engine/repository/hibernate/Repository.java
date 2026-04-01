@@ -30,7 +30,6 @@ import net.blockdynasty.economy.core.domain.result.ErrorCode;
 import net.blockdynasty.economy.core.domain.result.Result;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.SessionFactory;
-import net.blockdynasty.economy.engine.repository.hibernate.ConnectionHandler.Hibernate.Connection;
 
 import java.util.List;
 import java.util.UUID;

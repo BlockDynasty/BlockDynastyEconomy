@@ -16,6 +16,7 @@
 
 package net.blockdynasty.economy.engine.repository.hibernate.ConnectionHandler.Hibernate;
 
+import net.blockdynasty.economy.engine.repository.hibernate.DbConfig;
 import net.blockdynasty.economy.libs.services.Console;
 import org.h2.tools.Server;
 import org.sqlite.JDBC;
@@ -23,9 +24,9 @@ import java.nio.charset.StandardCharsets;
 
 public class ConnectionHibernateSQLite extends ConnectionHibernate{
     private Server webServer;
-    public ConnectionHibernateSQLite(String dbFilePath,boolean enableServerConsole) {
+    public ConnectionHibernateSQLite(DbConfig dbConfig) {
         super();
-        String url = "jdbc:sqlite:" + dbFilePath + "/database.db";
+        String url = "jdbc:sqlite:" + dbConfig.getDatabasePath() + "/database.db";
         configuration.setProperty("hibernate.hikari.driverClassName", JDBC.class.getName());
         configuration.setProperty("hibernate.hikari.jdbcUrl", url);
         configuration.setProperty("hibernate.hikari.maximumPoolSize", "1");
@@ -35,8 +36,8 @@ public class ConnectionHibernateSQLite extends ConnectionHibernate{
         configuration.setProperty("hibernate.hikari.dataSource.synchronous", "NORMAL");
         this.init();
 
-        if (enableServerConsole) {
-            startServerConsole(dbFilePath);
+        if (dbConfig.isEnableWebEditorSqlServer()) {
+            startServerConsole(dbConfig.getDatabasePath());
         }
     }
 

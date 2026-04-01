@@ -16,6 +16,7 @@
 
 package net.blockdynasty.economy.engine.repository.hibernate.ConnectionHandler.Hibernate;
 
+import net.blockdynasty.economy.engine.repository.hibernate.DbConfig;
 import net.blockdynasty.economy.libs.services.Console;
 import org.h2.tools.Server;
 import org.h2.Driver;
@@ -24,9 +25,9 @@ import java.nio.charset.StandardCharsets;
 public class ConnectionHibernateH2 extends ConnectionHibernate {
     private Server webServer;
 
-    public ConnectionHibernateH2(String dbFilePath,boolean enableServerConsole) {
+    public ConnectionHibernateH2(DbConfig dbConfig) {
         super();
-        String url = "jdbc:h2:file:" + dbFilePath + "/h2Database";
+        String url = "jdbc:h2:file:" + dbConfig.getDatabasePath() + "/h2Database";
         configuration.setProperty("hibernate.hikari.driverClassName", Driver.class.getName());
         configuration.setProperty("hibernate.hikari.jdbcUrl", url);
 
@@ -36,8 +37,8 @@ public class ConnectionHibernateH2 extends ConnectionHibernate {
         configuration.setProperty("hibernate.hikari.poolName", "H2Pool");
         this.init();
 
-        if (enableServerConsole) {
-            startServerConsole(dbFilePath);
+        if (dbConfig.isEnableWebEditorSqlServer()) {
+            startServerConsole(dbConfig.getDatabasePath());
         }
     }
 

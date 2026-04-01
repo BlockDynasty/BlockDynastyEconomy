@@ -16,6 +16,7 @@
 
 package net.blockdynasty.economy.engine.repository.hibernate.ConnectionHandler.Hibernate;
 
+import net.blockdynasty.economy.engine.repository.hibernate.Connection;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import net.blockdynasty.economy.engine.repository.hibernate.Models.AccountDb;

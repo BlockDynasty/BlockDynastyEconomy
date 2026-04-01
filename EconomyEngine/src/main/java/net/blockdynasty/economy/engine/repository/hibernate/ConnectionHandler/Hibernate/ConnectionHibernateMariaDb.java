@@ -16,16 +16,17 @@
 
 package net.blockdynasty.economy.engine.repository.hibernate.ConnectionHandler.Hibernate;
 
+import net.blockdynasty.economy.engine.repository.hibernate.DbConfig;
 import org.mariadb.jdbc.Driver;
 
 public class ConnectionHibernateMariaDb extends ConnectionHibernate {
 
-    public ConnectionHibernateMariaDb(String host, int port, String database, String username, String password) {
+    public ConnectionHibernateMariaDb(DbConfig dbConfig) {
         super();
         configuration.setProperty("hibernate.hikari.dataSourceClassName", Driver.class.getName());
-        configuration.setProperty("hibernate.hikari.dataSource.url", "jdbc:mariadb://" + host + ":" + port + "/" + database);
-        configuration.setProperty("hibernate.hikari.dataSource.user", username);
-        configuration.setProperty("hibernate.hikari.dataSource.password", password);
+        configuration.setProperty("hibernate.hikari.dataSource.url", "jdbc:mariadb://" + dbConfig.getHost() + ":" + dbConfig.getPort() + "/" + dbConfig.getDatabase());
+        configuration.setProperty("hibernate.hikari.dataSource.user", dbConfig.getUsername());
+        configuration.setProperty("hibernate.hikari.dataSource.password", dbConfig.getPassword());
 
         configuration.setProperty("hibernate.hikari.maximumPoolSize", "20");
         configuration.setProperty("hibernate.hikari.minimumIdle", "5");

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.blockdynasty.economy.engine.repository.hibernate.ConnectionHandler.Hibernate;
+package net.blockdynasty.economy.engine.repository.hibernate;
 
 import org.hibernate.SessionFactory;
 

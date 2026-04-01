@@ -40,8 +40,8 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 public class TransactionRepository  implements ITransactions {
-
     private final SessionFactory sessionFactory;
+
     public TransactionRepository(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }

@@ -18,7 +18,7 @@ package repositoryTest.ConnectionHandler;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import net.blockdynasty.economy.engine.repository.hibernate.ConnectionHandler.Hibernate.Connection;
+import net.blockdynasty.economy.engine.repository.hibernate.Connection;
 import net.blockdynasty.economy.engine.repository.hibernate.Models.AccountDb;
 import net.blockdynasty.economy.engine.repository.hibernate.Models.BalanceDb;
 import net.blockdynasty.economy.engine.repository.hibernate.Models.CurrencyDb;

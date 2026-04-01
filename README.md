@@ -6,16 +6,16 @@
 
 ## BlockDynasty-Economy
 
-API for Develpers: https://wiki.blockdynasty.net/Developers/Api/
+API for Develpers: [wiki.blockdynasty.net/Developers/Api](https://wiki.blockdynasty.net/Developers/Api)
 ---
 
-Wiki: https://wiki.blockdynasty.net 
+Wiki: [wiki.blockdynasty.net](https://wiki.blockdynasty.net)
 
-Spigot: https://www.spigotmc.org/resources/dynastyeconomy.129308
+Spigot: [www.spigotmc.org/resources/dynastyeconomy](https://www.spigotmc.org/resources/dynastyeconomy.129308)
 
-Modrinth: https://modrinth.com/plugin/dynastyeconomy
+Modrinth: [modrinth.com/plugin/dynastyeconomy](https://modrinth.com/plugin/dynastyeconomy)
 
-Bukkit: https://dev.bukkit.org/projects/dynastyeconomy
+Bukkit: [dev.bukkit.org/projects/dynastyeconomy](https://dev.bukkit.org/projects/dynastyeconomy)
 
 ### 🗃️ Supported Databases
 - **MySQL**: v8.0.38

@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-package net.blockdynasty.economy.minestom;
+package integrationTest;
 
-import net.blockdynasty.economy.minestom.adapters.EconomySystem;
+import net.blockdynasty.economy.api.DynastyEconomy;
+import net.blockdynasty.economy.api.entity.Account;
+import net.blockdynasty.economy.minestom.EconomySystem;
 //import net.minestom.server.Auth;
+import integrationTest.basicCommands.toggleOp;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
@@ -26,6 +29,7 @@ import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.Block;
 
+import java.util.Optional;
 
 //example main class to start a minestom server with economy system
 public class MainTest {
@@ -43,13 +47,28 @@ public class MainTest {
             event.setSpawningInstance(instanceContainer);
             player.setRespawnPoint(new Pos(0, 42, 0));
         });
-
         minecraftServer.start("0.0.0.0", 25565);
-        //MinecraftServer.getCommandManager().register(new permsCommand()); //test perms command to give basic permissions
         //--------fin basic server setup-------------------------
+
+        //test
+        MinecraftServer.getCommandManager().register(new toggleOp()); //test
 
 
         //--------start economy system setup----------------------
-        EconomySystem.start(true, new PermsServiceDefault()); // <----------Initialize the economy system and this is ready to use!
+        EconomySystem.start(true); // <----------Initialize the economy system and this is ready to use!
+        //EconomySystem.start(true, new PermsServiceDefault()); // <----------Initialize the economy system with custom permissions service and this is ready to use!
+
+
+
+        //if you want you can get economy api and work!
+        Optional<DynastyEconomy> optional = EconomySystem.getApi();
+        if (optional.isPresent()) {
+            DynastyEconomy economy = optional.get();
+            Account account = economy.getAccount("Nullplague");
+            if (account != null) {
+                account.getBalances().forEach(m -> System.out.println( m.getAmount()+ " "+m.getCurrency().getSingular()));
+            }
+            //use economy api
+        }
     }
 }

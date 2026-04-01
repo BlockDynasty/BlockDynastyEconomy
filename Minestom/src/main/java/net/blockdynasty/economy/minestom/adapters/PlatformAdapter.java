@@ -16,7 +16,7 @@
 
 package net.blockdynasty.economy.minestom.adapters;
 
-import net.blockdynasty.economy.minestom.console.Console;
+import net.blockdynasty.economy.minestom.adapters.console.Console;
 import net.blockdynasty.economy.libs.abstractions.platform.IConsole;
 import net.blockdynasty.economy.libs.abstractions.platform.IProxySubscriber;
 import net.blockdynasty.economy.libs.abstractions.platform.recipes.RecipeItem;
@@ -58,12 +58,12 @@ public class PlatformAdapter implements IPlatform {
 
     @Override
     public ItemStackCurrency createItemStackNBT(RecipeItemCurrency recipe) {
-        return new ItemStackAdapter(null);
+        return new ItemStackAdapter(ItemStack.AIR);
     }
 
     @Override
     public ItemStackCurrency createItemBase64(RecipeItemCurrency recipe) {
-        return new ItemStackAdapter(null);
+        return new ItemStackAdapter(ItemStack.AIR);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class PlatformAdapter implements IPlatform {
 
     @Override
     public File getDataFolder() {
-        return new File("BlockDynastyEconomy"); //verificar ruta utilizada por complementos de Minestom
+        return new File("BlockDynastyEconomy");
     }
 
     @Override
@@ -150,7 +150,7 @@ public class PlatformAdapter implements IPlatform {
 
     @Override
     public boolean hasSupportHardCash() {
-        return false;
+        return true;
     }
 
     @Override

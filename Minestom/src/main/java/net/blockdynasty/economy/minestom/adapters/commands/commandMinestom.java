@@ -61,6 +61,7 @@ public class commandMinestom extends Command {
                 command.execute(new PlayerAdapter((Player) sender), new String[]{});
             });
         }
+        setCondition(new PermissionCondition(command.getPermission()));
         List<net.blockdynasty.economy.gui.commands.abstractions.Command> subCommands = command.getSubCommands();
         for (net.blockdynasty.economy.gui.commands.abstractions.Command subCommand : subCommands) {
             addSubcommand(new commandMinestom(subCommand));

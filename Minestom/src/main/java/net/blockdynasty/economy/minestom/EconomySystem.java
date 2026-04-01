@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-package net.blockdynasty.economy.minestom.adapters;
+package net.blockdynasty.economy.minestom;
 
+import net.blockdynasty.economy.api.DynastyEconomy;
 import net.blockdynasty.economy.engine.Economy;
+import net.blockdynasty.economy.minestom.services.PermissionsService;
+import net.blockdynasty.economy.minestom.adapters.PermsService;
+import net.blockdynasty.economy.minestom.adapters.PlatformAdapter;
 import net.blockdynasty.economy.minestom.adapters.commands.Commands;
 import net.blockdynasty.economy.minestom.adapters.events.ClickInventoryEvent;
 import net.blockdynasty.economy.minestom.adapters.events.playerExitEvent;
 import net.blockdynasty.economy.minestom.adapters.events.playerJoinEvent;
+import net.blockdynasty.economy.minestom.services.PermsServiceDefault;
 
-//build economy engine with dependency injection
+import java.util.Optional;
+
 public class EconomySystem {
     private static Economy economy;
 
@@ -32,21 +38,51 @@ public class EconomySystem {
     * @param permissionsService the permissions service implementation for the server to handle permissions players
      *@implNote  PermsServiceDefault class is provided as default implementation
      * **/
-    public static void start(boolean onlineModeServer,PermissionsService permissionsService) {
+    public static void start(boolean onlineModeServer, PermissionsService permissionsService) {
         PermsService.setPermissionsService(permissionsService);
         EconomySystem.economy= Economy.init(new PlatformAdapter(onlineModeServer));
-        playerJoinEvent.register(economy.getPlayerJoinListener());
-        playerExitEvent.register(economy.getPlayerJoinListener());
+        playerJoinEvent.register(Economy.getPlayerJoinListener());
+        playerExitEvent.register(Economy.getPlayerJoinListener());
         Commands.register();
         ClickInventoryEvent.register();
     }
 
+    /**
+     * Start the economy system
+     * @param onlineModeServer whether the server is in online mode or not "AuthMode"
+     *@implNote  PermsServiceDefault class is provided as default implementation
+     * **/
+    public static void start(boolean onlineModeServer) {
+        PermsService.setPermissionsService(new PermsServiceDefault());
+        EconomySystem.economy= Economy.init(new PlatformAdapter(onlineModeServer));
+        playerJoinEvent.register(Economy.getPlayerJoinListener());
+        playerExitEvent.register(Economy.getPlayerJoinListener());
+        Commands.register();
+        ClickInventoryEvent.register();
+    }
+
+    /**
+     * Stop the economy system and save all data
+     * **/
     public static void stop(){
         Economy.shutdown();
     }
 
+    /** Check if the economy system is started
+     *
+     * @return true if the economy system is started, false otherwise
+     */
     public static boolean isStarted(){
         return EconomySystem.economy!=null;
+    }
+
+
+    /**
+     * Get the economy api instance
+     * @return Optional of DynastyEconomy api instance, empty if the economy system is not started
+     * **/
+    public static Optional<DynastyEconomy> getApi(){
+        return Economy.getApi();
     }
 
 }

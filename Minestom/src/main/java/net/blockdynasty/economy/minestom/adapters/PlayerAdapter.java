@@ -21,6 +21,7 @@ import net.blockdynasty.economy.hardcash.domain.entity.player.IEntityHardCash;
 import net.blockdynasty.economy.gui.commands.abstractions.IEntityCommands;
 import net.blockdynasty.economy.gui.gui.components.IEntityGUI;
 import net.blockdynasty.economy.gui.gui.components.IInventory;
+import net.blockdynasty.economy.minestom.services.PermissionsService;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
@@ -36,6 +37,7 @@ import java.util.UUID;
 
 public class PlayerAdapter implements IPlayer {
     private final Player player;
+    private final PermissionsService permsService = PermsService.getPermissionsService();
 
     public PlayerAdapter(Player player) {
         this.player = player;
@@ -48,7 +50,7 @@ public class PlayerAdapter implements IPlayer {
 
     @Override
     public boolean hasPermission(String permission) {
-        return PermsService.getPermissionsService().hasPermission(player, permission);
+        return permsService.hasPermission(player, permission);
     }
 
     @Override
@@ -126,7 +128,7 @@ public class PlayerAdapter implements IPlayer {
 
     @Override
     public ItemStackCurrency takeHandItem() {
-        return null;
+        return new ItemStackAdapter(ItemStack.AIR); //todo implement
     }
 
     @Override

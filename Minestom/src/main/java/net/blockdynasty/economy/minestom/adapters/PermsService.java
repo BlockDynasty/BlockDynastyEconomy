@@ -1,5 +1,7 @@
 package net.blockdynasty.economy.minestom.adapters;
 
+import net.blockdynasty.economy.minestom.services.PermissionsService;
+
 public class PermsService {
     private static PermissionsService permsService;
 

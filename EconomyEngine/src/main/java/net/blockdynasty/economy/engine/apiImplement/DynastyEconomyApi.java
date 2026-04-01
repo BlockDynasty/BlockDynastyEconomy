@@ -494,7 +494,11 @@ class DynastyEconomyApi implements DynastyEconomy {
 
     @Override
     public Account getAccount(UUID uuid) {
-        net.blockdynasty.economy.core.domain.entities.account.Account account = getAccountByUUIDUseCase.execute(uuid).getValue();
+        Result<net.blockdynasty.economy.core.domain.entities.account.Account> result = getAccountByUUIDUseCase.execute(uuid);
+        if (!result.isSuccess()) {
+            return null;
+        }
+        net.blockdynasty.economy.core.domain.entities.account.Account account = result.getValue();
         return new Account(
                 account.getNickname(),
                 account.getUuid(),
@@ -521,7 +525,11 @@ class DynastyEconomyApi implements DynastyEconomy {
 
     @Override
     public Account getAccount(String name) {
-        net.blockdynasty.economy.core.domain.entities.account.Account account = getAccountByNameUseCase.execute(name).getValue();
+        Result<net.blockdynasty.economy.core.domain.entities.account.Account> result = getAccountByNameUseCase.execute(name);
+        if (!result.isSuccess()) {
+            return null;
+        }
+        net.blockdynasty.economy.core.domain.entities.account.Account account = result.getValue();
         return new Account(
                 account.getNickname(),
                 account.getUuid(),

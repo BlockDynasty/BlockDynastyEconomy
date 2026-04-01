@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.blockdynasty.economy.minestom.console;
+package net.blockdynasty.economy.minestom.adapters.console;
 
 import net.blockdynasty.economy.libs.abstractions.platform.IConsole;
 import net.minestom.server.MinecraftServer;

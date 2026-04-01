@@ -135,6 +135,10 @@
                                     <pattern>org.hibernate</pattern>
                                     <shadedPattern>net.blockdynasty.economy.engine.shaded.hibernate</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>jakarta.persistence</pattern>
+                                    <shadedPattern>net.blockdynasty.economy.engine.shaded.jakarta</shadedPattern>
+                               </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -269,6 +273,13 @@
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.7.2</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.1.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

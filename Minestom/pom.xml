@@ -5,8 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.blockdynasty</groupId>
-    <artifactId>BlockDynastyEconomy-Minestom</artifactId>
+    <artifactId>Minestom</artifactId>
     <version>1.0</version>
+    <packaging>pom</packaging>
+
+    <name>Minestom Economy Framework</name>
+    <description>Economy Engine for Minestom Servers</description>
+    <url>https://github.com/BlockDynasty/BlockDynastyEconomy</url>
 
     <licenses>
         <license>
@@ -28,51 +33,23 @@
         <developerConnection>scm:git:ssh://github.com/BlockDynasty/BlockDynastyEconomy.git</developerConnection>
         <url>https://github.com/BlockDynasty/BlockDynastyEconomy</url>
     </scm>
+    <distributionManagement>
+        <repository>
+            <id>central</id>
+            <url>https://central.sonatype.com/api/v1/publisher</url>
+        </repository>
+    </distributionManagement>
+
+    <modules>
+        <module>Base-2025.07.08-1.21.5</module>
+        <module>Minestom-2025.07.08-1.21.5</module>
+        <module>Minestom-2026.03.25-1.21.11</module>
+    </modules>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <artifactSet>
-                                <includes>
-                                    <include>net.blockdynasty:EconomyEngine</include>
-                                </includes>
-                            </artifactSet>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-    <dependencies>
-        <!-- https://mvnrepository.com/artifact/net.minestom/minestom -->
-        <dependency>
-            <groupId>net.minestom</groupId>
-            <artifactId>minestom</artifactId>
-            <version>2025.07.08-1.21.5</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>net.blockdynasty</groupId>
-            <artifactId>EconomyEngine</artifactId>
-            <version>1.0</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 </project>

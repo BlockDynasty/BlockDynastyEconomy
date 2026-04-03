@@ -2,7 +2,8 @@
 [![Licencia](https://img.shields.io/badge/License-Apache%20v2.0-blue.svg)](https://github.com/BlockDynasty/BlockDynastyEconomy/blob/main/LICENSE)
 [![Version](https://img.shields.io/github/v/release/BlockDynasty/BlockDynastyEconomy?color=blue&label=Version)](https://github.com/BlockDynasty/BlockDynastyEconomy/releases/latest)
 ![Status](https://img.shields.io/badge/Status-In%20Progress-yellow)
-![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)
+[![Version](https://img.shields.io/maven-central/v/net.blockdynasty/minestom-2026.03.25-1.21.11?color=007ec6&label=Maven%20Central&logo=apachemaven&logoColor=white)](https://central.sonatype.com/artifact/net.blockdynasty/minestom-2026.03.25-1.21.11)
+
 
 ## BlockDynasty-Economy
 

@@ -47,8 +47,31 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>25</release>
+                    <source>25</source>
+                    <target>25</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.6.0</version>
+                <dependencies>
+                    <!-- Force the latest ASM version for newer Java support -->
+                    <dependency>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm</artifactId>
+                        <version>9.9.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm-commons</artifactId>
+                        <version>9.7</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -57,6 +80,8 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <minimizeJar>false</minimizeJar>
                             <filters>
                                 <filter>
                                     <artifact>*:*</artifact>
@@ -67,18 +92,43 @@
                                     </excludes>
                                 </filter>
                             </filters>
-                            <artifactSet>
-                                <includes>
-                                    <include>net.blockdynasty:EconomyEngine</include>
-                                    <include>org.blockdynasty.libs:hyui</include>
-                                </includes>
-                            </artifactSet>
+
+                            <relocations>
+                                <relocation>
+                                    <pattern>au.ellie.hyui</pattern>
+                                    <shadedPattern>net.blockdynasty.economy.hytale.shaded.hyui</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Multi-Release>true</Multi-Release>
+                                    </manifestEntries>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                            </transformers>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <!-- Hytale release repository -->
+        <repository>
+            <id>hytale-release</id>
+            <url>https://maven.hytale.com/release</url>
+        </repository>
+        <repository>
+            <id>codemc-creatorfromhell</id>
+            <url>https://repo.codemc.io/repository/creatorfromhell/</url>
+        </repository>
+        <repository>
+            <id>cursemaven</id>
+            <url>https://www.cursemaven.com</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -93,26 +143,25 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
-            <groupId>com.hypixel</groupId>
-            <artifactId>hytale-sdk</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libraries/HytaleServer.jar</systemPath>
+            <groupId>com.hypixel.hytale</groupId>
+            <artifactId>Server</artifactId>
+            <version>2026.03.26-89796e57b</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>com.vaultUlocked</groupId>
-            <artifactId>VaultUnlockedAPI</artifactId>
-            <version>2.18.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libraries/VaultUnlocked-Hytale-2.18.0.jar</systemPath>
+            <groupId>net.cfh.vault</groupId>
+            <artifactId>VaultUnlocked</artifactId>
+            <version>2.18.3</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.blockdynasty.libs</groupId>
-            <artifactId>hyui</artifactId>
-            <version>0.3.0</version>
+            <groupId>curse.maven</groupId>
+            <artifactId>hyui-1431415</artifactId>
+            <version>7820303</version>
             <scope>compile</scope>
         </dependency>
 

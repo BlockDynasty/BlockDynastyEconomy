@@ -17,9 +17,10 @@ public class SchedulerAdapter implements IScheduler {
     @Override
     public void runAsync(ContextualTask contextualTask) {
 
-        //contextualTask.getRunnable().run();
-        CompletableFuture.runAsync(contextualTask.getRunnable());
+        contextualTask.getRunnable().run();
+        //CompletableFuture.runAsync(contextualTask.getRunnable());
         //HytaleServer.SCHEDULED_EXECUTOR.submit(contextualTask.getRunnable());
+
     }
 
     @Override

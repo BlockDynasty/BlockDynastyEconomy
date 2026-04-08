@@ -4,18 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>net.blockdynasty</groupId>
-        <artifactId>Minestom</artifactId>
-        <version>1.0</version>
-    </parent>
-
     <name>Minestom Economy Framework</name>
     <description>Economy Engine for Minestom Servers</description>
     <url>https://github.com/BlockDynasty/BlockDynastyEconomy</url>
     <groupId>net.blockdynasty</groupId>
     <artifactId>minestom-2026.03.25-1.21.11</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <licenses>

@@ -31,8 +31,7 @@ public class Version {
     public static final boolean hasMojangAuthLib = JavaUtil.classExists("com.mojang.authlib.GameProfile") && JavaUtil.classExists("com.mojang.authlib.properties.Property");
     public static final boolean hasSupportHardCash = isHigherThan("1.8.7");
 
-    //this dependency is critical, because the library AnvilGUI works directly with NMS code.
-    private static final boolean hasSupportAnvilGUI = !isMohist() && !isHigherThan("1.21.11");
+    private static final boolean hasSupportAnvilGUI = !isMohist() && !isHigherThan("26.1");
 
     public static boolean hasSupportHardCash() {
         return hasSupportHardCash;
@@ -89,12 +88,12 @@ public class Version {
     }
 
     public static boolean isHigherThan(String version) {
-        String currentClean = currentVersion.split("-")[0]; // Remove any suffixes like "-R0.1-SNAPSHOT"
+        String currentClean = extractVersionNumbers(currentVersion);
+        String compareClean = extractVersionNumbers(version);
 
         String[] currentParts = currentClean.split("\\.");
-        String[] compareParts = version.split("\\.");
+        String[] compareParts = compareClean.split("\\.");
 
-        // Compare major version
         int length = Math.max(currentParts.length, compareParts.length);
         for (int i = 0; i < length; i++) {
             int currentNum = i < currentParts.length ? Integer.parseInt(currentParts[i]) : 0;
@@ -105,10 +104,12 @@ public class Version {
             } else if (currentNum < compareNum) {
                 return false;
             }
-            // If equal, continue to next version component
         }
 
-        // All components are equal
         return false;
+    }
+
+    private static String extractVersionNumbers(String versionString) {
+        return versionString.replaceAll("([0-9]+(\\.[0-9]+)*).*", "$1");
     }
 }

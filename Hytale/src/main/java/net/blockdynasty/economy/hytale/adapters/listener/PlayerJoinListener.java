@@ -1,6 +1,5 @@
 package net.blockdynasty.economy.hytale.adapters.listener;
 
-
 import net.blockdynasty.economy.hytale.adapters.HytaleAdapter;
 import net.blockdynasty.economy.hytale.adapters.PlayerAdapter;
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;

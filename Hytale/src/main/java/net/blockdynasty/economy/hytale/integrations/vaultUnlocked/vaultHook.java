@@ -2,6 +2,7 @@ package net.blockdynasty.economy.hytale.integrations.vaultUnlocked;
 
 import com.sun.istack.NotNull;
 import net.blockdynasty.economy.api.DynastyEconomy;
+import net.cfh.vault.VaultUnlockedServicesManager;
 import net.milkbowl.vault2.economy.AccountPermission;
 import net.milkbowl.vault2.economy.Economy;
 import net.milkbowl.vault2.economy.EconomyResponse;
@@ -17,6 +18,11 @@ public class vaultHook implements Economy {
 
     public vaultHook(DynastyEconomy api) {
         this.api = api;
+    }
+
+    public static void hook(DynastyEconomy api){
+        vaultHook hook = new vaultHook(api);
+        VaultUnlockedServicesManager.get().economy(hook);
     }
 
     @Override

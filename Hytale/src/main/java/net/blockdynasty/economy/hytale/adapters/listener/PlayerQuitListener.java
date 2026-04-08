@@ -1,5 +1,6 @@
 package net.blockdynasty.economy.hytale.adapters.listener;
 
+import net.blockdynasty.economy.hytale.adapters.Gui.HudService;
 import net.blockdynasty.economy.hytale.adapters.HytaleAdapter;
 import net.blockdynasty.economy.hytale.adapters.PlayerAdapter;
 import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
@@ -15,5 +16,7 @@ public class PlayerQuitListener {
     public void onPlayerQuit(PlayerDisconnectEvent event) {
         HytaleAdapter.disconnectPlayer(event.getPlayerRef());
         playerJoin.offLoadPlayerAccount(new PlayerAdapter(event.getPlayerRef()));
+
+        HudService.removeHud(event.getPlayerRef());
     }
 }

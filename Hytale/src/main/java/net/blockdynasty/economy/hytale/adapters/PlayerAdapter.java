@@ -1,10 +1,8 @@
 package net.blockdynasty.economy.hytale.adapters;
 
-import au.ellie.hyui.builders.*;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.SoundCategory;
-import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.protocol.packets.interface_.Page;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
@@ -19,16 +17,12 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import net.blockdynasty.economy.engine.platform.IPlayer;
 import net.blockdynasty.economy.gui.commands.abstractions.IEntityCommands;
-import net.blockdynasty.economy.gui.gui.GUISystem;
-import net.blockdynasty.economy.gui.gui.components.ClickType;
 import net.blockdynasty.economy.gui.gui.components.IEntityGUI;
 import net.blockdynasty.economy.gui.gui.components.IInventory;
 import net.blockdynasty.economy.hardcash.domain.entity.currency.ItemStackCurrency;
 import net.blockdynasty.economy.hardcash.domain.entity.player.IEntityHardCash;
-import net.blockdynasty.economy.libs.abstractions.platform.recipes.RecipeInventory;
-import net.blockdynasty.economy.libs.abstractions.platform.recipes.RecipeItem;
+import net.blockdynasty.economy.hytale.adapters.Gui.Hyui;
 
-import java.util.List;
 import java.util.UUID;
 
 public class PlayerAdapter implements IPlayer {
@@ -185,51 +179,7 @@ public class PlayerAdapter implements IPlayer {
     //open GUI la cual puede ser otra cosa que no sea un inventario
     @Override
     public void openInventory(IInventory iInventory) {
-        InventoryAdapter inventory = (InventoryAdapter) iInventory.getHandle();
-        RecipeInventory recipeInventory = inventory.getRecipeInventory();
-
-
-        PageBuilder pageBuilder = new PageBuilder(playerRef);
-        GroupBuilder groupBuilder = new GroupBuilder();
-        groupBuilder.withId("ParentGroup")
-                .withAnchor(new HyUIAnchor().setWidth(800).setHeight(500))
-                .withLayoutMode("TopScrolling")
-                .inside("#Content")
-                .addChild(LabelBuilder.label().withText(recipeInventory.getTitle()));
-
-        ItemStackAdapter[] buttons = inventory.getItems();
-        List<ItemStackAdapter> itemList =  java.util.Arrays.asList(buttons);
-        itemList.forEach(item -> {
-           RecipeItem recipeButton =  item.getRecipeItem();
-           if(!recipeButton.getName().isEmpty()){
-               String name =MessageAdapter.clearColorCodes(recipeButton.getName());
-               String[] lore = recipeButton.getLore();
-
-               ButtonBuilder buttonBuilder = ButtonBuilder.textButton();
-               buttonBuilder
-                       .withId("Button_" + name)
-                       .withText(name)
-                       .withTooltipTextSpan(MessageAdapter.formatVanillaMessage(lore))
-                       .withStyle(new HyUIStyle()
-                               .setAlignment("center")
-                               .setFontSize(10)
-                               .setTextColor("#FFFFFF")
-                       )
-                       .addEventListener(CustomUIEventBindingType.RightClicking, (ignored) -> {
-                           //playerRef.sendMessage(Message.raw("Button " + name + " right-clicked!"));
-                           GUISystem.handleClick(this, ClickType.RIGHT, itemList.indexOf(item));
-                       })
-                       .addEventListener(CustomUIEventBindingType.Activating, (ignored) -> {
-                           GUISystem.handleClick(this, ClickType.LEFT, itemList.indexOf(item));
-                          // playerRef.sendMessage(Message.raw("Button " + name + " clicked! slot:"+ itemList.indexOf(item)));
-                       });
-               groupBuilder.addChild(buttonBuilder);
-           }
-
-        });
-        pageBuilder.addElement(groupBuilder);
-        pageBuilder.open(playerRef.getReference().getStore());
-        
+        Hyui.open(iInventory, playerRef, this);
     }
 
     @Override

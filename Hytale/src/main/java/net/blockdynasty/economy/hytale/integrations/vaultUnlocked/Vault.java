@@ -4,8 +4,6 @@ import net.blockdynasty.economy.api.DynastyEconomy;
 import net.blockdynasty.economy.hytale.utils.JavaUtil;
 import net.blockdynasty.economy.engine.Economy;
 import net.blockdynasty.economy.libs.services.Console;
-import net.cfh.vault.VaultUnlockedServicesManager;
-
 
 import java.util.Optional;
 
@@ -17,7 +15,7 @@ public class Vault {
             return;
         }
         if(JavaUtil.classExists("net.cfh.vault.VaultUnlockedServicesManager")){
-            VaultUnlockedServicesManager.get().economy(new vaultHook(api.get()));
+            vaultHook.hook(api.get());
             Console.log("Vault Unlocked Hook successful");
         }else {Console.log("Vault Unlocked not detected");}
     }

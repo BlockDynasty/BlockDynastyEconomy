@@ -30,7 +30,8 @@ public class Formatter {
     public String format(String placeholder, String[] parts, Money money) {
         ICurrency currency = money.getCurrency();
         BigDecimal amountBD = money.getAmount();
-        boolean isFormatted = placeholder.contains("_formatted");
+
+        boolean isFormatted = parts.length > 2 && parts[2].equalsIgnoreCase("formatted");
         Locale locale = getLocaleFromPlaceholder(parts);
         boolean hasLocale = locale != null;
         locale = hasLocale ? locale : Locale.US;
@@ -56,9 +57,11 @@ public class Formatter {
     }
 
     private Locale getLocaleFromPlaceholder(String[] parts) {
-        if (parts.length >= 3) {
-            String possibleLocale = parts[parts.length - 1].toLowerCase();
-            return LOCALE_MAP.get(possibleLocale);
+        if (parts.length == 4 && parts[2].equalsIgnoreCase("formatted")) {
+            return LOCALE_MAP.get(parts[3].toLowerCase());
+        }
+        if (parts.length == 3 && !parts[2].equalsIgnoreCase("formatted")) {
+            return LOCALE_MAP.get(parts[2].toLowerCase());
         }
         return null;
     }

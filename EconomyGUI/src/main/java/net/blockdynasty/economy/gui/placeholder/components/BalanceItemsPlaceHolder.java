@@ -5,7 +5,6 @@ import net.blockdynasty.economy.hardcash.aplication.useCase.HardCashUseCaseFacto
 
 import java.util.UUID;
 
-//todo: muestra el balance basado en items solamente de su inventario
 public class BalanceItemsPlaceHolder {
     private final Formatter formatter;
 

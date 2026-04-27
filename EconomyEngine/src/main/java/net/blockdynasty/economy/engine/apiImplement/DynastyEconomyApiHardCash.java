@@ -1,6 +1,7 @@
 package net.blockdynasty.economy.engine.apiImplement;
 
 import net.blockdynasty.economy.core.aplication.useCase.UseCaseFactory;
+import net.blockdynasty.economy.core.domain.result.Result;
 import net.blockdynasty.economy.core.domain.services.log.Log;
 import net.blockdynasty.economy.hardcash.aplication.useCase.HardCashUseCaseFactory;
 import net.blockdynasty.economy.hardcash.aplication.useCase.items.balance.IGetItemBalanceCurrencyDefaultUseCase;
@@ -32,8 +33,13 @@ class DynastyEconomyApiHardCash extends DynastyEconomyApi{
         BigDecimal filteredAmount = amount.setScale(2, RoundingMode.HALF_UP);
         BigDecimal itemsNeeded = filteredAmount.setScale(0, RoundingMode.CEILING);
 
-        int itemsAvailable = getItemsBalanceUseCase.execute(uuid);
-        BigDecimal amountToMove = itemsNeeded.min(BigDecimal.valueOf(itemsAvailable));
+        BigDecimal itemsAvailable = BigDecimal.ZERO;
+        Result<net.blockdynasty.economy.core.domain.entities.balance.Money> result = getItemsBalanceUseCase.execute(uuid);
+        if (result.isSuccess()) {
+            itemsAvailable = result.getValue().getAmount();
+        }
+
+        BigDecimal amountToMove = itemsNeeded.min(itemsAvailable);
 
         if (amountToMove.compareTo(BigDecimal.ZERO) > 0) {
             this.depositItemUseCase.execute(uuid, amountToMove);
@@ -46,8 +52,13 @@ class DynastyEconomyApiHardCash extends DynastyEconomyApi{
         BigDecimal filteredAmount = amount.setScale(2, RoundingMode.HALF_UP);
         BigDecimal itemsNeeded = filteredAmount.setScale(0, RoundingMode.CEILING);
 
-        int itemsAvailable = getItemsBalanceUseCase.execute(name);
-        BigDecimal amountToMove = itemsNeeded.min(BigDecimal.valueOf(itemsAvailable));
+        BigDecimal itemsAvailable = BigDecimal.ZERO;
+        Result<net.blockdynasty.economy.core.domain.entities.balance.Money> result = getItemsBalanceUseCase.execute(name);
+        if (result.isSuccess()) {
+            itemsAvailable = result.getValue().getAmount();
+        }
+
+        BigDecimal amountToMove = itemsNeeded.min(itemsAvailable);
 
         if (amountToMove.compareTo(BigDecimal.ZERO) > 0) {
             this.depositItemUseCase.execute(name, amountToMove);
@@ -57,17 +68,17 @@ class DynastyEconomyApiHardCash extends DynastyEconomyApi{
 
     @Override
     public BigDecimal getBalance(UUID uuid){
-        int inv = getItemsBalanceUseCase.execute(uuid);
+        Result<net.blockdynasty.economy.core.domain.entities.balance.Money> result = getItemsBalanceUseCase.execute(uuid);
         BigDecimal balance = super.getBalance(uuid);
-        if (inv != -1) return balance.add(BigDecimal.valueOf(inv));
+        if (result.isSuccess()) return balance.add(result.getValue().getAmount());
         return balance;
     }
 
     @Override
     public BigDecimal getBalance(String name){
-        int inv = getItemsBalanceUseCase.execute(name);
+        Result<net.blockdynasty.economy.core.domain.entities.balance.Money> result = getItemsBalanceUseCase.execute(name);
         BigDecimal balance = super.getBalance(name);
-        if (inv != -1) return balance.add(BigDecimal.valueOf(inv));
+        if (result.isSuccess()) return balance.add(result.getValue().getAmount());
         return balance;
     }
 

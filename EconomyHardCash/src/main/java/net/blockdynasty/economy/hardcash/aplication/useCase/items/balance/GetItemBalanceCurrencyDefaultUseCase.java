@@ -1,7 +1,9 @@
 package net.blockdynasty.economy.hardcash.aplication.useCase.items.balance;
 
 import net.blockdynasty.economy.core.aplication.useCase.currency.SearchCurrencyUseCase;
+import net.blockdynasty.economy.core.domain.entities.balance.Money;
 import net.blockdynasty.economy.core.domain.entities.currency.ICurrency;
+import net.blockdynasty.economy.core.domain.result.ErrorCode;
 import net.blockdynasty.economy.core.domain.result.Result;
 import net.blockdynasty.economy.hardcash.aplication.useCase.items.service.CacheCurrencyItems;
 import net.blockdynasty.economy.hardcash.domain.entity.platform.HardCashCreator;
@@ -20,30 +22,30 @@ public class GetItemBalanceCurrencyDefaultUseCase extends GetItemsBalanceUseCase
     }
 
     @Override
-    public int execute(String playerName) {
+    public Result<Money> execute(String playerName) {
         Result<ICurrency> currency  = searchCurrencyUseCase.getDefaultCurrency();
         if (!currency.isSuccess()) {
-            return -1;
+            return Result.failure("currency not found", ErrorCode.CURRENCY_NOT_FOUND);
         }
 
         IEntityHardCash player = platform.getPlayer(playerName);
         if (player == null) {
-            return -1;
+            return Result.failure("Player not found", ErrorCode.ACCOUNT_NOT_FOUND);
         }
 
         return super.execute(player, currency.getValue());
     }
 
     @Override
-    public int execute(UUID playerUUID) {
+    public Result<Money> execute(UUID playerUUID) {
         Result<ICurrency> currency  = searchCurrencyUseCase.getDefaultCurrency();
         if (!currency.isSuccess()) {
-            return -1;
+            return Result.failure("currency not found", ErrorCode.CURRENCY_NOT_FOUND);
         }
 
         IEntityHardCash player = platform.getPlayerByUUID(playerUUID);
         if (player == null) {
-            return -1;
+            return Result.failure("Player not found", ErrorCode.ACCOUNT_NOT_FOUND);
         }
 
         return super.execute(player, currency.getValue());

@@ -17,7 +17,9 @@
 package net.blockdynasty.economy.hardcash.aplication.useCase.items.balance;
 
 import net.blockdynasty.economy.core.aplication.useCase.currency.SearchCurrencyUseCase;
+import net.blockdynasty.economy.core.domain.entities.balance.Money;
 import net.blockdynasty.economy.core.domain.entities.currency.ICurrency;
+import net.blockdynasty.economy.core.domain.result.ErrorCode;
 import net.blockdynasty.economy.core.domain.result.Result;
 import net.blockdynasty.economy.hardcash.aplication.useCase.items.service.ItemBase64Creator;
 import net.blockdynasty.economy.hardcash.domain.entity.currency.ItemStackCurrency;
@@ -26,6 +28,7 @@ import net.blockdynasty.economy.hardcash.domain.entity.player.IEntityHardCash;
 import net.blockdynasty.economy.hardcash.aplication.useCase.items.service.CacheCurrencyItems;
 import net.blockdynasty.economy.hardcash.domain.service.ItemCreator;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class GetItemsBalanceUseCase implements IGetItemsBalanceUseCase {
@@ -42,33 +45,33 @@ public class GetItemsBalanceUseCase implements IGetItemsBalanceUseCase {
     }
 
     @Override
-    public int execute(IEntityHardCash player, ICurrency currency) {
+    public Result<Money> execute(IEntityHardCash player, ICurrency currency) {
         if (!currency.isPhysicalItemSupported()){
-            return -1;
+             return Result.failure("Not Physical support", ErrorCode.CURRENCY_NOT_FOUND);
         }
 
         if (currency.getBase64Item() == null || currency.getBase64Item().isEmpty()) {
-            return -1;
+             return Result.failure("Currency not found", ErrorCode.CURRENCY_NOT_FOUND);
         }
         CacheCurrencyItems.Currencywrapper wrapper = cacheCurrencyItems.getItem(currency.getUuid());
         if (wrapper == null) {
-            return -1;
+            return Result.failure("Currency not found", ErrorCode.CURRENCY_NOT_FOUND);
         }
         ItemStackCurrency itemCurrency = wrapper.getItem();
-        if (itemCurrency.isNull()) return -1;
-        return player.countItems(itemCurrency);
+        if (itemCurrency.isNull()) return Result.failure("Currency not found", ErrorCode.CURRENCY_NOT_FOUND);
+        return Result.success(new Money(currency, BigDecimal.valueOf(player.countItems(itemCurrency))));
     }
 
     @Override
-    public int execute(String playerName, String currencyName) {
+    public Result<Money> execute(String playerName, String currencyName) {
         IEntityHardCash player = this.platform.getPlayer(playerName);
         if (player == null) {
-            return -1;
+            return Result.failure("Player not found", ErrorCode.ACCOUNT_NOT_FOUND);
         }
 
         Result<ICurrency> currencyResult = searchCurrencyUseCase.getCurrency(currencyName);
         if (!currencyResult.isSuccess()) {
-            return -1;
+            return Result.failure("Currency not found", ErrorCode.CURRENCY_NOT_FOUND);
         }
 
 
@@ -76,15 +79,15 @@ public class GetItemsBalanceUseCase implements IGetItemsBalanceUseCase {
     }
 
     @Override
-    public int execute(UUID playerUuid, String currencyName) {
+    public Result<Money> execute(UUID playerUuid, String currencyName) {
         IEntityHardCash player = this.platform.getPlayerByUUID(playerUuid);
         if (player == null) {
-            return -1;
+            return Result.failure("Player not found", ErrorCode.ACCOUNT_NOT_FOUND);
         }
 
         Result<ICurrency> currencyResult = searchCurrencyUseCase.getCurrency(currencyName);
         if (!currencyResult.isSuccess()) {
-            return -1;
+            return Result.failure("Currency not found", ErrorCode.CURRENCY_NOT_FOUND);
         }
 
         return execute(player, currencyResult.getValue());

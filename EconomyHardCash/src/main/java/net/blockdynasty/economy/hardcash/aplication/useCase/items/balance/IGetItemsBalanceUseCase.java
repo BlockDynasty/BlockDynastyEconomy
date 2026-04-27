@@ -16,14 +16,16 @@
 
 package net.blockdynasty.economy.hardcash.aplication.useCase.items.balance;
 
+import net.blockdynasty.economy.core.domain.entities.balance.Money;
 import net.blockdynasty.economy.core.domain.entities.currency.ICurrency;
+import net.blockdynasty.economy.core.domain.result.Result;
 import net.blockdynasty.economy.hardcash.domain.entity.player.IEntityHardCash;
 
 import java.util.UUID;
 
 public interface IGetItemsBalanceUseCase {
 
-    int execute(IEntityHardCash player, ICurrency currencyName);
-    int execute(String playerName, String currencyName);
-    int execute(UUID playerUuid, String currencyName);
+    Result<Money> execute(IEntityHardCash player, ICurrency currencyName);
+    Result<Money> execute(String playerName, String currencyName);
+    Result<Money> execute(UUID playerUuid, String currencyName);
 }

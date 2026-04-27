@@ -99,8 +99,9 @@ public class AccountBalance extends PaginatedPanel<Money> {
     }
     private String getItemBalance(IEntityGUI sender, ICurrency currency) {
         if (!currency.isPhysicalItemSupported()) return "";
-        int cant= getItemsBalanceUseCase.execute(sender.asEntityHardCash(), currency);
-        if (cant == -1 ) return "";
+        Result<Money> result= getItemsBalanceUseCase.execute(sender.asEntityHardCash(), currency);
+        if (!result.isSuccess() ) return "";
+        int cant = result.getValue().getAmount().intValue();
         return ChatColor.stringValueOf(Colors.WHITE)+"Inventory: "+ ChatColor.stringValueOf(currency.getColor())+cant;
     }
 

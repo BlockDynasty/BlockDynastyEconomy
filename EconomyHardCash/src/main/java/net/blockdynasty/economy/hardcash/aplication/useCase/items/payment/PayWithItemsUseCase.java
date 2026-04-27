@@ -19,6 +19,7 @@ package net.blockdynasty.economy.hardcash.aplication.useCase.items.payment;
 import net.blockdynasty.economy.core.aplication.useCase.currency.SearchCurrencyUseCase;
 import net.blockdynasty.economy.core.aplication.useCase.transaction.interfaces.IDepositUseCase;
 import net.blockdynasty.economy.core.aplication.useCase.transaction.interfaces.IPayUseCase;
+import net.blockdynasty.economy.core.domain.entities.balance.Money;
 import net.blockdynasty.economy.core.domain.entities.currency.ICurrency;
 import net.blockdynasty.economy.core.domain.events.Context;
 import net.blockdynasty.economy.core.domain.result.Result;
@@ -73,8 +74,9 @@ public class PayWithItemsUseCase implements IPayWithItemsUseCase{
                     player.sendMessage("The amount of items must be greater than zero.");
                     return;
                 }
-                int playerItemsBalance = getItemsBalanceUseCase.execute(player, currency);
-                if(playerItemsBalance == -1)return;
+                Result<Money> resultBalance = getItemsBalanceUseCase.execute(player, currency);
+                if(!resultBalance.isSuccess())return;
+                int playerItemsBalance = resultBalance.getValue().getAmount().intValue();
                 if (playerItemsBalance < cantItems) {
                     player.sendMessage("You don't have enough items to make the payment.");
                     return;

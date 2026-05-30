@@ -44,6 +44,19 @@ public interface IYamlConfig {
     Map<Object,Object> loadFile(File fileConfig, String templatePath);
 
     /**
+     * Loads the content of an existing file without requiring a bundled template resource.
+     * Use this for user-created files that do not have a matching classpath resource.
+     * Optionally, missing keys can be filled from a fallback template resource if provided.
+     *
+     * @param fileConfig   The file to be loaded.
+     * @param fallbackTemplatePath The classpath path to a fallback template resource used to fill
+     *                             missing keys, or {@code null} to skip key-filling entirely.
+     * @return A Map containing the content of the loaded file, with any missing keys filled from
+     *         the fallback template when one is provided.
+     */
+    Map<Object,Object> loadFileRaw(File fileConfig, String fallbackTemplatePath);
+
+    /**
      * Checks if the current configuration needs to be updated based on the template configuration.
      * new keys in the template that are missing in the current configuration will trigger an update.
      * @param currentConfig The current configuration to be checked.

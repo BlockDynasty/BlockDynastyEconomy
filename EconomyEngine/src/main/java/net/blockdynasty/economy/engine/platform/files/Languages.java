@@ -29,7 +29,7 @@ import java.util.Objects;
 public class Languages extends YamlConfig {
     private final IConfiguration config;
     private final String languagePath = "/languages";
-    private String[] languagesFiles = {"EN.yaml", "ES.yaml","RU.yaml","ZH.yaml","DE.yaml","FR.yaml","IT.yaml","JA.yaml"};
+    private String[] languagesFiles = {"EN.yaml", "ES.yaml","RU.yaml","ZH.yaml","DE.yaml","FR.yaml","IT.yaml","JA.yaml","TR.yaml"};
     //string nombre EN, ES, etc y File objeto File
     private Map<String,File> languageFileMap = new HashMap<>();
     private static Map<Object, Object> mensajes=new HashMap<>();

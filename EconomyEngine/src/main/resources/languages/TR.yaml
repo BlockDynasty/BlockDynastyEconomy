@@ -1,0 +1,241 @@
+prefix: "{color}[Banka] "
+
+#Events messages:
+pay1: "{prefix}{color}{currency}{color} tutarını {playerName} adlı oyuncuya ödediniz."
+pay2: "{prefix}{color}{playerName} adlı oyuncudan {currency}{color} aldınız."
+
+transfer1: "{prefix}{color}{currency}{color} tutarını {playerName} adlı oyuncuya transfer ettiniz."
+transfer2: "{prefix}{color}{playerName} adlı oyuncudan {currency} {color} aldınız."
+
+exchange: "{prefix}{color}{fromCurrency}{color} tutarını {toCurrency}{color} ile değiştirdiniz."
+
+trade1: "{prefix}{color}{fromCurrency}{color} tutarını {playerName}{color} adlı oyuncuyla {toCurrency}{color} karşılığında takas ettiniz."
+trade2: "{prefix}{color}{playerName}{color} adlı oyuncudan {toCurrency}{color} karşılığında {fromCurrency}{color} aldınız."
+
+deposit: "{prefix}{color}{currency}{color} para yatırma işlemi gerçekleştirildi."
+
+withdraw: "{prefix}{color}{currency}{color} para çekme işlemi gerçekleştirildi."
+
+set: "{prefix}{color}Bakiyeniz {currency}{color} olarak ayarlandı."
+
+offerCreated1: "{prefix}{color}{playerName} adlı oyuncuya {fromCurrency}{color} karşılığında {toCurrency}{color} teklifi gönderildi."
+offerCreated2: "{prefix}{color}{playerName} adlı oyuncudan {fromCurrency}{color} karşılığında {toCurrency}{color} teklifi aldınız."
+
+offerCanceled1: "{prefix}{color}{playerName} adlı oyuncudan gelen teklif iptal edildi."
+offerCanceled2: "{prefix}{color}{playerName} adlı oyuncuya gönderilen teklif iptal edildi."
+
+offerExpired1: "{prefix}{color}{playerName} adlı oyuncudan gelen teklifin süresi doldu."
+offerExpired2: "{prefix}{color}{playerName} adlı oyuncuya gönderilen teklifin süresi doldu."
+
+
+#GUI messages
+#user panels
+listPlayersOnline:
+  title: "Oyuncu Seçin"
+  button1:
+    nameItem: "{color}Ödeme Yapılacak Oyuncuyu Seçin"
+    lore: "{color}Ödeme yapmak istediğiniz oyuncuyu seçmek için tıklayın,{color}#İsme göre sıralı"
+
+AccountList:
+  button1:
+    nameItem: "{color}Oyuncu Ara"
+    lore: "{color}Oyuncuyu ismiyle aramak için tıklayın,{color}Büyük/Küçük harf duyarlı"
+  button2:
+    nameItem: "Oyuncu Ara"
+    lore: "İsim.."
+    response: "Oyuncu bulunamadı!"
+
+listPlayersFromDb:
+  title: "Oyuncu Seçin"
+  button1:
+    nameItem: "{color}Transfer Yapılacak Oyuncuyu Seçin"
+    lore: "{color}Transfer yapmak istediğiniz oyuncuyu seçmek için tıklayın,{color}#İsme göre sıralı"
+
+CurrencyListToPay:
+  response: "İşlem Başarılı!"
+  button1:
+    nameItem: "{color}Ödenecek Para Birimini Seçin"
+    lore: "{color}Ödemek istediğiniz para birimini seçmek için tıklayın,{color}Önce miktarı belirleyin"
+
+BankPanel:
+  title: "Banka"
+  button1:
+    nameItem1: "{color}Hesap Bloke Edildi"
+    nameItem2: "{color}Hesap Aktif"
+    lore: "{color}Bu şunları etkiler:,Para Çekme,Para Yatırma,Transfer,Ödeme,Takas,Döviz,Tüm ekonomi işlemleri"
+  button2:
+    nameItem: "{color}Para Birimi Değiştir"
+    lore: "{color}Para birimlerini değiştirmek için tıklayın"
+  button3:
+    nameItem: "{color}Çevrimiçi Oyuncuya Teklif Oluştur"
+    lore: "{color}Çevrimiçi oyuncularla para birimi takası için teklif oluşturmak üzere tıklayın"
+  button4:
+    nameItem: "{color}Ağdaki Oyuncuya Teklif Oluştur"
+    lore: "{color}Ağdaki oyuncularla para birimi takası için teklif oluşturmak üzere tıklayın"
+  button5:
+    nameItem: "{color}Aktif Tekliflerim"
+    lore: "{color}Oluşturduğunuz ve şu anda aktif olan teklifler."
+  button6:
+    nameItem: "{color}Bakiyeyi Gör"
+    lore: "{color}Bakiyenizi görmek için tıklayın"
+  button7:
+    nameItem: "{color}Alınan Teklifler"
+    lore: "{color}Diğer oyuncuların size gönderdiği tüm teklifleri burada görebilirsiniz."
+  button8:
+    nameItem: "{color}Çevrimiçi Oyuncuya Ödeme Yap"
+    lore: "{color}Bu sunucudaki çevrimiçi bir oyuncuya ödeme yapmak için tıklayın"
+  button9:
+    nameItem: "{color}Ağdaki Oyuncuya Transfer Yap"
+    lore: "{color}Ağdaki başka bir oyuncuya para transferi yapmak için tıklayın"
+  button10:
+    nameItem: "{color}Çıkış"
+    lore: "{color}Çıkmak için tıklayın"
+  button11:
+    nameItem: "{color}ATM"
+    lore: "{color}ATM'yi açmak için tıklayın"
+
+MachinePanel:
+  title: "ATM"
+  button1:
+    nameItem: "{color}Para Yatır"
+    lore: "{color}Para yatırmak için tıklayın"
+  button2:
+    nameItem: "{color}Para Çek"
+    lore: "{color}Para çekmek için tıklayın"
+
+AccountBalance:
+  title: "Hesap Bakiyesi"
+  button1:
+    nameItem: "{currency}"
+    lore: "{color}Bakiye: {currency}"
+  button2:
+     nameItem: "{color}Para Birimi Yok"
+     lore: "{color}Hesapta para birimi bulunmamaktadır"
+  button3:
+     nameItem: "{color}Hesap Bakiyesi"
+     lore: "{color}Mevcut bakiyeler"
+
+ReceivedOffers:
+  title: "Alınan Teklifler"
+  button1:
+    nameItem: "{playerName}"
+    lore: ",Miktar: {amount} ,Fiyat: {price},,{color1}Sol Tık ile Kabul Et,{color2}Sağ Tık ile İptal Et"
+  button2:
+    nameItem: "Alınan Teklifler Listesi"
+    lore: "Yenilemek için tıklayın"
+
+MyActiveOffers:
+  title: "Aktif Tekliflerim"
+  button1:
+    nameItem: "{playerName}"
+    lore: ",Miktar: {amount} ,Fiyat: {price},,{color2}Sağ Tık ile İptal Et"
+  button2:
+    nameItem: "Teklif Listesi"
+    lore: "Yenilemek için tıklayın"
+
+OfferListPlayer:
+  button1:
+    nameItem: "{color}Teklif Yapılacak Oyuncuyu Seçin"
+    lore: "{color}Teklif yapmak istediğiniz oyuncuyu seçmek için tıklayın,{color}Önce para birimlerini belirleyin"
+  button2:
+    nameItem: "{color}Teklif Edilecek Para Birimini Seçin"
+    lore: "{color}Teklif etmek istediğiniz para birimini seçmek için tıklayın,{color}Önce miktarı belirleyin"
+  button3:
+    nameItem: "{color}Alınacak Para Birimini Seçin"
+    lore: "{color}Almak istediğiniz para birimini seçmek için tıklayın,{color}Önce miktarı belirleyin"
+
+CurrencySelector:
+  title: "Para Birimi Listesi"
+  button1:
+    nameItem: "{currency}"
+    lore: "Tekil: {singular},Çoğul: {plural},Aktarılabilir: {transferable},Döviz Kuru: {exchangeRate}"
+  button2:
+    nameItem: "{currency} İçin Miktar"
+    lore: "0"
+
+Exchange:
+  button1:
+    nameItem: "{color}Almak İstediğiniz Para Birimini Seçin"
+    lore: "{color}Almak istediğiniz para birimini seçmek için tıklayın,{color}Önce miktarı belirleyin"
+  button2:
+    nameItem: "{color}Vermek İstediğiniz Para Birimini Seçin"
+    lore: "{color}Vermek istediğiniz para birimini seçmek için tıklayın"
+
+Paginated:
+  button1:
+    nameItem: "{color}Öğe Yok"
+    lore: "{color}Görüntülenecek öğe bulunmamaktadır"
+  button2:
+    nameItem: "{color}Önceki Sayfa"
+    lore: "{color}Önceki öğeleri görmek için tıklayın"
+  button3:
+    nameItem: "{color}Sonraki Sayfa"
+    lore: "{color}Daha fazla öğe görmek için tıklayın"
+  button4:
+    nameItem: "{color}Geri"
+    lore: "{color}Geri gitmek için tıklayın"
+
+#admin panel
+EconomyAdminPanel:
+  title: "Ekonomi Yönetici Paneli"
+  button1:
+    nameItem: "{color}Para Birimlerini Düzenle"
+    lore: "{color}Para birimlerini düzenlemek için tıklayın"
+  button2:
+    nameItem: "{color}Hesapları Yönet"
+    lore: "{color}Oyuncu hesaplarını yönetmek için tıklayın"
+  button3:
+    nameItem: "{color}Çıkış"
+    lore: "{color}Çıkmak için tıklayın"
+
+CurrencyAdminPanel:
+  title: "Para Birimi Yöneticisi"
+  button1:
+    nameItem: "{color}Para Birimi Oluştur"
+    lore: "{color}Yeni para birimi oluşturmak için tıklayın"
+  button2:
+    nameItem: "{color}Para Birimini Sil"
+    lore: "{color}Para birimini silmek için tıklayın"
+  button3:
+    nameItem: "{color}Para Birimini Düzenle"
+    lore: "{color}Para birimini düzenlemek için tıklayın"
+  button4:
+    nameItem: "{color}Özellikleri Yapılandır"
+    lore: "{color}Tıklayın"
+  button5:
+    nameItem: "{color}Geri"
+    lore: "{color}Geri gitmek için tıklayın"
+
+AccountSelectorToEdit:
+  title: "Oyuncu Seçin"
+  button1:
+    nameItem: "Düzenlenecek Hesabı Seçin"
+    lore: "Bir hesap seçmek için tıklayın, veya isme göre arayın, İsme göre sıralı, Büyük/Küçük harf duyarlı"
+
+EditCurrencyPanel:
+  title: "Para Birimini Düzenle: {currency}"
+  button1:
+    nameItem: "{currency}"
+    lore: "Sembol: {symbol},Materyal: {material},Renk: {color},Başlangıç bakiyesi: {balance},Döviz kuru: {rate},Aktarılabilir: {transferable},Varsayılan para birimi: {default},Ondalık destekler: {decimals}"
+  button2:
+    nameItem: "{color}Başlangıç Bakiyesini Düzenle"
+    lore: "{color}Başlangıç bakiyesini değiştirmek için tıklayın"
+  button3:
+    nameItem: "{color}Döviz Kurunu Ayarla"
+    lore: "{color}Döviz kurunu değiştirmek için tıklayın"
+  button4:
+    nameItem: "{color}Rengi Düzenle"
+    lore: "{color}Para biriminin rengini değiştirmek için tıklayın"
+  button5:
+    nameItem: "{color}Sembolü Düzenle"
+    lore: "{color}Para birimi sembolünü değiştirmek için tıklayın"
+  button6:
+    nameItem: "{color}Varsayılan Olarak Ayarla"
+    lore: "{color}Bu para birimini varsayılan yapmak için tıklayın"
+  button7:
+    nameItem: "{color}Tekil Adı Düzenle"
+    lore: "{color}Tekil adı değiştirmek için tıklayın"
+  button8:
+    nameItem: "{color}Çoğul Adı Düzenle"
+    lore: "{color}Çoğul adı değiştirmek için tıklayın"
+#COMMANDS MESSAGES

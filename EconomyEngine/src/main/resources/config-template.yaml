@@ -4,7 +4,7 @@
 
 # Developer(s): @Federkone.
 
-#EN(English), ES(Spanish),RU(Russia),ZH(Chinese),DE(Deutschland),IT(Italian),FR(French),JA(Japan) You can also create your own language file in the language folder.
+#EN(English), ES(Spanish),RU(Russia),ZH(Chinese),DE(Deutschland),IT(Italian),FR(French),JA(Japan),TR(Turkish) You can also create your own language file in the language folder.
 lang: EN
 
 #This option is to synchronize the configuration of the plugin with the proxy,ex: bungee,velocity.

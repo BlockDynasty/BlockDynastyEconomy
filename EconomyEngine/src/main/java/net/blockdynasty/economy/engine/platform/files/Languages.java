@@ -112,7 +112,25 @@ public class Languages extends YamlConfig {
                 throw new RuntimeException("No language files available");
             }
         }
-        mensajes = loadFile(langFile, "languages/"+langFile.getName());
+
+        // Built-in languages have a matching classpath resource and can be validated/updated
+        // against their bundled template. User-created languages must be loaded without a
+        // classpath template, but we still fill any missing keys using EN.yaml as a fallback.
+        String langFileName = langFile.getName();
+        boolean isBuiltIn = false;
+        for (String builtIn : languagesFiles) {
+            if (builtIn.equalsIgnoreCase(langFileName)) {
+                isBuiltIn = true;
+                break;
+            }
+        }
+
+        if (isBuiltIn) {
+            mensajes = loadFile(langFile, "languages/" + langFileName);
+        } else {
+            // User-created language: load from disk, fill missing keys from EN template
+            mensajes = loadFileRaw(langFile, "languages/EN.yaml");
+        }
     }
 
 

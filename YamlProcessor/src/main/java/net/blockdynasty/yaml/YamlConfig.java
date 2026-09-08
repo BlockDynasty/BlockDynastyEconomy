@@ -124,6 +124,33 @@ public abstract class YamlConfig implements IYamlConfig {
     }
 
     @Override
+    public Map<Object, Object> loadFileRaw(File fileConfig, String fallbackTemplatePath) {
+        try {
+            Yaml yaml = new Yaml();
+            Map<Object, Object> configAct = yaml.load(Files.newInputStream(fileConfig.toPath()));
+            if (configAct == null) {
+                configAct = new java.util.LinkedHashMap<>();
+            }
+
+            if (fallbackTemplatePath != null) {
+                try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fallbackTemplatePath)) {
+                    if (inputStream != null) {
+                        Map<Object, Object> defaultConfig = yaml.load(inputStream);
+                        if (defaultConfig != null && checkIfNeedsUpdate(defaultConfig, configAct)) {
+                            fillMissingKeys(defaultConfig, configAct);
+                            // Do NOT write back — this is a user-created file; we keep their content intact
+                        }
+                    }
+                }
+            }
+
+            return configAct;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load config: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
     public Map<Object,Object> createNewFile(File file, String templatePath){
         try {
             if (!file.getParentFile().exists()) {

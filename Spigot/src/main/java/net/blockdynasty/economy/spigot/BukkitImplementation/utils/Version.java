@@ -31,7 +31,7 @@ public class Version {
     public static final boolean hasMojangAuthLib = JavaUtil.classExists("com.mojang.authlib.GameProfile") && JavaUtil.classExists("com.mojang.authlib.properties.Property");
     public static final boolean hasSupportHardCash = isHigherThan("1.8.7");
 
-    private static final boolean hasSupportAnvilGUI = !isMohist() && !isHigherThan("26.1");
+    private static final boolean hasSupportAnvilGUI = !isMohist() && !isHigherThan("26.2");
 
     public static boolean hasSupportHardCash() {
         return hasSupportHardCash;

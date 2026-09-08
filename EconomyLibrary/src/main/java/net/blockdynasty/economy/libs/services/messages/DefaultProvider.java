@@ -65,7 +65,7 @@ public class DefaultProvider implements MessageProvider{
         messageConfig.addDefault("balance.list", ">> {currencycolor}{format}");
         messageConfig.addDefault("balance.none", "No balances to show for §c{player}.");
 
-        messageConfig.addDefault("balance_top.balance", "-> {number}. {player} - {currencycolor}{balance}");
+        messageConfig.addDefault("balance_top.balance", "-> {number}. {player} - {balance}");
         messageConfig.addDefault("balance_top.header", "----- {currencycolor} Top Balances for {currencyplural} (Page {page}) -----");
         messageConfig.addDefault("balance_top.empty", "No accounts to display.");
         messageConfig.addDefault("balance_top.next", "{currencycolor}/gbaltop {currencyplural} {page} for more.");

@@ -70,7 +70,7 @@ public class ApiTest {
         BigDecimal balanceNew1 = api.getBalance(nullplague.getName(),"Money");
         BigDecimal balanceNew2 = api.getBalance(fede.getName(),"Money");
         assertTrue(response.isSuccess());
-        assertEquals(balanceNew1, balanceAct1.add(BigDecimal.valueOf(2000)));
-        assertEquals(balanceNew2, balanceAct2.subtract(BigDecimal.valueOf(2000)));
+        assertEquals(balanceNew1, balanceAct1.add(BigDecimal.valueOf(2000).setScale(2)));
+        assertEquals(balanceNew2, balanceAct2.subtract(BigDecimal.valueOf(2000).setScale(2)));
     }
 }

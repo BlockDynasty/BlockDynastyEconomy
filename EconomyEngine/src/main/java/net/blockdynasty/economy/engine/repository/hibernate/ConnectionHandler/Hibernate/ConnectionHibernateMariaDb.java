@@ -17,23 +17,28 @@
 package net.blockdynasty.economy.engine.repository.hibernate.ConnectionHandler.Hibernate;
 
 import net.blockdynasty.economy.engine.repository.hibernate.DbConfig;
-import org.mariadb.jdbc.Driver;
+import org.mariadb.jdbc.MariaDbDataSource;
 
 public class ConnectionHibernateMariaDb extends ConnectionHibernate {
 
     public ConnectionHibernateMariaDb(DbConfig dbConfig) {
         super();
-        configuration.setProperty("hibernate.hikari.dataSourceClassName", Driver.class.getName());
-        configuration.setProperty("hibernate.hikari.dataSource.url", "jdbc:mariadb://" + dbConfig.getHost() + ":" + dbConfig.getPort() + "/" + dbConfig.getDatabase());
-        configuration.setProperty("hibernate.hikari.dataSource.user", dbConfig.getUsername());
-        configuration.setProperty("hibernate.hikari.dataSource.password", dbConfig.getPassword());
+        // Modo JDBC URL - HikariCP lo manejará correctamente
+        configuration.setProperty("hibernate.connection.url",
+                "jdbc:mariadb://" + dbConfig.getHost() + ":" + dbConfig.getPort() + "/" + dbConfig.getDatabase() +
+                        "?useServerPrepStmts=true&cachePrepStmts=true");
+        configuration.setProperty("hibernate.connection.username", dbConfig.getUsername());
+        configuration.setProperty("hibernate.connection.password", dbConfig.getPassword());
+        configuration.setProperty("hibernate.connection.driver_class", "org.mariadb.jdbc.Driver");
 
+        // Propiedades de pool HikariCP (válidas en modo jdbcUrl)
         configuration.setProperty("hibernate.hikari.maximumPoolSize", "20");
         configuration.setProperty("hibernate.hikari.minimumIdle", "5");
         configuration.setProperty("hibernate.hikari.connectionTimeout", "30000");
 
-        configuration.setProperty("hibernate.hikari.dataSource.useServerPrepStmts", "true");
-        configuration.setProperty("hibernate.hikari.dataSource.cachePrepStmts", "true");
+        // Las opciones de preparación de statements van en la URL, no como propiedades separadas
+        // (ya incluídas arriba como parámetros de URL)
+
         this.init();
     }
 
